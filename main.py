@@ -1,6 +1,6 @@
 from typing import Optional
 
-from fastapi import FastAPI
+from fastapi import FastAPI, WebSocket
 from pydantic import BaseModel
 
 app = FastAPI()
@@ -25,3 +25,10 @@ def read_item(item_id: int, q: Optional[str] = None):
 @app.put("/items/{item_id}")
 def update_item(item_id: int, item: Item):
     return {"item_name": item.name, "item_id": item_id}
+
+@app.websocket("/ws/chat/lobby")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    while True:
+        data = await websocket.receive_json()
+        await websocket.send_json(data)
