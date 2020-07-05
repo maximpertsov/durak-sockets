@@ -1,34 +1,35 @@
-from typing import Optional
+from broadcaster import Broadcast
+from starlette.applications import Starlette
+from starlette.concurrency import run_until_first_complete
+from starlette.routing import WebSocketRoute
 
-from fastapi import FastAPI, WebSocket
-from pydantic import BaseModel
-
-app = FastAPI()
-
-
-class Item(BaseModel):
-    name: str
-    price: float
-    is_offer: Optional[bool] = None
+broadcast = Broadcast("redis://localhost:6379")
 
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
-
-
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Optional[str] = None):
-    return {"item_id": item_id, "q": q}
-
-
-@app.put("/items/{item_id}")
-def update_item(item_id: int, item: Item):
-    return {"item_name": item.name, "item_id": item_id}
-
-@app.websocket("/ws/chat/lobby")
-async def websocket_endpoint(websocket: WebSocket):
+async def chatroom_ws(websocket):
     await websocket.accept()
-    while True:
-        data = await websocket.receive_json()
-        await websocket.send_json(data)
+    await run_until_first_complete(
+        (chatroom_ws_receiver, {"websocket": websocket}),
+        (chatroom_ws_sender, {"websocket": websocket}),
+    )
+
+
+async def chatroom_ws_receiver(websocket):
+    async for message in websocket.iter_text():
+        await broadcast.publish(channel="chatroom", message=message)
+
+
+async def chatroom_ws_sender(websocket):
+    async with broadcast.subscribe(channel="chatroom") as subscriber:
+        async for event in subscriber:
+            await websocket.send_text(event.message)
+
+
+routes = [
+    WebSocketRoute("/ws/chat", chatroom_ws, name="chat"),
+]
+
+
+app = Starlette(
+    routes=routes, on_startup=[broadcast.connect], on_shutdown=[broadcast.disconnect],
+)
