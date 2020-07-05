@@ -1,12 +1,13 @@
 from broadcaster import Broadcast
-from starlette.applications import Starlette
-from starlette.concurrency import run_until_first_complete
-from starlette.routing import WebSocketRoute
+from fastapi import FastAPI, WebSocket
+from fastapi.concurrency import run_until_first_complete
 
 broadcast = Broadcast("redis://localhost:6379")
+app = FastAPI(on_startup=[broadcast.connect], on_shutdown=[broadcast.disconnect])
 
 
-async def chatroom_ws(websocket):
+@app.websocket("/ws/chat")
+async def chatroom_ws(websocket: WebSocket):
     await websocket.accept()
     await run_until_first_complete(
         (chatroom_ws_receiver, {"websocket": websocket}),
@@ -14,22 +15,12 @@ async def chatroom_ws(websocket):
     )
 
 
-async def chatroom_ws_receiver(websocket):
+async def chatroom_ws_receiver(websocket: WebSocket):
     async for message in websocket.iter_text():
         await broadcast.publish(channel="chatroom", message=message)
 
 
-async def chatroom_ws_sender(websocket):
+async def chatroom_ws_sender(websocket: WebSocket):
     async with broadcast.subscribe(channel="chatroom") as subscriber:
         async for event in subscriber:
             await websocket.send_text(event.message)
-
-
-routes = [
-    WebSocketRoute("/ws/chat", chatroom_ws, name="chat"),
-]
-
-
-app = Starlette(
-    routes=routes, on_startup=[broadcast.connect], on_shutdown=[broadcast.disconnect],
-)
