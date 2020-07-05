@@ -1,8 +1,10 @@
+from os import environ
+
 from broadcaster import Broadcast
 from fastapi import FastAPI, WebSocket
 from fastapi.concurrency import run_until_first_complete
 
-broadcast = Broadcast("redis://localhost:6379")
+broadcast = Broadcast(environ.get("REDISCLOUD_URL", "redis://localhost:6379"))
 app = FastAPI(on_startup=[broadcast.connect], on_shutdown=[broadcast.disconnect])
 
 
