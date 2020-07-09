@@ -1,27 +1,42 @@
-from typing import Optional
+from os import environ
 
-from fastapi import FastAPI
-from pydantic import BaseModel
+from broadcaster import Broadcast
+from fastapi import FastAPI, WebSocket
+from fastapi.concurrency import run_until_first_complete
+from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI()
+broadcast = Broadcast(environ.get("REDISCLOUD_URL", "redis://localhost:6379"))
+app = FastAPI(on_startup=[broadcast.connect], on_shutdown=[broadcast.disconnect])
+
+origins = [
+    "http://localhost:3000",
+    "https://xchi.online",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
-class Item(BaseModel):
-    name: str
-    price: float
-    is_offer: Optional[bool] = None
+@app.websocket("/ws")
+async def room_ws(websocket: WebSocket):
+    await websocket.accept()
+    await run_until_first_complete(
+        (room_ws_receiver, {"websocket": websocket}),
+        (room_ws_sender, {"websocket": websocket}),
+    )
 
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+async def room_ws_receiver(websocket: WebSocket):
+    async for message in websocket.iter_text():
+        await broadcast.publish(channel="room", message=message)
 
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Optional[str] = None):
-    return {"item_id": item_id, "q": q}
-
-
-@app.put("/items/{item_id}")
-def update_item(item_id: int, item: Item):
-    return {"item_name": item.name, "item_id": item_id}
+async def room_ws_sender(websocket: WebSocket):
+    async with broadcast.subscribe(channel="room") as subscriber:
+        async for event in subscriber:
+            await websocket.send_text(event.message)
