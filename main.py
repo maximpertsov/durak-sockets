@@ -22,21 +22,21 @@ app.add_middleware(
 )
 
 
-@app.websocket("/ws")
-async def room_ws(websocket: WebSocket):
+@app.websocket("/ws/{channel}")
+async def channel_ws(websocket: WebSocket, channel: str):
     await websocket.accept()
     await run_until_first_complete(
-        (room_ws_receiver, {"websocket": websocket}),
-        (room_ws_sender, {"websocket": websocket}),
+        (channel_ws_receiver, {"websocket": websocket, "channel": channel}),
+        (channel_ws_sender, {"websocket": websocket, "channel": channel}),
     )
 
 
-async def room_ws_receiver(websocket: WebSocket):
+async def channel_ws_receiver(websocket: WebSocket, channel: str):
     async for message in websocket.iter_text():
-        await broadcast.publish(channel="room", message=message)
+        await broadcast.publish(channel=channel, message=message)
 
 
-async def room_ws_sender(websocket: WebSocket):
-    async with broadcast.subscribe(channel="room") as subscriber:
+async def channel_ws_sender(websocket: WebSocket, channel: str):
+    async with broadcast.subscribe(channel=channel) as subscriber:
         async for event in subscriber:
             await websocket.send_text(event.message)
