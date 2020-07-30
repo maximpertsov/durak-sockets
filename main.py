@@ -11,6 +11,7 @@ app = FastAPI(on_startup=[broadcast.connect], on_shutdown=[broadcast.disconnect]
 origins = [
     "http://localhost:3000",
     "https://xchi.online",
+    "https://maximpertsov.github.io",
 ]
 
 app.add_middleware(
