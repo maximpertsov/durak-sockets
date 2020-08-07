@@ -10,6 +10,7 @@ app = FastAPI(on_startup=[broadcast.connect], on_shutdown=[broadcast.disconnect]
 
 origins = [
     "https://xchi.online",
+    "https://xdurak.xyz",
     "https://maximpertsov.github.io",
 ]
 
