@@ -50,11 +50,17 @@ async def channel_ws_sender(websocket: WebSocket, channel: str):
 async def transform_and_persist(message):
     data = json.loads(message)
 
+    # transform
     if data["type"] == "attacked":
-        print(data)
         data["result"] = attack(user=data["user"], **data["payload"])
 
+    # persist
+    url = "http://localhost:8000/api/game/{game}/events".format(**data)
+    persist_data = {**data}
+    persist_data.update(
+        payload=json.dumps(data["payload"]), result=json.dumps(data["result"]),
+    )
     # TODO: make this async with request_threads?
-    requests.post("http://localhost:8000/api/events", data)
+    requests.post(url, persist_data)
 
     return json.dumps(data)
