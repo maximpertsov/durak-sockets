@@ -7,7 +7,13 @@ class Card:
         return {"rank": self.rank, "suit": self.suit}
 
     def __eq__(self, other):
-        return self.rank == other.rank and self.suit == self.suit
+        return self.rank == other.rank and self.suit == other.suit
+
+    def __repr__(self):
+        return repr(self.serialize())
+
+    def __str__(self):
+        return "{} of {}".format(self.rank, self.suit)
 
 
 class Hands:
@@ -25,9 +31,11 @@ class Hands:
     def remove_card(self, *, player, card):
         card_object = Card(**card)
         self._hands.update(
-            player=[
-                _card for _card in self._player_hand(player) if _card == card_object
-            ]
+            {
+                player: [
+                    _card for _card in self._player_hand(player) if _card != card_object
+                ]
+            }
         )
         return self
 

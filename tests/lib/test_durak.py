@@ -19,7 +19,7 @@ def hands():
 
 def test_remove_card_from_anna(hands):
     subject = Hands(hands=hands)
-    assert Hands.serialize == {
+    assert subject.serialize() == {
         "anna": [
             {"rank": "10", "suit": "diamonds"},
             {"rank": "10", "suit": "clubs"},
@@ -29,8 +29,8 @@ def test_remove_card_from_anna(hands):
             {"rank": "2", "suit": "clubs"},
         ]
     }
-    subject.remove_card("anna", {"rank": "2", "suit": "spades"})
-    assert Hands.serialize == {
+    subject.remove_card(player="anna", card={"rank": "2", "suit": "spades"})
+    assert subject.serialize() == {
         "anna": [
             {"rank": "10", "suit": "diamonds"},
             {"rank": "10", "suit": "clubs"},
