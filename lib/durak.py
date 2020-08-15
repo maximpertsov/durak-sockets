@@ -51,4 +51,5 @@ def attack(*, user, card, hands, table, **kwargs):
     return {
         "hands": Hands(hands=hands).remove_card(player=user, card=card).serialize(),
         "table": Table(table=table).add_card(card=card).serialize(),
+        "yielded": [],
     }
