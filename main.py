@@ -38,13 +38,15 @@ async def channel_ws(websocket: WebSocket, channel: str):
 
 async def channel_ws_receiver(websocket: WebSocket, channel: str):
     async for message in websocket.iter_text():
-        await broadcast.publish(channel=channel, message=message)
+        await broadcast.publish(
+            channel=channel, message=await transform_and_persist(message)
+        )
 
 
 async def channel_ws_sender(websocket: WebSocket, channel: str):
     async with broadcast.subscribe(channel=channel) as subscriber:
         async for event in subscriber:
-            await websocket.send_text(await transform_and_persist(event.message))
+            await websocket.send_text(event.message)
 
 
 async def transform_and_persist(message):
