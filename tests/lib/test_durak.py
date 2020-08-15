@@ -1,0 +1,41 @@
+import pytest
+
+from lib.durak import Hands
+
+
+@pytest.fixture
+def hands():
+    return {
+        "anna": [
+            {"rank": "10", "suit": "diamonds"},
+            {"rank": "10", "suit": "clubs"},
+            {"rank": "2", "suit": "spades"},
+            {"rank": "5", "suit": "clubs"},
+            {"rank": "8", "suit": "diamonds"},
+            {"rank": "2", "suit": "clubs"},
+        ],
+    }
+
+
+def test_remove_card_from_anna(hands):
+    subject = Hands(hands=hands)
+    assert Hands.serialize == {
+        "anna": [
+            {"rank": "10", "suit": "diamonds"},
+            {"rank": "10", "suit": "clubs"},
+            {"rank": "2", "suit": "spades"},
+            {"rank": "5", "suit": "clubs"},
+            {"rank": "8", "suit": "diamonds"},
+            {"rank": "2", "suit": "clubs"},
+        ]
+    }
+    subject.remove_card("anna", {"rank": "2", "suit": "spades"})
+    assert Hands.serialize == {
+        "anna": [
+            {"rank": "10", "suit": "diamonds"},
+            {"rank": "10", "suit": "clubs"},
+            {"rank": "5", "suit": "clubs"},
+            {"rank": "8", "suit": "diamonds"},
+            {"rank": "2", "suit": "clubs"},
+        ]
+    }
