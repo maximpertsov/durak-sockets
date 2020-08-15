@@ -1,9 +1,12 @@
+import json
 from os import environ
 
 from broadcaster import Broadcast
 from fastapi import FastAPI, WebSocket
 from fastapi.concurrency import run_until_first_complete
 from fastapi.middleware.cors import CORSMiddleware
+
+from lib.durak import attack
 
 broadcast = Broadcast(environ.get("REDISCLOUD_URL", "redis://localhost:6379"))
 app = FastAPI(on_startup=[broadcast.connect], on_shutdown=[broadcast.disconnect])
@@ -40,4 +43,14 @@ async def channel_ws_receiver(websocket: WebSocket, channel: str):
 async def channel_ws_sender(websocket: WebSocket, channel: str):
     async with broadcast.subscribe(channel=channel) as subscriber:
         async for event in subscriber:
-            await websocket.send_text(event.message)
+            await websocket.send_text(await transform(event.message))
+
+
+async def transform(message):
+    data = json.loads(message)
+
+    if data["type"] == "attacked":
+        print(data)
+        data["result"] = attack(user=data['user'], **data["payload"])
+
+    return json.dumps(data)

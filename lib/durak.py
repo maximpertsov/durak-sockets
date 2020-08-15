@@ -13,18 +13,18 @@ class Card:
 class Hands:
     def __init__(self, hands):
         self._hands = {
-            player: [Card(**card) for card in cards] for player, cards in hands
+            player: [Card(**card) for card in cards] for player, cards in hands.items()
         }
 
     def serialize(self):
         return {
             player: [card.serialize() for card in cards]
-            for player, cards in self._hands
+            for player, cards in self._hands.items()
         }
 
     def remove_card(self, *, player, card):
         card_object = Card(**card)
-        self._hand.update(
+        self._hands.update(
             player=[
                 _card for _card in self._player_hand(player) if _card == card_object
             ]
@@ -49,7 +49,6 @@ class Table:
 
 def attack(*, user, card, hands, table, **kwargs):
     return {
-        **kwargs,
         "hands": Hands(hands=hands).remove_card(player=user, card=card).serialize(),
         "table": Table(table=table).add_card(card=card).serialize(),
     }
