@@ -1,6 +1,7 @@
 import json
 from os import environ
 
+import requests
 from broadcaster import Broadcast
 from fastapi import FastAPI, WebSocket
 from fastapi.concurrency import run_until_first_complete
@@ -43,14 +44,17 @@ async def channel_ws_receiver(websocket: WebSocket, channel: str):
 async def channel_ws_sender(websocket: WebSocket, channel: str):
     async with broadcast.subscribe(channel=channel) as subscriber:
         async for event in subscriber:
-            await websocket.send_text(await transform(event.message))
+            await websocket.send_text(await transform_and_persist(event.message))
 
 
-async def transform(message):
+async def transform_and_persist(message):
     data = json.loads(message)
 
     if data["type"] == "attacked":
         print(data)
-        data["result"] = attack(user=data['user'], **data["payload"])
+        data["result"] = attack(user=data["user"], **data["payload"])
+
+    # TODO: make this async with request_threads?
+    requests.post("http://localhost:8000/api/events", data)
 
     return json.dumps(data)
