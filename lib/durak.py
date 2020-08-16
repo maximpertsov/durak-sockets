@@ -45,7 +45,6 @@ class Hands:
                 ]
             }
         )
-        return self
 
     def _player_hand(self, player):
         return self._hands[player]
@@ -60,7 +59,6 @@ class Table:
 
     def add_card(self, *, card):
         self._table.append([Card(card=card)])
-        return self
 
 
 class Game:
@@ -82,7 +80,7 @@ class Game:
         self._yielded = []
 
 
-def attack(*, user, card, hands, table, yielded, **kwargs):
-    game = Game(hands=hands, table=table, yielded=yielded)
-    game.attack(player=user, card=card)
+def attack(*, from_state, user, payload):
+    game = Game(**from_state)
+    game.attack(player=user, **payload)
     return game.serialize()

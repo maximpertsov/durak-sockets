@@ -55,7 +55,7 @@ async def transform_and_persist(message):
     # transform
     if data["type"] == "attacked":
         data["to_state"] = attack(
-            user=data["user"], **{**data["payload"], **data["from_state"]}
+            from_state=data["from_state"], user=data["user"], payload=data["payload"]
         )
 
     # persist
