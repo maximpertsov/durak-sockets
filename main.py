@@ -54,7 +54,9 @@ async def transform_and_persist(message):
 
     # transform
     if data["type"] == "attacked":
-        data["to_state"] = attack(user=data["user"], **data["payload"])
+        data["to_state"] = attack(
+            user=data["user"], **{**data["payload"], **data["from_state"]}
+        )
 
     # persist
     url = "http://localhost:8000/api/game/{game}/events".format(**data)
