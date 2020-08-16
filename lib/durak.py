@@ -1,7 +1,11 @@
 class Card:
-    def __init__(self, *, rank, suit):
-        self.rank = rank
-        self.suit = suit
+    def __init__(self, *, card):
+        if not card:
+            self.rank = None
+            self.suit = None
+        else:
+            self.rank = card["rank"]
+            self.suit = card["suit"]
 
     def serialize(self):
         return {"rank": self.rank, "suit": self.suit}
@@ -19,7 +23,8 @@ class Card:
 class Hands:
     def __init__(self, hands):
         self._hands = {
-            player: [Card(**card) for card in cards] for player, cards in hands.items()
+            player: [Card(card=card) for card in cards]
+            for player, cards in hands.items()
         }
 
     def serialize(self):
@@ -29,7 +34,7 @@ class Hands:
         }
 
     def remove_card(self, *, player, card):
-        card_object = Card(**card)
+        card_object = Card(card=card)
         self._hands.update(
             {
                 player: [
@@ -45,13 +50,13 @@ class Hands:
 
 class Table:
     def __init__(self, table):
-        self._table = [[Card(**card) for card in cards] for cards in table]
+        self._table = [[Card(card=card) for card in cards] for cards in table]
 
     def serialize(self):
         return [[card.serialize() for card in cards] for cards in self._table]
 
     def add_card(self, *, card):
-        self._table.append([Card(**card)])
+        self._table.append([Card(card=card)])
         return self
 
 
