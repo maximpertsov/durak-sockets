@@ -79,25 +79,29 @@ class Game:
         self._hands = Hands(hands=hands)
         self._table = Table(table=table)
         self._players = players
-        self._yielded = yielded
+        self._yielded = set(yielded)
 
     def serialize(self):
         return {
             "hands": self._hands.serialize(),
             "table": self._table.serialize(),
             "players": self._players,
-            "yielded": self._yielded,
+            "yielded": list(self._yielded),
         }
 
     def attack(self, *, player, card):
         self._hands.remove_card(player=player, card=card)
         self._table.add_card(card=card)
-        self._yielded = []
+        self._yielded.clear()
 
     def defend(self, *, player, base_card, card):
         self._hands.remove_card(player=player, card=card)
         self._table.stack_card(base_card=base_card, card=card)
-        self._yielded = []
+        self._yielded.clear()
+
+    def yield_attack(self, *, player):
+        self._yielded.add(player)
+        raise NotImplementedError("Draw routine after all attackers have yielded")
 
 
 def attack(*, from_state, user, payload):
