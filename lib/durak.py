@@ -50,34 +50,20 @@ class Player:
 class Hands:
     def __init__(self, hands):
         self._hands = {
-            player: [Card(card=card) for card in cards]
-            for player, cards in hands.items()
+            player: Player(name=player, cards=cards) for player, cards in hands.items()
         }
 
     def serialize(self):
         return {
-            player: [card.serialize() for card in cards]
-            for player, cards in self._hands.items()
+            serialized["name"]: serialized["cards"]
+            for serialized in [player.serialize() for player in self._hands.values()]
         }
 
     def take_cards(self, *, player, cards):
-        card_objects = [Card(card=card) for card in cards]
-        # TODO: maybe compacting should happen client-side?
-        compact_hand = [
-            _card for _card in self._player_hand(player) if not _card.is_empty_space()
-        ]
-        self._hands.update({player: compact_hand + card_objects})
+        self._player_hand(player).take_cards(cards=cards)
 
     def remove_card(self, *, player, card):
-        card_object = Card(card=card)
-        self._hands.update(
-            {
-                player: [
-                    Card(card=None) if _card == card_object else _card
-                    for _card in self._player_hand(player)
-                ]
-            }
-        )
+        self._player_hand(player).remove_card(card=card)
 
     def _player_hand(self, player):
         return self._hands[player]
