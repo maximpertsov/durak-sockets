@@ -57,28 +57,6 @@ class Player:
         ]
 
 
-class Hands:
-    def __init__(self, hands):
-        self._hands = {
-            player: Player(name=player, cards=cards) for player, cards in hands.items()
-        }
-
-    def serialize(self):
-        return {
-            serialized["name"]: serialized["cards"]
-            for serialized in [player.serialize() for player in self._hands.values()]
-        }
-
-    def take_cards(self, *, player, cards):
-        self._player_hand(player).take_cards(cards=cards)
-
-    def remove_card(self, *, player, card):
-        self._player_hand(player).remove_card(card=card)
-
-    def _player_hand(self, player):
-        return self._hands[player]
-
-
 class Table:
     class BaseCardNotFound(Exception):
         pass
