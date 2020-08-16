@@ -60,7 +60,8 @@ async def transform_and_persist(message):
     url = "http://localhost:8000/api/game/{game}/events".format(**data)
     persist_data = {**data}
     persist_data.update(
-        payload=json.dumps(data["payload"]), to_state=json.dumps(data["to_state"]),
+        payload=json.dumps(data["payload"]),
+        to_state=json.dumps(data.get("to_state", {})),
     )
     # TODO: make this async with request_threads?
     requests.post(url, persist_data)
