@@ -8,6 +8,8 @@ class Card:
             self.suit = card["suit"]
 
     def serialize(self):
+        if self.rank is None and self.suit is None:
+            return None
         return {"rank": self.rank, "suit": self.suit}
 
     def __eq__(self, other):
@@ -38,7 +40,8 @@ class Hands:
         self._hands.update(
             {
                 player: [
-                    _card for _card in self._player_hand(player) if _card != card_object
+                    Card(card=None) if _card == card_object else _card
+                    for _card in self._player_hand(player)
                 ]
             }
         )

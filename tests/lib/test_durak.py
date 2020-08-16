@@ -34,6 +34,7 @@ def test_remove_card_from_anna(hands):
         "anna": [
             {"rank": "10", "suit": "diamonds"},
             {"rank": "10", "suit": "clubs"},
+            None,
             {"rank": "5", "suit": "clubs"},
             {"rank": "8", "suit": "diamonds"},
             {"rank": "2", "suit": "clubs"},
