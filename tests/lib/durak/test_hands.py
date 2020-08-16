@@ -17,7 +17,7 @@ def hands():
     }
 
 
-def test_remove_card_from_anna(hands):
+def test_remove_card_from_player(hands):
     subject = Hands(hands=hands)
     assert subject.serialize() == {
         "anna": [
