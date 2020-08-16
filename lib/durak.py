@@ -91,7 +91,8 @@ class DrawPile:
 
 
 class Game:
-    def __init__(self, *, players, hands, table, yielded):
+    def __init__(self, *, draw_pile, players, hands, table, yielded):
+        self._draw_pile = DrawPile(draw_pile=draw_pile)
         self._hands = Hands(hands=hands)
         self._table = Table(table=table)
         self._players = players
@@ -99,6 +100,7 @@ class Game:
 
     def serialize(self):
         return {
+            "draw_pile": self._draw_pile.serialize(),
             "hands": self._hands.serialize(),
             "table": self._table.serialize(),
             "players": self._players,
