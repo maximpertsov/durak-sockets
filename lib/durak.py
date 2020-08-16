@@ -92,8 +92,19 @@ class Game:
         self._table.add_card(card=card)
         self._yielded = []
 
+    def defend(self, *, player, base_card, card):
+        self._hands.remove_card(player=player, card=card)
+        self._table.stack_card(base_card=base_card, card=card)
+        self._yielded = []
+
 
 def attack(*, from_state, user, payload):
     game = Game(**from_state)
     game.attack(player=user, **payload)
+    return game.serialize()
+
+
+def defend(*, from_state, user, payload):
+    game = Game(**from_state)
+    game.defend(player=user, **payload)
     return game.serialize()
