@@ -15,6 +15,7 @@ def player():
             {"rank": "8", "suit": "diamonds"},
             {"rank": "2", "suit": "clubs"},
         ],
+        order=0,
     )
 
 
@@ -30,6 +31,8 @@ def test_serialize(player):
             {"rank": "8", "suit": "diamonds"},
             {"rank": "2", "suit": "clubs"},
         ],
+        "order": 0,
+        "yielded": False,
     }
 
 
@@ -49,6 +52,8 @@ def test_take_cards(player):
             {"rank": "3", "suit": "spades"},
             {"rank": "4", "suit": "diamonds"},
         ],
+        "order": 0,
+        "yielded": False,
     }
 
 
@@ -65,4 +70,6 @@ def test_remove_card(player):
             {"rank": "8", "suit": "diamonds"},
             {"rank": "2", "suit": "clubs"},
         ],
+        "order": 0,
+        "yielded": False,
     }

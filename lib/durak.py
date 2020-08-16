@@ -1,3 +1,6 @@
+from operator import attrgetter
+
+
 class Card:
     def __init__(self, *, card):
         if not card:
@@ -26,12 +29,19 @@ class Card:
 
 
 class Player:
-    def __init__(self, *, name, cards):
+    def __init__(self, *, name, cards, order, yielded=False):
         self.name = name
         self._cards = [Card(card=card) for card in cards]
+        self.order = order
+        self.yielded = yielded
 
     def serialize(self):
-        return {"name": self.name, "cards": [card.serialize() for card in self._cards]}
+        return {
+            "name": self.name,
+            "cards": [card.serialize() for card in self._cards],
+            "order": self.order,
+            "yielded": self.yielded,
+        }
 
     def take_cards(self, *, cards):
         card_objects = [Card(card=card) for card in cards]
@@ -113,42 +123,55 @@ class Game:
     @classmethod
     def deserialize(cls, *, draw_pile, players, hands, table, yielded):
         return cls(
-            draw_pile=draw_pile,
-            players=players,
-            hands=hands,
-            table=table,
-            yielded=yielded,
+            draw_pile=DrawPile(draw_pile=draw_pile),
+            players={
+                player: Player(name=player, cards=hands[player], order=order)
+                for order, player in enumerate(players)
+            },
+            table=Table(table=table),
         )
 
-    def __init__(self, *, draw_pile, players, hands, table, yielded):
-        self._draw_pile = DrawPile(draw_pile=draw_pile)
-        self._hands = Hands(hands=hands)
-        self._table = Table(table=table)
+    def __init__(self, *, draw_pile, players, table):
+        self._draw_pile = draw_pile
         self._players = players
-        self._yielded = set(yielded)
+        self._table = table
 
     def serialize(self):
         return {
             "draw_pile": self._draw_pile.serialize(),
-            "hands": self._hands.serialize(),
+            "hands": {
+                serialized["name"]: serialized["cards"]
+                for serialized in [
+                    player.serialize() for player in self._players.values()
+                ]
+            },
             "table": self._table.serialize(),
-            "players": self._players,
-            "yielded": list(self._yielded),
+            "players": [
+                player.name
+                for player in sorted(self._players.values(), key=attrgetter("order"))
+            ],
+            "yielded": [
+                player.name for player in self._players.values() if player.yielded
+            ],
         }
 
     def attack(self, *, player, card):
-        self._hands.remove_card(player=player, card=card)
+        self._get_player(player).remove_card(card=card)
         self._table.add_card(card=card)
-        self._yielded.clear()
+        for _player in self._players.values():
+            _player.yielded = False
 
     def defend(self, *, player, base_card, card):
-        self._hands.remove_card(player=player, card=card)
+        self._get_player(player).remove_card(card=card)
         self._table.stack_card(base_card=base_card, card=card)
-        self._yielded.clear()
+        for _player in self._players.values():
+            _player.yielded = False
 
     def yield_attack(self, *, player):
-        self._yielded.add(player)
         raise NotImplementedError("Draw routine after all attackers have yielded")
+
+    def _get_player(self, player):
+        return self._players[player]
 
 
 def attack(*, from_state, user, payload):
