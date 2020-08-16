@@ -74,6 +74,22 @@ class Table:
             raise self.BaseCardNotFound
 
 
+class DrawPile:
+    def __init__(self, *, draw_pile):
+        self._draw_pile = [Card(card=card) for card in draw_pile]
+
+    def serialize(self):
+        return [card.serialize() for card in self._draw_pile]
+
+    def size(self):
+        return len(self._draw_pile)
+
+    def draw(self, count):
+        result = self._draw_pile[:count]
+        self._draw_pile = self._draw_pile[count:]
+        return result
+
+
 class Game:
     def __init__(self, *, players, hands, table, yielded):
         self._hands = Hands(hands=hands)
