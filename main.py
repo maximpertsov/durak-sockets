@@ -54,13 +54,13 @@ async def transform_and_persist(message):
 
     # transform
     if data["type"] == "attacked":
-        data["result"] = attack(user=data["user"], **data["payload"])
+        data["to_state"] = attack(user=data["user"], **data["payload"])
 
     # persist
     url = "http://localhost:8000/api/game/{game}/events".format(**data)
     persist_data = {**data}
     persist_data.update(
-        payload=json.dumps(data["payload"]), result=json.dumps(data["result"]),
+        payload=json.dumps(data["payload"]), to_state=json.dumps(data["to_state"]),
     )
     # TODO: make this async with request_threads?
     requests.post(url, persist_data)
