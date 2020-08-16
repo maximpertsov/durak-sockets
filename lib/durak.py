@@ -51,6 +51,9 @@ class Hands:
 
 
 class Table:
+    class BaseCardNotFound(Exception):
+        pass
+
     def __init__(self, table):
         self._table = [[Card(card=card) for card in cards] for cards in table]
 
@@ -59,6 +62,16 @@ class Table:
 
     def add_card(self, *, card):
         self._table.append([Card(card=card)])
+
+    def stack_card(self, *, base_card, card):
+        base_card_object = Card(card=base_card)
+
+        for cards in self._table:
+            if cards[-1] == base_card_object:
+                cards.append(Card(card=card))
+                return
+        else:
+            raise self.BaseCardNotFound
 
 
 class Game:
