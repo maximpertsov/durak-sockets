@@ -75,15 +75,17 @@ class Table:
 
 
 class Game:
-    def __init__(self, *, hands, table, yielded):
+    def __init__(self, *, players, hands, table, yielded):
         self._hands = Hands(hands=hands)
         self._table = Table(table=table)
+        self._players = players
         self._yielded = yielded
 
     def serialize(self):
         return {
             "hands": self._hands.serialize(),
             "table": self._table.serialize(),
+            "players": self._players,
             "yielded": self._yielded,
         }
 
