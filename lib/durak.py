@@ -29,6 +29,8 @@ class Card:
 
 
 class Player:
+    HAND_SIZE = 6
+
     def __init__(self, *, name, cards, order, yielded=False):
         self.name = name
         self._cards = [Card(card=card) for card in cards]
@@ -43,18 +45,29 @@ class Player:
             "yielded": self.yielded,
         }
 
+    def card_count(self):
+        return sum(1 for card in self._cards if not card.is_empty_space())
+
     def take_cards(self, *, cards):
         card_objects = [Card(card=card) for card in cards]
-
         # TODO: maybe compacting should happen client-side?
-        compact_hand = [_card for _card in self._cards if not _card.is_empty_space()]
-        self._cards = compact_hand + card_objects
+        self._compact_hand()
+        self._cards += card_objects
 
     def remove_card(self, *, card):
         card_object = Card(card=card)
         self._cards = [
             Card(card=None) if _card == card_object else _card for _card in self._cards
         ]
+
+    def draw(self, *, draw_pile):
+        draw_count = max(self.HAND_SIZE - self.card_count(), 0)
+        self.take_cards(cards=draw_pile.draw(count=draw_count))
+        # TODO: maybe compacting should happen client-side?
+        self._compact_hand()
+
+    def _compact_hand(self):
+        self._cards = [card for card in self._cards if not card.is_empty_space()]
 
 
 class Table:
