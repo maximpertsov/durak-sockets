@@ -63,9 +63,26 @@ class Table:
         return self
 
 
-def attack(*, user, card, hands, table, **kwargs):
-    return {
-        "hands": Hands(hands=hands).remove_card(player=user, card=card).serialize(),
-        "table": Table(table=table).add_card(card=card).serialize(),
-        "yielded": [],
-    }
+class Game:
+    def __init__(self, *, hands, table, yielded):
+        self._hands = Hands(hands=hands)
+        self._table = Table(table=table)
+        self._yielded = yielded
+
+    def serialize(self):
+        return {
+            "hands": self._hands.serialize(),
+            "table": self._table.serialize(),
+            "yielded": self._yielded,
+        }
+
+    def attack(self, *, player, card):
+        self._hands.remove_card(player=player, card=card)
+        self._table.add_card(card=card)
+        self._yielded = []
+
+
+def attack(*, user, card, hands, table, yielded, **kwargs):
+    game = Game(hands=hands, table=table, yielded=yielded)
+    game.attack(player=user, card=card)
+    return game.serialize()
