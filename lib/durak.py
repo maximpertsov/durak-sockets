@@ -25,6 +25,28 @@ class Card:
         return "{} of {}".format(self.rank, self.suit)
 
 
+class Player:
+    def __init__(self, *, name, cards):
+        self.name = name
+        self._cards = [Card(card=card) for card in cards]
+
+    def serialize(self):
+        return {"name": self.name, "cards": [card.serialize() for card in self._cards]}
+
+    def take_cards(self, *, cards):
+        card_objects = [Card(card=card) for card in cards]
+
+        # TODO: maybe compacting should happen client-side?
+        compact_hand = [_card for _card in self._cards if not _card.is_empty_space()]
+        self._cards = compact_hand + card_objects
+
+    def remove_card(self, *, card):
+        card_object = Card(card=card)
+        self._cards = [
+            Card(card=None) if _card == card_object else _card for _card in self._cards
+        ]
+
+
 class Hands:
     def __init__(self, hands):
         self._hands = {
