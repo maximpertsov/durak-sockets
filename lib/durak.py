@@ -96,7 +96,7 @@ class DrawPile:
         return len(self._draw_pile)
 
     def draw(self, count):
-        result = self._draw_pile[:count]
+        result = [card.serialize() for card in self._draw_pile[:count]]
         self._draw_pile = self._draw_pile[count:]
         return result
 
