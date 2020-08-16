@@ -4,7 +4,7 @@ from lib.durak import Game
 
 @pytest.fixture
 def game():
-    return Game(
+    return Game.deserialize(
         draw_pile=[
             {"rank": "jack", "suit": "clubs"},
             {"rank": "3", "suit": "spades"},

@@ -110,6 +110,16 @@ class DrawPile:
 
 
 class Game:
+    @classmethod
+    def deserialize(cls, *, draw_pile, players, hands, table, yielded):
+        return cls(
+            draw_pile=draw_pile,
+            players=players,
+            hands=hands,
+            table=table,
+            yielded=yielded,
+        )
+
     def __init__(self, *, draw_pile, players, hands, table, yielded):
         self._draw_pile = DrawPile(draw_pile=draw_pile)
         self._hands = Hands(hands=hands)
@@ -142,12 +152,12 @@ class Game:
 
 
 def attack(*, from_state, user, payload):
-    game = Game(**from_state)
+    game = Game.deserialize(**from_state)
     game.attack(player=user, **payload)
     return game.serialize()
 
 
 def defend(*, from_state, user, payload):
-    game = Game(**from_state)
+    game = Game.deserialize(**from_state)
     game.defend(player=user, **payload)
     return game.serialize()
