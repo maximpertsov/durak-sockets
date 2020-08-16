@@ -8,9 +8,12 @@ class Card:
             self.suit = card["suit"]
 
     def serialize(self):
-        if self.rank is None and self.suit is None:
+        if self.is_empty_space():
             return None
         return {"rank": self.rank, "suit": self.suit}
+
+    def is_empty_space(self):
+        return self.rank is None and self.suit is None
 
     def __eq__(self, other):
         return self.rank == other.rank and self.suit == other.suit
@@ -34,6 +37,14 @@ class Hands:
             player: [card.serialize() for card in cards]
             for player, cards in self._hands.items()
         }
+
+    def take_cards(self, *, player, cards):
+        card_objects = [Card(card=card) for card in cards]
+        # TODO: maybe compacting should happen client-side?
+        compact_hand = [
+            _card for _card in self._player_hand(player) if not _card.is_empty_space()
+        ]
+        self._hands.update({player: compact_hand + card_objects})
 
     def remove_card(self, *, player, card):
         card_object = Card(card=card)
