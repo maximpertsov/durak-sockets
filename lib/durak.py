@@ -1,3 +1,4 @@
+from functools import lru_cache
 from operator import attrgetter
 
 
@@ -137,32 +138,60 @@ class Game:
                 ]
             },
             "table": self._table.serialize(),
-            "players": [
-                player.name
-                for player in sorted(self._players.values(), key=attrgetter("order"))
-            ],
-            "yielded": [
-                player.name for player in self._players.values() if player.yielded
-            ],
+            "players": [player.name for player in self._ordered_players()],
+            "yielded": [player.name for player in self._yielded_players()],
         }
 
     def attack(self, *, player, card):
-        self._get_player(player).remove_card(card=card)
+        self._player(player).remove_card(card=card)
         self._table.add_card(card=card)
         for _player in self._players.values():
             _player.yielded = False
 
     def defend(self, *, player, base_card, card):
-        self._get_player(player).remove_card(card=card)
+        self._player(player).remove_card(card=card)
         self._table.stack_card(base_card=base_card, card=card)
         for _player in self._players.values():
             _player.yielded = False
 
+    def draw(self, *, skip=0):
+        for i in range(len(self._ordered_players())):
+            index = (i + skip) % len(self._ordered_players())
+            player = self._ordered_players()[index]
+            player.draw(draw_pile=self._draw_pile)
+
+    def rotate(self, *, skip=0):
+        shift = skip + 1
+        players = self._ordered_players()[shift:] + self._ordered_players()[:shift]
+
+        # TODO: shift players, factoring in players who are out?
+
+        self._ordered_players.cache_clear()
+
     def yield_attack(self, *, player):
         raise NotImplementedError("Draw routine after all attackers have yielded")
 
-    def _get_player(self, player):
+        self._player(player).yielded = True
+        if self._no_more_attacks():
+            self._draw()
+
+    def _player(self, player):
         return self._players[player]
+
+    @lru_cache
+    def _ordered_players(self):
+        return sorted(self._players.values(), key=attrgetter("order"))
+
+    def _no_more_attacks(self):
+        not_yielded = set(self._ordered_players()).difference(
+            set(self._yielded_players())
+        )
+
+        # TODO: check if the only player who hasn't yielded is the defender?
+        return len(not_yielded) == 1
+
+    def _yielded_players(self):
+        return [player for player in self._players.values() if player.yielded]
 
 
 def attack(*, from_state, user, payload):
