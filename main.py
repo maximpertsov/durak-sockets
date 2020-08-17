@@ -1,4 +1,5 @@
 import json
+from copy import deepcopy
 from os import environ
 
 import requests
@@ -57,27 +58,24 @@ async def transform_and_persist(message):
         data["to_state"] = attack(
             from_state=data["from_state"], user=data["user"], payload=data["payload"]
         )
-    if data["type"] == "defended":
+    elif data["type"] == "defended":
         data["to_state"] = defend(
             from_state=data["from_state"], user=data["user"], payload=data["payload"]
         )
-    if data["type"] == "yielded_attack":
+    elif data["type"] == "yielded_attack":
         data["to_state"] = yield_attack(
             from_state=data["from_state"], user=data["user"], payload=data["payload"]
         )
-    if data["type"] == "collected":
+    elif data["type"] == "collected":
         data["to_state"] = collect(
             from_state=data["from_state"], user=data["user"], payload=data["payload"]
         )
+    else:
+        data["to_state"] = deepcopy(data["from_state"])
 
     # persist
     url = "http://localhost:8000/api/game/{game}/events".format(**data)
-    persist_data = {**data}
-    persist_data.update(
-        payload=json.dumps(data["payload"]),
-        to_state=json.dumps(data.get("to_state", {})),
-    )
     # TODO: make this async with request_threads?
-    requests.post(url, persist_data)
+    requests.post(url, data)
 
     return json.dumps(data)
