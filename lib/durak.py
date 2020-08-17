@@ -1,6 +1,6 @@
 from functools import lru_cache
-from operator import attrgetter
 from itertools import chain
+from operator import attrgetter
 
 
 class Card:
@@ -166,13 +166,18 @@ class Game:
         self._table.stack_card(base_card=base_card, card=card)
         self._clear_yields()
 
-    def draw(self, *, skip=0):
-        for i in range(len(self._ordered_players())):
-            index = (i + skip) % len(self._ordered_players())
-            player = self._ordered_players()[index]
+    # TODO: add offset back for "passing" rule games
+    def draw(self):
+        for player in self._ordered_players():
             player.draw(draw_pile=self._draw_pile)
 
-    def rotate(self, *, skip=0):
+    def collect(self, *, player):
+        self._player(player).take_cards(cards=self._table.collect())
+        self.draw()
+        self._rotate(skip=1)
+        self._clear_yields()
+
+    def _rotate(self, *, skip=0):
         shift = skip + 1
         players = self._ordered_players()[shift:] + self._ordered_players()[:shift]
         for order, player in enumerate(players):
@@ -184,7 +189,7 @@ class Game:
         if self._no_more_attacks():
             self._table.clear()
             self.draw()
-            self.rotate()
+            self._rotate()
             self._clear_yields()
 
     def _player(self, player):
@@ -225,4 +230,10 @@ def defend(*, from_state, user, payload):
 def yield_attack(*, from_state, user, payload):
     game = Game.deserialize(**from_state)
     game.yield_attack(player=user, **payload)
+    return game.serialize()
+
+
+def collect(*, from_state, user, payload):
+    game = Game.deserialize(**from_state)
+    game.collect(player=user, **payload)
     return game.serialize()
