@@ -94,6 +94,9 @@ class Table:
         else:
             raise self.BaseCardNotFound
 
+    def clear(self):
+        self._table.clear()
+
 
 class DrawPile:
     def __init__(self, *, draw_pile):
@@ -117,7 +120,12 @@ class Game:
         return cls(
             draw_pile=DrawPile(draw_pile=draw_pile),
             players={
-                player: Player(name=player, cards=hands[player], order=order)
+                player: Player(
+                    name=player,
+                    cards=hands[player],
+                    order=order,
+                    yielded=player in yielded,
+                )
                 for order, player in enumerate(players)
             },
             table=Table(table=table),
@@ -145,14 +153,12 @@ class Game:
     def attack(self, *, player, card):
         self._player(player).remove_card(card=card)
         self._table.add_card(card=card)
-        for _player in self._players.values():
-            _player.yielded = False
+        self._clear_yields()
 
     def defend(self, *, player, base_card, card):
         self._player(player).remove_card(card=card)
         self._table.stack_card(base_card=base_card, card=card)
-        for _player in self._players.values():
-            _player.yielded = False
+        self._clear_yields()
 
     def draw(self, *, skip=0):
         for i in range(len(self._ordered_players())):
@@ -163,17 +169,17 @@ class Game:
     def rotate(self, *, skip=0):
         shift = skip + 1
         players = self._ordered_players()[shift:] + self._ordered_players()[:shift]
-
-        # TODO: shift players, factoring in players who are out?
-
+        for order, player in enumerate(players):
+            player.order = order
         self._ordered_players.cache_clear()
 
     def yield_attack(self, *, player):
-        raise NotImplementedError("Draw routine after all attackers have yielded")
-
         self._player(player).yielded = True
         if self._no_more_attacks():
-            self._draw()
+            self._table.clear()
+            self.draw()
+            self.rotate()
+            self._clear_yields()
 
     def _player(self, player):
         return self._players[player]
@@ -183,7 +189,7 @@ class Game:
         return sorted(self._players.values(), key=attrgetter("order"))
 
     def _no_more_attacks(self):
-        not_yielded = set(self._ordered_players()).difference(
+        not_yielded = set(self._players.values()).difference(
             set(self._yielded_players())
         )
 
@@ -192,6 +198,10 @@ class Game:
 
     def _yielded_players(self):
         return [player for player in self._players.values() if player.yielded]
+
+    def _clear_yields(self):
+        for _player in self._players.values():
+            _player.yielded = False
 
 
 def attack(*, from_state, user, payload):
@@ -203,4 +213,10 @@ def attack(*, from_state, user, payload):
 def defend(*, from_state, user, payload):
     game = Game.deserialize(**from_state)
     game.defend(player=user, **payload)
+    return game.serialize()
+
+
+def yield_attack(*, from_state, user, payload):
+    game = Game.deserialize(**from_state)
+    game.yield_attack(player=user, **payload)
     return game.serialize()

@@ -7,7 +7,7 @@ from fastapi import FastAPI, WebSocket
 from fastapi.concurrency import run_until_first_complete
 from fastapi.middleware.cors import CORSMiddleware
 
-from lib.durak import attack, defend
+from lib.durak import attack, defend, yield_attack
 
 broadcast = Broadcast(environ.get("REDISCLOUD_URL", "redis://localhost:6379"))
 app = FastAPI(on_startup=[broadcast.connect], on_shutdown=[broadcast.disconnect])
@@ -59,6 +59,10 @@ async def transform_and_persist(message):
         )
     if data["type"] == "defended":
         data["to_state"] = defend(
+            from_state=data["from_state"], user=data["user"], payload=data["payload"]
+        )
+    if data["type"] == "yielded_attack":
+        data["to_state"] = yield_attack(
             from_state=data["from_state"], user=data["user"], payload=data["payload"]
         )
 
