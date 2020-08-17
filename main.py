@@ -10,6 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from lib.durak import attack, collect, defend, yield_attack
 
+BASE_API_URL = environ.get("BASE_API_URL", "http://localhost:8000/api")
 broadcast = Broadcast(environ.get("REDISCLOUD_URL", "redis://localhost:6379"))
 app = FastAPI(on_startup=[broadcast.connect], on_shutdown=[broadcast.disconnect])
 
@@ -74,7 +75,7 @@ async def transform_and_persist(message):
         data["to_state"] = deepcopy(data["from_state"])
 
     # persist
-    url = "http://localhost:8000/api/game/{game}/events".format(**data)
+    url = "{}/game/{}/events".format(BASE_API_URL, data['game'])
     # TODO: make this async with request_threads?
     requests.post(url, json=data)
 
