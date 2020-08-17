@@ -1,5 +1,6 @@
 from functools import lru_cache
 from operator import attrgetter
+from itertools import chain
 
 
 class Card:
@@ -96,6 +97,11 @@ class Table:
 
     def clear(self):
         self._table.clear()
+
+    def collect(self):
+        result = [card.serialize() for card in chain.from_iterable(self._table)]
+        self.clear()
+        return result
 
 
 class DrawPile:
