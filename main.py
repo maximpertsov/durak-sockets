@@ -65,7 +65,7 @@ async def transform_and_persist(message):
         data["to_state"] = yield_attack(
             from_state=data["from_state"], user=data["user"], payload=data["payload"]
         )
-    if data["type"] == "collect":
+    if data["type"] == "collected":
         data["to_state"] = collect(
             from_state=data["from_state"], user=data["user"], payload=data["payload"]
         )
