@@ -155,7 +155,9 @@ class Game:
                 ]
             },
             "table": self._table.serialize(),
-            "players": [player.name for player in self._ordered_players()],
+            "players": [
+                player.name for player in self._ordered_players() if player.in_game()
+            ],
             "yielded": [player.name for player in self._yielded_players()],
         }
 
