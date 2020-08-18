@@ -79,6 +79,22 @@ def test_remove_card(player):
     }
 
 
+def test_card_count_and_in_game(player):
+    kwargs = {"name": "anna", "order": 0}
+
+    player = Player(cards=[{"rank": "10", "suit": "diamonds"}], **kwargs)
+    assert player.in_game()
+    assert player.card_count() == 1
+
+    player = Player(cards=[None], **kwargs)
+    assert player.in_game()
+    assert player.card_count() == 0
+
+    player = Player(cards=[], **kwargs)
+    assert not player.in_game()
+    assert player.card_count() == 0
+
+
 def test_draw_from_pile():
     player = Player(
         name="anna",
