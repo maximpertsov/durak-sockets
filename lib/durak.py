@@ -182,13 +182,6 @@ class Game:
         self._rotate(skip=1)
         self._clear_yields()
 
-    def _rotate(self, *, skip=0):
-        shift = skip + 1
-        players = self._ordered_players()[shift:] + self._ordered_players()[:shift]
-        for order, player in enumerate(players):
-            player.order = order
-        self._ordered_players.cache_clear()
-
     def yield_attack(self, *, player):
         self._player(player).yielded = True
         if self._no_more_attacks():
@@ -196,6 +189,19 @@ class Game:
             self.draw()
             self._rotate()
             self._clear_yields()
+
+    def pass_card(self, *, player, card):
+        self._player(player).remove_card(card=card)
+        self._table.add_card(card=card)
+        self._clear_yields()
+        self._rotate()
+
+    def _rotate(self, *, skip=0):
+        shift = skip + 1
+        players = self._ordered_players()[shift:] + self._ordered_players()[:shift]
+        for order, player in enumerate(players):
+            player.order = order
+        self._ordered_players.cache_clear()
 
     def _player(self, player):
         return self._players[player]
@@ -241,4 +247,10 @@ def yield_attack(*, from_state, user, payload):
 def collect(*, from_state, user, payload):
     game = Game.deserialize(**from_state)
     game.collect(player=user, **payload)
+    return game.serialize()
+
+
+def pass_card(*, from_state, user, payload):
+    game = Game.deserialize(**from_state)
+    game.pass_card(player=user, **payload)
     return game.serialize()
