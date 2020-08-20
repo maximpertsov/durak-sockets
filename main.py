@@ -52,32 +52,22 @@ async def channel_ws_sender(websocket: WebSocket, channel: str):
             await websocket.send_text(event.message)
 
 
+actions = {
+    "attacked": attack,
+    "attacked_with_many": attack_with_many,
+    "defended": defend,
+    "yielded_attack": yield_attack,
+    "collected": collect,
+    "passed": pass_card,
+}
+
+
 async def transform_and_persist(message):
     data = json.loads(message)
 
     # transform
-    if data["type"] == "attacked":
-        data["to_state"] = attack(
-            from_state=data["from_state"], user=data["user"], payload=data["payload"]
-        )
-    elif data["type"] == "attacked_with_many":
-        data["to_state"] = attack_with_many(
-            from_state=data["from_state"], user=data["user"], payload=data["payload"]
-        )
-    elif data["type"] == "defended":
-        data["to_state"] = defend(
-            from_state=data["from_state"], user=data["user"], payload=data["payload"]
-        )
-    elif data["type"] == "yielded_attack":
-        data["to_state"] = yield_attack(
-            from_state=data["from_state"], user=data["user"], payload=data["payload"]
-        )
-    elif data["type"] == "collected":
-        data["to_state"] = collect(
-            from_state=data["from_state"], user=data["user"], payload=data["payload"]
-        )
-    elif data["type"] == "passed":
-        data["to_state"] = pass_card(
+    if data["type"] in actions:
+        data["to_state"] = actions[data["type"]](
             from_state=data["from_state"], user=data["user"], payload=data["payload"]
         )
     else:
