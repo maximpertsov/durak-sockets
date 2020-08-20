@@ -232,6 +232,16 @@ def attack(*, from_state, user, payload):
     return game.serialize()
 
 
+def attack_with_many(*, from_state, user, payload):
+    cards = payload["cards"]
+
+    # TODO make this a reducer?
+    state = from_state
+    for card in cards:
+        state = attack(from_state=state, user=user, payload=card)
+    return state
+
+
 def defend(*, from_state, user, payload):
     game = Game.deserialize(**from_state)
     game.defend(player=user, **payload)
