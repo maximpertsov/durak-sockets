@@ -9,7 +9,7 @@ from fastapi.concurrency import run_until_first_complete
 from fastapi.middleware.cors import CORSMiddleware
 
 from lib.durak import (attack, attack_with_many, collect, defend, pass_card,
-                       yield_attack)
+                       pass_with_many, yield_attack)
 
 BASE_API_URL = environ.get("BASE_API_URL", "http://localhost:8000/api")
 broadcast = Broadcast(environ.get("REDISCLOUD_URL", "redis://localhost:6379"))
@@ -59,6 +59,7 @@ actions = {
     "yielded_attack": yield_attack,
     "collected": collect,
     "passed": pass_card,
+    "passed_with_many": pass_with_many,
 }
 
 

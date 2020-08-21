@@ -261,3 +261,10 @@ def pass_card(*, from_state, user, payload):
     game = Game.deserialize(**from_state)
     game.pass_card(player=user, **payload)
     return game.serialize()
+
+
+def pass_with_many(*, from_state, user, payload):
+    def step(state, card):
+        return pass_card(from_state=state, user=user, payload={"card": card})
+
+    return reduce(step, payload["cards"], from_state)
