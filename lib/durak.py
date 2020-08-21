@@ -125,7 +125,7 @@ class DrawPile:
 
 class Game:
     @classmethod
-    def deserialize(cls, *, draw_pile, players, hands, table, yielded):
+    def deserialize(cls, *, draw_pile, hands, pass_count, players, table, yielded):
         return cls(
             draw_pile=DrawPile(draw_pile=draw_pile),
             players={
@@ -137,11 +137,13 @@ class Game:
                 )
                 for order, player in enumerate(players)
             },
+            pass_count=pass_count,
             table=Table(table=table),
         )
 
-    def __init__(self, *, draw_pile, players, table):
+    def __init__(self, *, draw_pile, pass_count, players, table):
         self._draw_pile = draw_pile
+        self._pass_count = pass_count
         self._players = players
         self._table = table
 
@@ -155,6 +157,7 @@ class Game:
                 ]
             },
             "table": self._table.serialize(),
+            "pass_count": self._pass_count,
             "players": [
                 player.name for player in self._ordered_players() if player.in_game()
             ],
@@ -171,10 +174,13 @@ class Game:
         self._table.stack_card(base_card=base_card, card=card)
         self._clear_yields()
 
-    # TODO: add offset back for "passing" rule games
     def draw(self):
-        for player in self._ordered_players():
+        player_count = len(self._ordered_players())
+        for index in range(player_count):
+            index_with_passes = (index - self._pass_count) % player_count
+            player = self._ordered_players()[index_with_passes]
             player.draw(draw_pile=self._draw_pile)
+        self._pass_count = 0
 
     def collect(self, *, player):
         self._player(player).take_cards(cards=self._table.collect())
@@ -257,12 +263,26 @@ def collect(*, from_state, user, payload):
     return game.serialize()
 
 
+# HACK: internal functions should increment pass count correctly
+def increment_pass_count(func):
+    def wrapped(*args, **kwargs):
+        init_pass_count = kwargs["from_state"]["pass_count"]
+        state = func(*args, **kwargs)
+        state["pass_count"] = init_pass_count + 1
+        return state
+
+    return wrapped
+
+
+@increment_pass_count
 def pass_card(*, from_state, user, payload):
     game = Game.deserialize(**from_state)
     game.pass_card(player=user, **payload)
+
     return game.serialize()
 
 
+@increment_pass_count
 def pass_with_many(*, from_state, user, payload):
     def step(state, card):
         return pass_card(from_state=state, user=user, payload={"card": card})
