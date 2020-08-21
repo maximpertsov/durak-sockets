@@ -174,7 +174,6 @@ class Game:
         self._table.stack_card(base_card=base_card, card=card)
         self._clear_yields()
 
-    # TODO: add offset back for "passing" rule games
     def draw(self):
         player_count = len(self._ordered_players())
         for index in range(player_count):

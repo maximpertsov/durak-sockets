@@ -112,5 +112,81 @@ def test_defend(game):
     }
 
 
-def test_draw(game):
-    pass
+@pytest.fixture
+def game_3p():
+    return Game.deserialize(
+        draw_pile=[
+            {"rank": "7", "suit": "diamonds"},
+            {"rank": "9", "suit": "clubs"},
+            {"rank": "9", "suit": "diamonds"},
+            {"rank": "10", "suit": "clubs"},
+            {"rank": "8", "suit": "diamonds"},
+        ],
+        hands={
+            "anna": [
+                {"rank": "9", "suit": "hearts"},
+                {"rank": "3", "suit": "spades"},
+                {"rank": "king", "suit": "hearts"},
+                {"rank": "4", "suit": "clubs"},
+                {"rank": "4", "suit": "hearts"},
+                None,
+            ],
+            "vasyl": [
+                {"rank": "7", "suit": "clubs"},
+                {"rank": "6", "suit": "diamonds"},
+                {"rank": "jack", "suit": "spades"},
+                {"rank": "7", "suit": "hearts"},
+                None,
+                None,
+            ],
+            "igor": [
+                {"rank": "8", "suit": "hearts"},
+                {"rank": "jack", "suit": "diamonds"},
+                {"rank": "king", "suit": "spades"},
+                {"rank": "5", "suit": "hearts"},
+                {"rank": "jack", "suit": "clubs"},
+                None,
+            ],
+        },
+        pass_count=0,
+        players=["anna", "vasyl", "igor"],
+        table=[],
+        yielded=[],
+    )
+
+
+def test_draw(game_3p):
+    game_3p.draw()
+    assert game_3p.serialize() == {
+        "draw_pile": [{"rank": "8", "suit": "diamonds"}],
+        "hands": {
+            "anna": [
+                {"rank": "9", "suit": "hearts"},
+                {"rank": "3", "suit": "spades"},
+                {"rank": "king", "suit": "hearts"},
+                {"rank": "4", "suit": "clubs"},
+                {"rank": "4", "suit": "hearts"},
+                {"rank": "7", "suit": "diamonds"},
+            ],
+            "vasyl": [
+                {"rank": "7", "suit": "clubs"},
+                {"rank": "6", "suit": "diamonds"},
+                {"rank": "jack", "suit": "spades"},
+                {"rank": "7", "suit": "hearts"},
+                {"rank": "9", "suit": "clubs"},
+                {"rank": "9", "suit": "diamonds"},
+            ],
+            "igor": [
+                {"rank": "8", "suit": "hearts"},
+                {"rank": "jack", "suit": "diamonds"},
+                {"rank": "king", "suit": "spades"},
+                {"rank": "5", "suit": "hearts"},
+                {"rank": "jack", "suit": "clubs"},
+                {"rank": "10", "suit": "clubs"},
+            ],
+        },
+        "pass_count": 0,
+        "players": ["anna", "vasyl", "igor"],
+        "table": [],
+        "yielded": [],
+    }
