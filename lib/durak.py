@@ -196,9 +196,14 @@ class Game:
             self._rotate()
             self._clear_yields()
 
-    def pass_card(self, *, player, card):
+    def _pass_card(self, *, player, card):
         self._player(player).remove_card(card=card)
         self._table.add_card(card=card)
+
+    def pass_cards(self, *, player, cards):
+        for card in cards:
+            self._pass_card(player=player, card=card)
+        self._pass_count += 1
         self._clear_yields()
         self._rotate()
 
@@ -263,28 +268,13 @@ def collect(*, from_state, user, payload):
     return game.serialize()
 
 
-# HACK: internal functions should increment pass count correctly
-def increment_pass_count(func):
-    def wrapped(*args, **kwargs):
-        init_pass_count = kwargs["from_state"]["pass_count"]
-        state = func(*args, **kwargs)
-        state["pass_count"] = init_pass_count + 1
-        return state
-
-    return wrapped
-
-
-@increment_pass_count
 def pass_card(*, from_state, user, payload):
     game = Game.deserialize(**from_state)
-    game.pass_card(player=user, **payload)
-
+    game.pass_cards(player=user, cards=[payload["card"]])
     return game.serialize()
 
 
-@increment_pass_count
 def pass_with_many(*, from_state, user, payload):
-    def step(state, card):
-        return pass_card(from_state=state, user=user, payload={"card": card})
-
-    return reduce(step, payload["cards"], from_state)
+    game = Game.deserialize(**from_state)
+    game.pass_cards(player=user, **payload)
+    return game.serialize()
