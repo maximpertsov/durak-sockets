@@ -8,7 +8,8 @@ from fastapi import FastAPI, WebSocket
 from fastapi.concurrency import run_until_first_complete
 from fastapi.middleware.cors import CORSMiddleware
 
-from lib.durak import attack, collect, defend, pass_card, yield_attack
+from lib.durak import (attack, attack_with_many, collect, defend, pass_card,
+                       pass_with_many, yield_attack)
 
 BASE_API_URL = environ.get("BASE_API_URL", "http://localhost:8000/api")
 broadcast = Broadcast(environ.get("REDISCLOUD_URL", "redis://localhost:6379"))
@@ -51,28 +52,23 @@ async def channel_ws_sender(websocket: WebSocket, channel: str):
             await websocket.send_text(event.message)
 
 
+actions = {
+    "attacked": attack,
+    "attacked_with_many": attack_with_many,
+    "defended": defend,
+    "yielded_attack": yield_attack,
+    "collected": collect,
+    "passed": pass_card,
+    "passed_with_many": pass_with_many,
+}
+
+
 async def transform_and_persist(message):
     data = json.loads(message)
 
     # transform
-    if data["type"] == "attacked":
-        data["to_state"] = attack(
-            from_state=data["from_state"], user=data["user"], payload=data["payload"]
-        )
-    elif data["type"] == "defended":
-        data["to_state"] = defend(
-            from_state=data["from_state"], user=data["user"], payload=data["payload"]
-        )
-    elif data["type"] == "yielded_attack":
-        data["to_state"] = yield_attack(
-            from_state=data["from_state"], user=data["user"], payload=data["payload"]
-        )
-    elif data["type"] == "collected":
-        data["to_state"] = collect(
-            from_state=data["from_state"], user=data["user"], payload=data["payload"]
-        )
-    elif data["type"] == "passed":
-        data["to_state"] = pass_card(
+    if data["type"] in actions:
+        data["to_state"] = actions[data["type"]](
             from_state=data["from_state"], user=data["user"], payload=data["payload"]
         )
     else:
