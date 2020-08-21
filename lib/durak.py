@@ -263,12 +263,26 @@ def collect(*, from_state, user, payload):
     return game.serialize()
 
 
+# HACK: internal functions should increment pass count correctly
+def increment_pass_count(func):
+    def wrapped(*args, **kwargs):
+        init_pass_count = kwargs["from_state"]["pass_count"]
+        state = func(*args, **kwargs)
+        state["pass_count"] = init_pass_count + 1
+        return state
+
+    return wrapped
+
+
+@increment_pass_count
 def pass_card(*, from_state, user, payload):
     game = Game.deserialize(**from_state)
     game.pass_card(player=user, **payload)
+
     return game.serialize()
 
 
+@increment_pass_count
 def pass_with_many(*, from_state, user, payload):
     def step(state, card):
         return pass_card(from_state=state, user=user, payload={"card": card})
