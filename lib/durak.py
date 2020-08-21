@@ -1,4 +1,4 @@
-from functools import lru_cache
+from functools import lru_cache, reduce
 from itertools import chain
 from operator import attrgetter
 
@@ -233,13 +233,10 @@ def attack(*, from_state, user, payload):
 
 
 def attack_with_many(*, from_state, user, payload):
-    cards = payload["cards"]
+    def step(state, card):
+        return attack(from_state=state, user=user, payload={"card": card})
 
-    # TODO make this a reducer?
-    state = from_state
-    for card in cards:
-        state = attack(from_state=state, user=user, payload=card)
-    return state
+    return reduce(step, payload["cards"], from_state)
 
 
 def defend(*, from_state, user, payload):
