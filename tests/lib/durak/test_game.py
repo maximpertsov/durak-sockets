@@ -1,4 +1,5 @@
 import pytest
+
 from lib.durak import Game
 
 
@@ -21,6 +22,7 @@ def game():
                 {"rank": "2", "suit": "clubs"},
             ],
         },
+        pass_count=0,
         players=["anna"],
         table=[],
         yielded=[],
@@ -45,6 +47,7 @@ def test_serialize(game):
                 {"rank": "2", "suit": "clubs"},
             ]
         },
+        "pass_count": 0,
         "players": ["anna"],
         "table": [],
         "yielded": [],
@@ -70,6 +73,7 @@ def test_attack(game):
                 {"rank": "2", "suit": "clubs"},
             ]
         },
+        "pass_count": 0,
         "players": ["anna"],
         "table": [[{"rank": "10", "suit": "diamonds"}]],
         "yielded": [],
@@ -101,7 +105,12 @@ def test_defend(game):
                 {"rank": "2", "suit": "clubs"},
             ]
         },
+        "pass_count": 0,
         "players": ["anna"],
         "table": [[nine_of_diamonds, {"rank": "10", "suit": "diamonds"}]],
         "yielded": [],
     }
+
+
+def test_draw(game):
+    pass
