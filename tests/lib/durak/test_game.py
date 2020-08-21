@@ -190,3 +190,41 @@ def test_draw(game_3p):
         "table": [],
         "yielded": [],
     }
+
+
+def test_draw_with_pass_count(game_3p):
+    game_3p._pass_count = 2
+    game_3p.draw()
+    assert game_3p.serialize() == {
+        "draw_pile": [{"rank": "8", "suit": "diamonds"}],
+        "hands": {
+            "anna": [
+                {"rank": "9", "suit": "hearts"},
+                {"rank": "3", "suit": "spades"},
+                {"rank": "king", "suit": "hearts"},
+                {"rank": "4", "suit": "clubs"},
+                {"rank": "4", "suit": "hearts"},
+                {"rank": "10", "suit": "clubs"},
+            ],
+            "vasyl": [
+                {"rank": "7", "suit": "clubs"},
+                {"rank": "6", "suit": "diamonds"},
+                {"rank": "jack", "suit": "spades"},
+                {"rank": "7", "suit": "hearts"},
+                {"rank": "7", "suit": "diamonds"},
+                {"rank": "9", "suit": "clubs"},
+            ],
+            "igor": [
+                {"rank": "8", "suit": "hearts"},
+                {"rank": "jack", "suit": "diamonds"},
+                {"rank": "king", "suit": "spades"},
+                {"rank": "5", "suit": "hearts"},
+                {"rank": "jack", "suit": "clubs"},
+                {"rank": "9", "suit": "diamonds"},
+            ],
+        },
+        "pass_count": 0,
+        "players": ["anna", "vasyl", "igor"],
+        "table": [],
+        "yielded": [],
+    }
