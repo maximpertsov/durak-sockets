@@ -8,8 +8,8 @@ from fastapi import FastAPI, WebSocket
 from fastapi.concurrency import run_until_first_complete
 from fastapi.middleware.cors import CORSMiddleware
 
-from lib.durak import (attack, attack_with_many, collect, defend, pass_card,
-                       pass_with_many, yield_attack)
+from lib.durak import (InvalidUpdate, attack, attack_with_many, collect, defend,
+                       pass_card, pass_with_many, yield_attack)
 
 BASE_API_URL = environ.get("BASE_API_URL", "http://localhost:8000/api")
 broadcast = Broadcast(environ.get("REDISCLOUD_URL", "redis://localhost:6379"))
@@ -66,17 +66,16 @@ actions = {
 async def transform_and_persist(message):
     data = json.loads(message)
 
-    # transform
-    if data["type"] in actions:
+    try:
         data["to_state"] = actions[data["type"]](
             from_state=data["from_state"], user=data["user"], payload=data["payload"]
         )
-    else:
-        data["to_state"] = deepcopy(data["from_state"])
 
-    # persist
-    url = "{}/game/{}/events".format(BASE_API_URL, data["game"])
-    # TODO: make this async with request_threads?
-    requests.post(url, json=data)
+        # persist
+        url = "{}/game/{}/events".format(BASE_API_URL, data["game"])
+        # TODO: make this async with request_threads?
+        requests.post(url, json=data)
+    except (KeyError, InvalidUpdate):
+        data["to_state"] = deepcopy(data["from_state"])
 
     return json.dumps(data)

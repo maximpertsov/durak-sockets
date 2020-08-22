@@ -3,6 +3,18 @@ from itertools import chain
 from operator import attrgetter
 
 
+class InvalidUpdate(Exception):
+    pass
+
+
+class BaseCardNotFound(InvalidUpdate):
+    pass
+
+
+class DuplicateCard(InvalidUpdate):
+    pass
+
+
 class Card:
     def __init__(self, *, card):
         if not card:
@@ -76,9 +88,6 @@ class Player:
 
 
 class Table:
-    class BaseCardNotFound(Exception):
-        pass
-
     def __init__(self, table):
         self._table = [[Card(card=card) for card in cards] for cards in table]
 
@@ -86,6 +95,10 @@ class Table:
         return [[card.serialize() for card in cards] for cards in self._table]
 
     def add_card(self, *, card):
+        for _card in self._all_cards():
+            if _card["rank"] == card["rank"] and _card["suit"] == card["suit"]:
+                raise DuplicateCard
+
         self._table.append([Card(card=card)])
 
     def stack_card(self, *, base_card, card):
@@ -96,15 +109,18 @@ class Table:
                 cards.append(Card(card=card))
                 return
         else:
-            raise self.BaseCardNotFound
+            raise BaseCardNotFound
 
     def clear(self):
         self._table.clear()
 
     def collect(self):
-        result = [card.serialize() for card in chain.from_iterable(self._table)]
+        result = self._all_cards()
         self.clear()
         return result
+
+    def _all_cards(self):
+        return [card.serialize() for card in chain.from_iterable(self._table)]
 
 
 class DrawPile:
