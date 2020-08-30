@@ -15,46 +15,19 @@ class DuplicateCard(InvalidUpdate):
     pass
 
 
-class Card:
-    def __init__(self, *, card):
-        if not card:
-            self.rank = None
-            self.suit = None
-        else:
-            self.rank = card["rank"]
-            self.suit = card["suit"]
-
-    def serialize(self):
-        if self.is_empty_space():
-            return None
-        return {"rank": self.rank, "suit": self.suit}
-
-    def is_empty_space(self):
-        return self.rank is None and self.suit is None
-
-    def __eq__(self, other):
-        return self.rank == other.rank and self.suit == other.suit
-
-    def __repr__(self):
-        return repr(self.serialize())
-
-    def __str__(self):
-        return "{} of {}".format(self.rank, self.suit)
-
-
 class Player:
     HAND_SIZE = 6
 
     def __init__(self, *, name, cards, order, yielded=False):
         self.name = name
-        self._cards = [Card(card=card) for card in cards]
+        self._cards = cards
         self.order = order
         self.yielded = yielded
 
     def serialize(self):
         return {
             "name": self.name,
-            "cards": [card.serialize() for card in self._cards],
+            "cards": self._cards,
             "order": self.order,
             "yielded": self.yielded,
         }
@@ -66,15 +39,13 @@ class Player:
         return bool(self._cards)
 
     def take_cards(self, *, cards):
-        card_objects = [Card(card=card) for card in cards]
         # TODO: maybe compacting should happen client-side?
         self._compact_hand()
-        self._cards += card_objects
+        self._cards += cards
 
     def remove_card(self, *, card):
-        card_object = Card(card=card)
         self._cards = [
-            Card(card=None) if _card == card_object else _card for _card in self._cards
+            None if hand_card == card else hand_card for hand_card in self._cards
         ]
 
     def draw(self, *, draw_pile):
@@ -89,24 +60,22 @@ class Player:
 
 class Table:
     def __init__(self, table):
-        self._table = [[Card(card=card) for card in cards] for cards in table]
+        self._table = table
 
     def serialize(self):
-        return [[card.serialize() for card in cards] for cards in self._table]
+        return self._table
 
     def add_card(self, *, card):
-        for _card in self._all_cards():
-            if _card["rank"] == card["rank"] and _card["suit"] == card["suit"]:
+        for table_card in self._all_cards():
+            if table_card == card:
                 raise DuplicateCard
 
-        self._table.append([Card(card=card)])
+        self._table.append(card)
 
     def stack_card(self, *, base_card, card):
-        base_card_object = Card(card=base_card)
-
         for cards in self._table:
-            if cards[-1] == base_card_object:
-                cards.append(Card(card=card))
+            if cards[-1] == base_card:
+                cards.append(card)
                 return
         else:
             raise BaseCardNotFound
@@ -120,21 +89,21 @@ class Table:
         return result
 
     def _all_cards(self):
-        return [card.serialize() for card in chain.from_iterable(self._table)]
+        return list(chain.from_iterable(self._table))
 
 
 class DrawPile:
     def __init__(self, *, draw_pile):
-        self._draw_pile = [Card(card=card) for card in draw_pile]
+        self._draw_pile = draw_pile
 
     def serialize(self):
-        return [card.serialize() for card in self._draw_pile]
+        return self._draw_pile
 
     def size(self):
         return len(self._draw_pile)
 
     def draw(self, count):
-        result = [card.serialize() for card in self._draw_pile[:count]]
+        result = self._draw_pile[:count]
         self._draw_pile = self._draw_pile[count:]
         return result
 
