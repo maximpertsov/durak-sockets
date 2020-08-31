@@ -1,3 +1,5 @@
+from unittest import TestCase
+
 import pytest
 
 from lib.durak import Game
@@ -19,6 +21,7 @@ def test_serialize(game):
     assert game.serialize() == {
         "draw_pile": ["JC", "3S", "6C"],
         "hands": {"anna": ["10D", None, "10C", "2S", "5C", "8D", "2C"]},
+        "legal_defenses": {},
         "pass_count": 0,
         "players": ["anna"],
         "table": [],
@@ -31,6 +34,7 @@ def test_attack(game):
     assert game.serialize() == {
         "draw_pile": ["JC", "3S", "6C"],
         "hands": {"anna": [None, None, "10C", "2S", "5C", "8D", "2C"]},
+        "legal_defenses": {},
         "pass_count": 0,
         "players": ["anna"],
         "table": [["10D"]],
@@ -47,6 +51,7 @@ def test_defend(game):
     assert game.serialize() == {
         "draw_pile": ["JC", "3S", "6C"],
         "hands": {"anna": [None, None, "10C", "2S", "5C", "8D", "2C"]},
+        "legal_defenses": {},
         "pass_count": 0,
         "players": ["anna"],
         "table": [[nine_of_D, "10D"]],
@@ -79,6 +84,7 @@ def test_draw(game_3p):
             "vasyl": ["7C", "6D", "JS", "7H", "9C", "9D"],
             "igor": ["8H", "JD", "KS", "5H", "JC", "10C"],
         },
+        "legal_defenses": {},
         "pass_count": 0,
         "players": ["anna", "vasyl", "igor"],
         "table": [],
@@ -96,8 +102,26 @@ def test_draw_with_pass_count(game_3p):
             "vasyl": ["7C", "6D", "JS", "7H", "7D", "9C"],
             "igor": ["8H", "JD", "KS", "5H", "JC", "9D"],
         },
+        "legal_defenses": {},
         "pass_count": 0,
         "players": ["anna", "vasyl", "igor"],
         "table": [],
+        "yielded": [],
+    }
+
+
+def test_legal_defenses(game_3p):
+    game_3p._table.add_card(card="10S")
+    assert game_3p.serialize() == {
+        "draw_pile": ["7D", "9C", "9D", "10C", "8D"],
+        "hands": {
+            "anna": ["9H", "3S", "KH", "4C", "4H", None],
+            "vasyl": ["7C", "6D", "JS", "7H", None, None],
+            "igor": ["8H", "JD", "KS", "5H", "JC", None],
+        },
+        "pass_count": 0,
+        "legal_defenses": {"10S": set(["JS", "6D"])},
+        "players": ["anna", "vasyl", "igor"],
+        "table": [["10S"]],
         "yielded": [],
     }

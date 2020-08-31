@@ -54,11 +54,11 @@ def test_duplicate_card(table):
         table.add_card(card="10C")
 
 
-def test_valid_defenses(table):
+def test_legal_defenses(table):
     table.add_card(card="JD")
     trump_suit = "diamonds"
     diamonds = get_cards_of_suit(trump_suit)
-    assert table.valid_defenses(trump_suit=trump_suit) == {
+    assert table.legal_defenses(trump_suit=trump_suit) == {
         "JD": set(["QD", "KD", "AD"]),
         "10C": set(diamonds + ["JC", "QC", "KC", "AC"]),
     }

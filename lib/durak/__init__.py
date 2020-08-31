@@ -44,7 +44,10 @@ class Player:
         self._compact_hand()
 
     def _compact_hand(self):
-        self._cards = [card for card in self._cards if card]
+        self._cards = self.cards()
+
+    def cards(self):
+        return [card for card in self._cards if card]
 
 
 class DrawPile:
@@ -96,12 +99,28 @@ class Game:
                     player.serialize() for player in self._players.values()
                 ]
             },
+            "legal_defenses": self.legal_defenses(),
             "table": self._table.serialize(),
             "pass_count": self._pass_count,
             "players": [
                 player.name for player in self._ordered_players() if player.in_game()
             ],
             "yielded": [player.name for player in self._yielded_players()],
+        }
+
+    def legal_defenses(self):
+        if self._defender() is None:
+            return {}
+
+        # TODO: provide the trump suit
+        TRUMP_SUIT = "diamonds"
+
+        defender_cards = set(self._defender().cards())
+        return {
+            base_card: defender_cards & cards
+            for base_card, cards in self._table.legal_defenses(
+                trump_suit=TRUMP_SUIT
+            ).items()
         }
 
     def attack(self, *, player, card):
@@ -161,13 +180,16 @@ class Game:
     def _ordered_players(self):
         return sorted(self._players.values(), key=attrgetter("order"))
 
+    def _defender(self):
+        if len(self._ordered_players()) < 2:
+            return
+        return self._ordered_players()[1]
+
     def _no_more_attacks(self):
         not_yielded = set(self._players.values()).difference(
             set(self._yielded_players())
         )
-
-        # TODO: check if the only player who hasn't yielded is the defender?
-        return len(not_yielded) == 1
+        return not_yielded == set([self._defender()])
 
     def _yielded_players(self):
         return [player for player in self._players.values() if player.yielded]

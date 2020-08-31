@@ -24,7 +24,7 @@ class Table:
 
         self._table.append([card])
 
-    def valid_defenses(self, *, trump_suit):
+    def legal_defenses(self, *, trump_suit):
         return {
             base_card: set(
                 card
