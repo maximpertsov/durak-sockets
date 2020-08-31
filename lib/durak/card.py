@@ -18,21 +18,32 @@ RANKS = [
 ]
 
 
-def key(rank, suit):
+def _key(rank, suit):
     short_rank = rank if rank == "10" else rank[0]
     short_suit = suit[0]
 
     return f"{short_rank}{short_suit}".upper()
 
 
-DATA_BY_CARD = {
-    key(rank, suit): {"rank": rank, "suit": suit}
-    for rank, suit in product(RANKS, SUITS)
+_DATA_BY_CARD = {
+    _key(rank, suit): {"rank": rank, "suit": suit, "value": index}
+    for (index, rank), suit in product(enumerate(RANKS), SUITS)
 }
 
 
 def get_rank(card):
-    return DATA_BY_CARD[card]["rank"]
+    return _DATA_BY_CARD[card]["rank"]
+
 
 def get_suit(card):
-    return DATA_BY_CARD[card]["suit"]
+    return _DATA_BY_CARD[card]["suit"]
+
+
+def get_value(card):
+    return _DATA_BY_CARD[card]["value"]
+
+
+def is_legal_defense(attack_card, defense_card, trump_suit):
+    if get_suit(attack_card) == get_suit(defense_card):
+        return get_value(defense_card) > get_value(attack_card)
+    return get_suit(defense_card) == trump_suit

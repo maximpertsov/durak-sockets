@@ -1,6 +1,6 @@
 import pytest
 
-from lib.durak.card import get_rank, get_suit
+from lib.durak.card import get_rank, get_suit, is_legal_defense
 
 
 @pytest.mark.parametrize(
@@ -17,3 +17,16 @@ from lib.durak.card import get_rank, get_suit
 def test_get_rank_and_suit(card, rank, suit):
     assert get_rank(card) == rank
     assert get_suit(card) == suit
+
+
+@pytest.mark.parametrize(
+    "attack_card,defense_card,trump_suit,expected",
+    [
+        ("6H", "7H", "spades", True),
+        ("7H", "6H", "spades", False),
+        ("6H", "7C", "spades", False),
+        ("AH", "7S", "spades", True),
+    ],
+)
+def test_is_legal_defense(attack_card, defense_card, trump_suit, expected):
+    assert is_legal_defense(attack_card, defense_card, trump_suit) == expected
