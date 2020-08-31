@@ -107,3 +107,9 @@ def pass_with_many(*, from_state, user, payload):
     game = Game.deserialize(**from_state)
     game.pass_cards(player=user, **payload)
     return game.serialize()
+
+
+def start_game(*, from_state, user, payload):
+    game = Game.deserialize(**from_state)
+    game.draw()
+    return game.serialize()
