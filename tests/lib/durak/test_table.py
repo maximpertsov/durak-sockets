@@ -5,39 +5,32 @@ from lib.durak import BaseCardNotFound, DuplicateCard, Table
 
 @pytest.fixture
 def table():
-    return Table(
-        table=[
-            [{"rank": "8", "suit": "diamonds"}, {"rank": "10", "suit": "diamonds"}],
-            [{"rank": "10", "suit": "clubs"}],
-        ]
-    )
+    return Table(table=[["8D", "10D"], ["10C"]])
 
 
 def test_add_card(table):
-    table.add_card(card={"rank": "jack", "suit": "clubs"},)
+    table.add_card(card="JC")
     assert table.serialize() == [
-        [{"rank": "8", "suit": "diamonds"}, {"rank": "10", "suit": "diamonds"}],
-        [{"rank": "10", "suit": "clubs"}],
-        [{"rank": "jack", "suit": "clubs"}],
+        ["8D", "10D"],
+        ["10C"],
+        ["JC"],
     ]
 
 
 def test_stack_card(table):
     table.stack_card(
-        base_card={"rank": "10", "suit": "clubs"},
-        card={"rank": "jack", "suit": "clubs"},
+        base_card="10C", card="JC",
     )
     assert table.serialize() == [
-        [{"rank": "8", "suit": "diamonds"}, {"rank": "10", "suit": "diamonds"}],
-        [{"rank": "10", "suit": "clubs"}, {"rank": "jack", "suit": "clubs"}],
+        ["8D", "10D"],
+        ["10C", "JC"],
     ]
 
 
 def test_stack_card_on_nonexistent_base_card(table):
     with pytest.raises(BaseCardNotFound):
         table.stack_card(
-            base_card={"rank": "8", "suit": "diamonds"},
-            card={"rank": "jack", "suit": "clubs"},
+            base_card="8D", card="JC",
         )
 
 
@@ -48,13 +41,13 @@ def test_clear(table):
 
 def test_collect(table):
     assert table.collect() == [
-        {"rank": "8", "suit": "diamonds"},
-        {"rank": "10", "suit": "diamonds"},
-        {"rank": "10", "suit": "clubs"},
+        "8D",
+        "10D",
+        "10C",
     ]
     assert table.serialize() == []
 
 
 def test_duplicate_card(table):
     with pytest.raises(DuplicateCard):
-        table.add_card(card={"rank": "10", "suit": "clubs"})
+        table.add_card(card="10C")

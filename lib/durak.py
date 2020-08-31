@@ -33,7 +33,7 @@ class Player:
         }
 
     def card_count(self):
-        return sum(1 for card in self._cards if not card.is_empty_space())
+        return sum(1 for card in self._cards if card)
 
     def in_game(self):
         return bool(self._cards)
@@ -55,7 +55,7 @@ class Player:
         self._compact_hand()
 
     def _compact_hand(self):
-        self._cards = [card for card in self._cards if not card.is_empty_space()]
+        self._cards = [card for card in self._cards if card]
 
 
 class Table:
@@ -70,7 +70,7 @@ class Table:
             if table_card == card:
                 raise DuplicateCard
 
-        self._table.append(card)
+        self._table.append([card])
 
     def stack_card(self, *, base_card, card):
         for cards in self._table:
