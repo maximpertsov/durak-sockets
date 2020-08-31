@@ -1,5 +1,6 @@
 from itertools import chain
 
+from lib.durak.card import get_all_cards, is_legal_defense
 from lib.durak.exceptions import IllegalAction
 
 
@@ -22,6 +23,19 @@ class Table:
                 raise self.DuplicateCard
 
         self._table.append([card])
+
+    def valid_defenses(self, *, trump_suit):
+        return {
+            base_card: set(
+                card
+                for card in get_all_cards()
+                if is_legal_defense(base_card, card, trump_suit)
+            )
+            for base_card in self._undefended_cards()
+        }
+
+    def _undefended_cards(self):
+        return [stack[0] for stack in self._table if len(stack) == 1]
 
     def stack_card(self, *, base_card, card):
         for cards in self._table:

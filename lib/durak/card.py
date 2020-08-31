@@ -31,6 +31,10 @@ _DATA_BY_CARD = {
 }
 
 
+def get_all_cards():
+    return list(_DATA_BY_CARD)
+
+
 def get_rank(card):
     return _DATA_BY_CARD[card]["rank"]
 
@@ -41,6 +45,10 @@ def get_suit(card):
 
 def get_value(card):
     return _DATA_BY_CARD[card]["value"]
+
+
+def get_cards_of_suit(suit):
+    return [card for card, data in _DATA_BY_CARD.items() if data["suit"] == suit]
 
 
 def is_legal_defense(attack_card, defense_card, trump_suit):
