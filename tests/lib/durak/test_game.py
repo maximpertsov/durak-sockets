@@ -11,6 +11,7 @@ def game():
         pass_count=0,
         players=["anna"],
         table=[],
+        trump_suit="diamonds",
         yielded=[],
     )
 
@@ -41,10 +42,9 @@ def test_attack(game):
 
 
 def test_defend(game):
-    nine_of_D = "9D"
-    game._table.add_card(card=nine_of_D)
+    game._table.add_card(card="9D")
     game.defend(
-        base_card=nine_of_D, player="anna", card="10D",
+        base_card="9D", player="anna", card="10D",
     )
     assert game.serialize() == {
         "draw_pile": ["JC", "3S", "6C"],
@@ -52,7 +52,7 @@ def test_defend(game):
         "legal_defenses": {},
         "pass_count": 0,
         "players": ["anna"],
-        "table": [[nine_of_D, "10D"]],
+        "table": [["9D", "10D"]],
         "yielded": [],
     }
 
@@ -69,6 +69,7 @@ def game_3p():
         pass_count=0,
         players=["anna", "vasyl", "igor"],
         table=[],
+        trump_suit="diamonds",
         yielded=[],
     )
 

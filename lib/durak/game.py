@@ -7,7 +7,9 @@ from lib.durak.table import Table
 
 class Game:
     @classmethod
-    def deserialize(cls, *, draw_pile, hands, pass_count, players, table, yielded):
+    def deserialize(
+        cls, *, draw_pile, hands, pass_count, players, table, trump_suit, yielded
+    ):
         return cls(
             draw_pile=DrawPile(draw_pile=draw_pile),
             players={
@@ -21,13 +23,16 @@ class Game:
             },
             pass_count=pass_count,
             table=Table(table=table),
+            trump_suit=trump_suit,
         )
 
-    def __init__(self, *, draw_pile, pass_count, players, table):
+    def __init__(self, *, draw_pile, pass_count, players, table, trump_suit):
         self._draw_pile = draw_pile
         self._pass_count = pass_count
         self._players = players
         self._table = table
+        # TODO: pass trump suit to table
+        self._trump_suit = trump_suit
 
     def serialize(self):
         return {
@@ -44,6 +49,7 @@ class Game:
             "players": [
                 player.name for player in self._ordered_players() if player.in_game()
             ],
+            "trump_suit": self._trump_suit,
             "yielded": [player.name for player in self._yielded_players()],
         }
 
@@ -51,14 +57,11 @@ class Game:
         if self._defender() is None:
             return {}
 
-        # TODO: provide the trump suit
-        TRUMP_SUIT = "diamonds"
-
         defender_cards = set(self._defender().cards())
         return {
             base_card: defender_cards & cards
             for base_card, cards in self._table.legal_defenses(
-                trump_suit=TRUMP_SUIT
+                trump_suit=self._trump_suit
             ).items()
         }
 
