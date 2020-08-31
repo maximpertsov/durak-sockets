@@ -1,36 +1,19 @@
 import pytest
+
 from lib.durak import DrawPile, Player
 
 
 @pytest.fixture
 def player():
     return Player(
-        name="anna",
-        cards=[
-            {"rank": "10", "suit": "diamonds"},
-            None,
-            {"rank": "10", "suit": "clubs"},
-            {"rank": "2", "suit": "spades"},
-            {"rank": "5", "suit": "clubs"},
-            {"rank": "8", "suit": "diamonds"},
-            {"rank": "2", "suit": "clubs"},
-        ],
-        order=0,
+        name="anna", cards=["10D", None, "10C", "2S", "5C", "8D", "2C"], order=0,
     )
 
 
 def test_serialize(player):
     assert player.serialize() == {
         "name": "anna",
-        "cards": [
-            {"rank": "10", "suit": "diamonds"},
-            None,
-            {"rank": "10", "suit": "clubs"},
-            {"rank": "2", "suit": "spades"},
-            {"rank": "5", "suit": "clubs"},
-            {"rank": "8", "suit": "diamonds"},
-            {"rank": "2", "suit": "clubs"},
-        ],
+        "cards": ["10D", None, "10C", "2S", "5C", "8D", "2C"],
         "order": 0,
         "yielded": False,
     }
@@ -41,39 +24,20 @@ def test_card_count(player):
 
 
 def test_take_cards(player):
-    player.take_cards(
-        cards=[{"rank": "3", "suit": "spades"}, {"rank": "4", "suit": "diamonds"}],
-    )
+    player.take_cards(cards=["3S", "4D"])
     assert player.serialize() == {
         "name": "anna",
-        "cards": [
-            {"rank": "10", "suit": "diamonds"},
-            {"rank": "10", "suit": "clubs"},
-            {"rank": "2", "suit": "spades"},
-            {"rank": "5", "suit": "clubs"},
-            {"rank": "8", "suit": "diamonds"},
-            {"rank": "2", "suit": "clubs"},
-            {"rank": "3", "suit": "spades"},
-            {"rank": "4", "suit": "diamonds"},
-        ],
+        "cards": ["10D", "10C", "2S", "5C", "8D", "2C", "3S", "4D"],
         "order": 0,
         "yielded": False,
     }
 
 
 def test_remove_card(player):
-    player.remove_card(card={"rank": "2", "suit": "spades"})
+    player.remove_card(card="2S")
     assert player.serialize() == {
         "name": "anna",
-        "cards": [
-            {"rank": "10", "suit": "diamonds"},
-            None,
-            {"rank": "10", "suit": "clubs"},
-            None,
-            {"rank": "5", "suit": "clubs"},
-            {"rank": "8", "suit": "diamonds"},
-            {"rank": "2", "suit": "clubs"},
-        ],
+        "cards": ["10D", None, "10C", None, "5C", "8D", "2C"],
         "order": 0,
         "yielded": False,
     }
@@ -82,7 +46,7 @@ def test_remove_card(player):
 def test_card_count_and_in_game(player):
     kwargs = {"name": "anna", "order": 0}
 
-    player = Player(cards=[{"rank": "10", "suit": "diamonds"}], **kwargs)
+    player = Player(cards=["10D"], **kwargs)
     assert player.in_game()
     assert player.card_count() == 1
 
@@ -96,38 +60,15 @@ def test_card_count_and_in_game(player):
 
 
 def test_draw_from_pile():
-    player = Player(
-        name="anna",
-        cards=[
-            {"rank": "10", "suit": "diamonds"},
-            None,
-            {"rank": "10", "suit": "clubs"},
-        ],
-        order=0,
-    )
-    draw_pile = DrawPile(
-        draw_pile=[
-            {"rank": "2", "suit": "spades"},
-            {"rank": "5", "suit": "clubs"},
-            {"rank": "8", "suit": "diamonds"},
-            {"rank": "2", "suit": "clubs"},
-            {"rank": "ace", "suit": "spades"},
-        ]
-    )
+    player = Player(name="anna", cards=["10D", None, "10C"], order=0,)
+    draw_pile = DrawPile(draw_pile=["2S", "5C", "8D", "2C", "AS"])
     player.draw(draw_pile=draw_pile)
     assert player.serialize() == {
         "name": "anna",
-        "cards": [
-            {"rank": "10", "suit": "diamonds"},
-            {"rank": "10", "suit": "clubs"},
-            {"rank": "2", "suit": "spades"},
-            {"rank": "5", "suit": "clubs"},
-            {"rank": "8", "suit": "diamonds"},
-            {"rank": "2", "suit": "clubs"},
-        ],
+        "cards": ["10D", "10C", "2S", "5C", "8D", "2C"],
         "order": 0,
         "yielded": False,
     }
     assert draw_pile.serialize() == [
-        {"rank": "ace", "suit": "spades"},
+        "AS",
     ]
