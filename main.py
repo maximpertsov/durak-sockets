@@ -8,7 +8,7 @@ from fastapi import FastAPI, WebSocket
 from fastapi.concurrency import run_until_first_complete
 from fastapi.middleware.cors import CORSMiddleware
 
-from lib.durak import (InvalidUpdate, attack, attack_with_many, collect, defend,
+from lib.durak import (IllegalAction, attack, attack_with_many, collect, defend,
                        pass_card, pass_with_many, yield_attack)
 
 BASE_API_URL = environ.get("BASE_API_URL", "http://localhost:8000/api")
@@ -75,7 +75,7 @@ async def transform_and_persist(message):
         url = "{}/game/{}/events".format(BASE_API_URL, data["game"])
         # TODO: make this async with request_threads?
         requests.post(url, json=data)
-    except (KeyError, InvalidUpdate):
+    except (KeyError, IllegalAction):
         data["to_state"] = deepcopy(data["from_state"])
 
     return json.dumps(data)

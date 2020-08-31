@@ -1,6 +1,6 @@
 import pytest
 
-from lib.durak import BaseCardNotFound, DuplicateCard, Table
+from lib.durak import Table
 
 
 @pytest.fixture
@@ -28,7 +28,7 @@ def test_stack_card(table):
 
 
 def test_stack_card_on_nonexistent_base_card(table):
-    with pytest.raises(BaseCardNotFound):
+    with pytest.raises(Table.BaseCardNotFound):
         table.stack_card(
             base_card="8D", card="JC",
         )
@@ -49,5 +49,5 @@ def test_collect(table):
 
 
 def test_duplicate_card(table):
-    with pytest.raises(DuplicateCard):
+    with pytest.raises(Table.DuplicateCard):
         table.add_card(card="10C")

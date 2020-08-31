@@ -1,18 +1,7 @@
 from functools import lru_cache, reduce
-from itertools import chain
 from operator import attrgetter
 
-
-class InvalidUpdate(Exception):
-    pass
-
-
-class BaseCardNotFound(InvalidUpdate):
-    pass
-
-
-class DuplicateCard(InvalidUpdate):
-    pass
+from lib.durak.table import Table
 
 
 class Player:
@@ -56,40 +45,6 @@ class Player:
 
     def _compact_hand(self):
         self._cards = [card for card in self._cards if card]
-
-
-class Table:
-    def __init__(self, table):
-        self._table = table
-
-    def serialize(self):
-        return self._table
-
-    def add_card(self, *, card):
-        for table_card in self._all_cards():
-            if table_card == card:
-                raise DuplicateCard
-
-        self._table.append([card])
-
-    def stack_card(self, *, base_card, card):
-        for cards in self._table:
-            if cards[-1] == base_card:
-                cards.append(card)
-                return
-        else:
-            raise BaseCardNotFound
-
-    def clear(self):
-        self._table.clear()
-
-    def collect(self):
-        result = self._all_cards()
-        self.clear()
-        return result
-
-    def _all_cards(self):
-        return list(chain.from_iterable(self._table))
 
 
 class DrawPile:
