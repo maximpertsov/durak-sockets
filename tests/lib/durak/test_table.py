@@ -1,6 +1,6 @@
 import pytest
 
-from lib.durak import Table
+from lib.durak.table import Table
 from lib.durak.card import get_cards_of_suit
 
 

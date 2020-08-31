@@ -1,8 +1,6 @@
-from unittest import TestCase
-
 import pytest
 
-from lib.durak import Game
+from lib.durak.game import Game
 
 
 @pytest.fixture
