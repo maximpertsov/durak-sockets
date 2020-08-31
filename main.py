@@ -63,6 +63,13 @@ actions = {
 }
 
 
+class MessageEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, set):
+            return list(obj)
+        return json.JSONEncoder.default(self, obj)
+
+
 async def transform_and_persist(message):
     data = json.loads(message)
 
@@ -74,8 +81,12 @@ async def transform_and_persist(message):
         # persist
         url = "{}/game/{}/events".format(BASE_API_URL, data["game"])
         # TODO: make this async with request_threads?
-        requests.post(url, json=data)
+        requests.post(
+            url,
+            headers={"Content-Type": "application/json"},
+            data=json.dumps(data, cls=MessageEncoder),
+        )
     except (KeyError, IllegalAction):
         data["to_state"] = deepcopy(data["from_state"])
 
-    return json.dumps(data)
+    return json.dumps(data, cls=MessageEncoder)
