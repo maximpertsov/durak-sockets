@@ -24,6 +24,7 @@ def test_serialize(game):
         "pass_count": 0,
         "players": ["anna"],
         "table": [],
+        "trump_suit": "diamonds",
         "yielded": [],
     }
 
@@ -37,6 +38,7 @@ def test_attack(game):
         "pass_count": 0,
         "players": ["anna"],
         "table": [["10D"]],
+        "trump_suit": "diamonds",
         "yielded": [],
     }
 
@@ -53,6 +55,7 @@ def test_defend(game):
         "pass_count": 0,
         "players": ["anna"],
         "table": [["9D", "10D"]],
+        "trump_suit": "diamonds",
         "yielded": [],
     }
 
@@ -87,6 +90,7 @@ def test_draw(game_3p):
         "pass_count": 0,
         "players": ["anna", "vasyl", "igor"],
         "table": [],
+        "trump_suit": "diamonds",
         "yielded": [],
     }
 
@@ -105,6 +109,7 @@ def test_draw_with_pass_count(game_3p):
         "pass_count": 0,
         "players": ["anna", "vasyl", "igor"],
         "table": [],
+        "trump_suit": "diamonds",
         "yielded": [],
     }
 
@@ -122,5 +127,6 @@ def test_legal_defenses(game_3p):
         "legal_defenses": {"10S": set(["JS", "6D"])},
         "players": ["anna", "vasyl", "igor"],
         "table": [["10S"]],
+        "trump_suit": "diamonds",
         "yielded": [],
     }
