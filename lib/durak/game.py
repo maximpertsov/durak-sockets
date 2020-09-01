@@ -56,15 +56,18 @@ class Game:
 
     def legal_attacks(self):
         if self._defender() is None:
-            return set([])
-        if len(self._defender().cards()) <= len(self._table.undefended_cards()):
-            return set([])
+            return {"cards": set([]), "limit": 0}
 
+        limit = max(
+            0, len(self._defender().cards()) - len(self._table.undefended_cards())
+        )
         attacker_cards = set(
             chain.from_iterable(player.cards() for player in self._attackers())
         )
-
-        return attacker_cards & self._table.legal_attacks()
+        return {
+            "cards": attacker_cards & self._table.legal_attacks(),
+            "limit": limit,
+        }
 
     def legal_defenses(self):
         if self._defender() is None:
