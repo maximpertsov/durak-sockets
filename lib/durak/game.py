@@ -1,4 +1,5 @@
 from functools import lru_cache
+from itertools import chain
 from operator import attrgetter
 
 from lib.durak import DrawPile, Player
@@ -31,7 +32,6 @@ class Game:
         self._pass_count = pass_count
         self._players = players
         self._table = table
-        # TODO: pass trump suit to table
         self._trump_suit = trump_suit
 
     def serialize(self):
@@ -43,6 +43,7 @@ class Game:
                     player.serialize() for player in self._players.values()
                 ]
             },
+            "legal_attacks": self.legal_attacks(),
             "legal_defenses": self.legal_defenses(),
             "table": self._table.serialize(),
             "pass_count": self._pass_count,
@@ -52,6 +53,18 @@ class Game:
             "trump_suit": self._trump_suit,
             "yielded": [player.name for player in self._yielded_players()],
         }
+
+    def legal_attacks(self):
+        if self._defender() is None:
+            return set([])
+        if len(self._defender().cards()) <= len(self._table.undefended_cards()):
+            return set([])
+
+        attacker_cards = set(
+            chain.from_iterable(player.cards() for player in self._attackers())
+        )
+
+        return attacker_cards & self._table.legal_attacks()
 
     def legal_defenses(self):
         if self._defender() is None:
@@ -126,6 +139,16 @@ class Game:
         if len(self._ordered_players()) < 2:
             return
         return self._ordered_players()[1]
+
+    def _attackers(self):
+        if not self._ordered_players():
+            return []
+        if len(self._ordered_players()) == 1 or not self._table.cards():
+            return self._ordered_players()[:1]
+
+        return [
+            player for player in self._ordered_players() if player != self._defender()
+        ]
 
     def _no_more_attacks(self):
         not_yielded = set(self._players.values()).difference(

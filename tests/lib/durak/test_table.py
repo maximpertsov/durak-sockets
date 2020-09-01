@@ -1,7 +1,7 @@
 import pytest
 
-from lib.durak.table import Table
 from lib.durak.card import get_cards_of_suit
+from lib.durak.table import Table
 
 
 @pytest.fixture
@@ -62,3 +62,9 @@ def test_legal_defenses(table):
         "JD": set(["QD", "KD", "AD"]),
         "10C": set(diamonds + ["JC", "QC", "KC", "AC"]),
     }
+
+
+def test_legal_attacks(table):
+    assert table.legal_attacks() == set(
+        ["10H", "10D", "10C", "10S", "8H", "8D", "8C", "8S"]
+    )
