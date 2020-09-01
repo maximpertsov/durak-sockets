@@ -1,6 +1,7 @@
 import pytest
 
-from lib.durak import DrawPile, Player
+from lib.durak.draw_pile import DrawPile
+from lib.durak.player import Player
 
 
 @pytest.fixture

@@ -1,6 +1,6 @@
 import pytest
 
-from lib.durak import DrawPile
+from lib.durak.draw_pile import DrawPile
 
 
 @pytest.fixture

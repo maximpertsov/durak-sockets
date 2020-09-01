@@ -2,7 +2,8 @@ from functools import lru_cache
 from itertools import chain
 from operator import attrgetter
 
-from lib.durak import DrawPile, Player
+from lib.durak.draw_pile import DrawPile
+from lib.durak.player import Player
 from lib.durak.table import Table
 
 
