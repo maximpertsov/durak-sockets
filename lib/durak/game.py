@@ -45,6 +45,7 @@ class Game:
             },
             "legal_attacks": self.legal_attacks(),
             "legal_defenses": self.legal_defenses(),
+            "legal_passes": self.legal_passes(),
             "table": self._table.serialize(),
             "pass_count": self._pass_count,
             "players": [
@@ -79,6 +80,21 @@ class Game:
             for base_card, cards in self._table.legal_defenses(
                 trump_suit=self._trump_suit
             ).items()
+        }
+
+    def legal_passes(self):
+        if self._pass_recipient() is None:
+            return {"cards": set([]), "limit": 0}
+
+        limit = max(
+            0, len(self._pass_recipient().cards()) - len(self._table.undefended_cards())
+        )
+        attacker_cards = set(
+            chain.from_iterable(player.cards() for player in self._attackers())
+        )
+        return {
+            "cards": attacker_cards & self._table.legal_passes(),
+            "limit": limit,
         }
 
     def attack(self, *, player, card):
@@ -152,6 +168,14 @@ class Game:
         return [
             player for player in self._ordered_players() if player != self._defender()
         ]
+
+    def _pass_recipient(self):
+        next_players_with_cards = [
+            player for player in self._ordered_players()[1:] if player.cards()
+        ]
+        if not next_players_with_cards:
+            return
+        return next_players_with_cards[0]
 
     def _no_more_attacks(self):
         not_yielded = set(self._players.values()).difference(

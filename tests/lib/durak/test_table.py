@@ -68,3 +68,12 @@ def test_legal_attacks(table):
     assert table.legal_attacks() == set(
         ["10H", "10D", "10C", "10S", "8H", "8D", "8C", "8S"]
     )
+
+
+def test_legal_passes(table):
+    assert table.legal_passes() == set([])
+    assert Table(table=[]).legal_passes() == set([])
+    assert Table(table=[["10H"]]).legal_passes() == set(["10H", "10D", "10C", "10S"])
+    assert Table(table=[["10H"], ["10S"]]).legal_passes() == set(
+        ["10H", "10D", "10C", "10S"]
+    )

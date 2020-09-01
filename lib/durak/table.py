@@ -41,6 +41,18 @@ class Table:
         ranks_on_table = set(get_rank(card) for card in self.cards())
         return set(card for card in get_all_cards() if get_rank(card) in ranks_on_table)
 
+    def legal_passes(self):
+        if not self._table:
+            return set([])
+        if any(len(stack) > 1 for stack in self._table):
+            return set([])
+
+        ranks_on_table = set(get_rank(card) for card in self.cards())
+        if len(ranks_on_table) > 1:
+            return set([])
+
+        return set(card for card in get_all_cards() if get_rank(card) in ranks_on_table)
+
     def undefended_cards(self):
         return [stack[0] for stack in self._table if len(stack) == 1]
 
