@@ -37,6 +37,8 @@ class Game:
 
     def serialize(self):
         return {
+            "attackers": [player.name for player in self._attackers()],
+            "defender": getattr(self._defender(), "name", None),
             "draw_pile": self._draw_pile.serialize(),
             "hands": {
                 serialized["name"]: serialized["cards"]

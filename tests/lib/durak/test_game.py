@@ -18,6 +18,8 @@ def game():
 
 def test_serialize(game):
     assert game.serialize() == {
+        "attackers": ["anna"],
+        "defender": None,
         "draw_pile": ["JC", "3S", "6C"],
         "hands": {"anna": ["10D", None, "10C", "2S", "5C", "8D", "2C"]},
         "legal_attacks": {"cards": set([]), "limit": 0},
@@ -34,6 +36,8 @@ def test_serialize(game):
 def test_attack(game):
     game.attack(player="anna", card="10D")
     assert game.serialize() == {
+        "attackers": ["anna"],
+        "defender": None,
         "draw_pile": ["JC", "3S", "6C"],
         "hands": {"anna": [None, None, "10C", "2S", "5C", "8D", "2C"]},
         "legal_attacks": {"cards": set([]), "limit": 0},
@@ -53,6 +57,8 @@ def test_defend(game):
         base_card="9D", player="anna", card="10D",
     )
     assert game.serialize() == {
+        "attackers": ["anna"],
+        "defender": None,
         "draw_pile": ["JC", "3S", "6C"],
         "hands": {"anna": [None, None, "10C", "2S", "5C", "8D", "2C"]},
         "legal_attacks": {"cards": set([]), "limit": 0},
@@ -86,6 +92,8 @@ def game_3p():
 def test_draw(game_3p):
     game_3p.draw()
     assert game_3p.serialize() == {
+        "attackers": ["anna"],
+        "defender": "vasyl",
         "draw_pile": ["8D"],
         "hands": {
             "anna": ["9H", "3S", "KH", "4C", "4H", "7D"],
@@ -110,6 +118,8 @@ def test_draw_with_pass_count(game_3p):
     game_3p._pass_count = 2
     game_3p.draw()
     assert game_3p.serialize() == {
+        "attackers": ["anna"],
+        "defender": "vasyl",
         "draw_pile": ["8D"],
         "hands": {
             "anna": ["9H", "3S", "KH", "4C", "4H", "10C"],
@@ -133,6 +143,8 @@ def test_draw_with_pass_count(game_3p):
 def test_legal_defenses(game_3p):
     game_3p._table.add_card(card="10S")
     assert game_3p.serialize() == {
+        "attackers": ["anna", "igor"],
+        "defender": "vasyl",
         "draw_pile": ["7D", "9C", "9D", "10C", "8D"],
         "hands": {
             "anna": ["9H", "3S", "KH", "4C", "4H", None],
@@ -153,6 +165,8 @@ def test_legal_defenses(game_3p):
 def test_legal_attacks(game_3p):
     game_3p._table.add_card(card="4S")
     assert game_3p.serialize() == {
+        "attackers": ["anna", "igor"],
+        "defender": "vasyl",
         "draw_pile": ["7D", "9C", "9D", "10C", "8D"],
         "hands": {
             "anna": ["9H", "3S", "KH", "4C", "4H", None],
@@ -173,6 +187,8 @@ def test_legal_attacks(game_3p):
 def test_legal_passes(game_3p):
     game_3p._table.add_card(card="7S")
     assert game_3p.serialize() == {
+        "attackers": ["anna", "igor"],
+        "defender": "vasyl",
         "draw_pile": ["7D", "9C", "9D", "10C", "8D"],
         "hands": {
             "anna": ["9H", "3S", "KH", "4C", "4H", None],
@@ -197,6 +213,8 @@ def test_legal_passes_when_on_deck_defender_has_no_cards(game_3p):
         game_3p._player("igor").remove_card(card=card)
 
     assert game_3p.serialize() == {
+        "attackers": ["anna", "igor"],
+        "defender": "vasyl",
         "draw_pile": ["7D", "9C", "9D", "10C", "8D"],
         "hands": {
             "anna": ["9H", "3S", "KH", "4C", "4H", None],
