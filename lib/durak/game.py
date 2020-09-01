@@ -90,11 +90,9 @@ class Game:
         limit = max(
             0, len(self._pass_recipient().cards()) - len(self._table.undefended_cards())
         )
-        attacker_cards = set(
-            chain.from_iterable(player.cards() for player in self._attackers())
-        )
+        defender_cards = set(self._defender().cards())
         return {
-            "cards": attacker_cards & self._table.legal_passes(),
+            "cards": defender_cards & self._table.legal_passes(),
             "limit": limit,
         }
 
@@ -171,8 +169,14 @@ class Game:
         ]
 
     def _pass_recipient(self):
+        if not self._defender():
+            return
+
+        players_from_defender = self._ordered_players()[2:] + [
+            self._ordered_players()[0]
+        ]
         next_players_with_cards = [
-            player for player in self._ordered_players()[1:] if player.cards()
+            player for player in players_from_defender if player.cards()
         ]
         if not next_players_with_cards:
             return

@@ -142,7 +142,7 @@ def test_legal_defenses(game_3p):
         "pass_count": 0,
         "legal_attacks": {"cards": set([]), "limit": 3},
         "legal_defenses": {"10S": set(["JS", "6D"])},
-        "legal_passes": {"cards": set([]), "limit": 3},
+        "legal_passes": {"cards": set([]), "limit": 4},
         "players": ["anna", "vasyl", "igor"],
         "table": [["10S"]],
         "trump_suit": "diamonds",
@@ -162,7 +162,7 @@ def test_legal_attacks(game_3p):
         "pass_count": 0,
         "legal_attacks": {"cards": set(["4C", "4H"]), "limit": 3},
         "legal_defenses": {"4S": set(["JS", "6D"])},
-        "legal_passes": {"cards": set(["4C", "4H"]), "limit": 3},
+        "legal_passes": {"cards": set([]), "limit": 4},
         "players": ["anna", "vasyl", "igor"],
         "table": [["4S"]],
         "trump_suit": "diamonds",
@@ -170,23 +170,45 @@ def test_legal_attacks(game_3p):
     }
 
 
-def test_legal_attacks_defender_has_no_cards(game_3p):
-    game_3p._table.add_card(card="4S")
-    for card in ["7C", "6D", "JS", "7H"]:
-        game_3p._player("vasyl").remove_card(card=card)
+def test_legal_passes(game_3p):
+    game_3p._table.add_card(card="7S")
     assert game_3p.serialize() == {
         "draw_pile": ["7D", "9C", "9D", "10C", "8D"],
         "hands": {
             "anna": ["9H", "3S", "KH", "4C", "4H", None],
-            "vasyl": [None, None, None, None, None, None],
+            "vasyl": ["7C", "6D", "JS", "7H", None, None],
             "igor": ["8H", "JD", "KS", "5H", "JC", None],
         },
         "pass_count": 0,
-        "legal_attacks": {"cards": set(["4C", "4H"]), "limit": 0},
-        "legal_defenses": {"4S": set([])},
-        "legal_passes": {"cards": set(["4C", "4H"]), "limit": 4},
+        "legal_attacks": {"cards": set([]), "limit": 3},
+        "legal_defenses": {"7S": set(["JS", "6D"])},
+        "legal_passes": {"cards": set(["7C", "7H"]), "limit": 4},
         "players": ["anna", "vasyl", "igor"],
-        "table": [["4S"]],
+        "table": [["7S"]],
+        "trump_suit": "diamonds",
+        "yielded": [],
+    }
+
+
+def test_legal_passes_when_on_deck_defender_has_no_cards(game_3p):
+    game_3p._table.add_card(card="7S")
+
+    for card in ["8H", "JD", "KS", "5H", "JC"]:
+        game_3p._player("igor").remove_card(card=card)
+
+    assert game_3p.serialize() == {
+        "draw_pile": ["7D", "9C", "9D", "10C", "8D"],
+        "hands": {
+            "anna": ["9H", "3S", "KH", "4C", "4H", None],
+            "vasyl": ["7C", "6D", "JS", "7H", None, None],
+            "igor": [None, None, None, None, None, None],
+        },
+        "pass_count": 0,
+        "legal_attacks": {"cards": set([]), "limit": 3},
+        "legal_defenses": {"7S": set(["JS", "6D"])},
+        "legal_passes": {"cards": set(["7C", "7H"]), "limit": 4},
+        "players": ["anna", "vasyl", "igor"],
+        "table": [["7S"]],
         "trump_suit": "diamonds",
         "yielded": [],
     }
