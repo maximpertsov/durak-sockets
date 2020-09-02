@@ -54,7 +54,7 @@ class Game:
             "pass_count": self._pass_count,
             "players": [player.name for player in self._ordered_players()],
             "trump_suit": self._trump_suit,
-            "winners": self.winners(),
+            "winners": set(player.name for player in self.winners()),
             "yielded": [player.name for player in self._yielded_players()],
         }
 
