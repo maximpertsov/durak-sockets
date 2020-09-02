@@ -207,7 +207,7 @@ class Game:
         return [
             player
             for player in self._ordered_players()
-            if self._draw_pile.size() or player.in_game()
+            if self._draw_pile.size() or player.cards()
         ]
 
     def _ordered_players(self):

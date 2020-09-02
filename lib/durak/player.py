@@ -16,10 +16,7 @@ class Player:
         }
 
     def card_count(self):
-        return sum(1 for card in self._cards if card)
-
-    def in_game(self):
-        return bool(self._cards)
+        return len(self.cards())
 
     def take_cards(self, *, cards):
         # TODO: maybe compacting should happen client-side?
