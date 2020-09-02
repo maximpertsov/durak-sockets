@@ -206,6 +206,10 @@ class Game:
     @lru_cache
     def _ordered_players(self):
         return sorted(
-            [player for player in self._players.values() if player.in_game()],
+            [
+                player
+                for player in self._players.values()
+                if self._draw_pile.size() or player.in_game()
+            ],
             key=attrgetter("order"),
         )
