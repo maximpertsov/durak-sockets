@@ -1,4 +1,3 @@
-from functools import lru_cache
 from itertools import chain
 from operator import attrgetter
 
@@ -44,7 +43,7 @@ class Game:
             "hands": {
                 serialized["name"]: serialized["cards"]
                 for serialized in [
-                    player.serialize() for player in self._ordered_players()
+                    player.serialize() for player in self._active_players()
                 ]
             },
             "legal_attacks": self.legal_attacks(),
@@ -52,7 +51,7 @@ class Game:
             "legal_passes": self.legal_passes(),
             "table": self._table.serialize(),
             "pass_count": self._pass_count,
-            "players": [player.name for player in self._players.values()],
+            "players": [player.name for player in self._ordered_players()],
             "trump_suit": self._trump_suit,
             "yielded": [player.name for player in self._yielded_players()],
         }
@@ -61,8 +60,8 @@ class Game:
         if self._draw_pile.size():
             return None
 
-        if len(self._ordered_players()) == 1:
-            return self._ordered_players()[0]
+        if len(self._active_players()) == 1:
+            return self._active_players()[0]
 
     def legal_attacks(self):
         if self._defender() is None:
@@ -119,10 +118,10 @@ class Game:
         self._clear_yields()
 
     def draw(self):
-        player_count = len(self._ordered_players())
+        player_count = len(self._active_players())
         for index in range(player_count):
             index_with_passes = (index - self._pass_count) % player_count
-            player = self._ordered_players()[index_with_passes]
+            player = self._active_players()[index_with_passes]
             player.draw(draw_pile=self._draw_pile)
         self._pass_count = 0
 
@@ -153,36 +152,33 @@ class Game:
 
     def _rotate(self, *, skip=0):
         shift = skip + 1
-        players = self._ordered_players()[shift:] + self._ordered_players()[:shift]
+        players = self._active_players()[shift:] + self._active_players()[:shift]
         for order, player in enumerate(players):
             player.order = order
-        self._ordered_players.cache_clear()
 
     def _player(self, player):
         return self._players[player]
 
     def _defender(self):
-        if len(self._ordered_players()) < 2:
+        if len(self._active_players()) < 2:
             return
-        return self._ordered_players()[1]
+        return self._active_players()[1]
 
     def _attackers(self):
-        if not self._ordered_players():
+        if not self._active_players():
             return []
-        if len(self._ordered_players()) == 1 or not self._table.cards():
-            return self._ordered_players()[:1]
+        if len(self._active_players()) == 1 or not self._table.cards():
+            return self._active_players()[:1]
 
         return [
-            player for player in self._ordered_players() if player != self._defender()
+            player for player in self._active_players() if player != self._defender()
         ]
 
     def _pass_recipient(self):
         if not self._defender():
             return
 
-        players_from_defender = self._ordered_players()[2:] + [
-            self._ordered_players()[0]
-        ]
+        players_from_defender = self._active_players()[2:] + [self._active_players()[0]]
         next_players_with_cards = [
             player for player in players_from_defender if player.cards()
         ]
@@ -191,25 +187,24 @@ class Game:
         return next_players_with_cards[0]
 
     def _no_more_attacks(self):
-        not_yielded = set(self._ordered_players()).difference(
+        not_yielded = set(self._active_players()).difference(
             set(self._yielded_players())
         )
         return not_yielded == set([self._defender()])
 
     def _yielded_players(self):
-        return [player for player in self._ordered_players() if player.yielded]
+        return [player for player in self._active_players() if player.yielded]
 
     def _clear_yields(self):
-        for _player in self._ordered_players():
+        for _player in self._active_players():
             _player.yielded = False
 
-    @lru_cache
+    def _active_players(self):
+        return [
+            player
+            for player in self._ordered_players()
+            if self._draw_pile.size() or player.in_game()
+        ]
+
     def _ordered_players(self):
-        return sorted(
-            [
-                player
-                for player in self._players.values()
-                if self._draw_pile.size() or player.in_game()
-            ],
-            key=attrgetter("order"),
-        )
+        return sorted(self._players.values(), key=attrgetter("order"))
