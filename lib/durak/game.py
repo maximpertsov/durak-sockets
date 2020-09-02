@@ -1,3 +1,4 @@
+from functools import lru_cache
 from itertools import chain
 from operator import attrgetter
 
@@ -155,6 +156,7 @@ class Game:
         players = self._active_players()[shift:] + self._active_players()[:shift]
         for order, player in enumerate(players):
             player.order = order
+        self._active_players.cache_clear()
 
     def _player(self, player):
         return self._players[player]
@@ -199,6 +201,7 @@ class Game:
         for _player in self._active_players():
             _player.yielded = False
 
+    @lru_cache
     def _active_players(self):
         return [
             player
