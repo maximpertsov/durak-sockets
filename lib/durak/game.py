@@ -43,7 +43,7 @@ class Game:
             "hands": {
                 serialized["name"]: serialized["cards"]
                 for serialized in [
-                    player.serialize() for player in self._players.values()
+                    player.serialize() for player in self._ordered_players()
                 ]
             },
             "legal_attacks": self.legal_attacks(),
@@ -51,9 +51,7 @@ class Game:
             "legal_passes": self.legal_passes(),
             "table": self._table.serialize(),
             "pass_count": self._pass_count,
-            "players": [
-                player.name for player in self._ordered_players() if player.in_game()
-            ],
+            "players": [player.name for player in self._players.values()],
             "trump_suit": self._trump_suit,
             "yielded": [player.name for player in self._yielded_players()],
         }
@@ -155,10 +153,6 @@ class Game:
     def _player(self, player):
         return self._players[player]
 
-    @lru_cache
-    def _ordered_players(self):
-        return sorted(self._players.values(), key=attrgetter("order"))
-
     def _defender(self):
         if len(self._ordered_players()) < 2:
             return
@@ -189,14 +183,21 @@ class Game:
         return next_players_with_cards[0]
 
     def _no_more_attacks(self):
-        not_yielded = set(self._players.values()).difference(
+        not_yielded = set(self._ordered_players()).difference(
             set(self._yielded_players())
         )
         return not_yielded == set([self._defender()])
 
     def _yielded_players(self):
-        return [player for player in self._players.values() if player.yielded]
+        return [player for player in self._ordered_players() if player.yielded]
 
     def _clear_yields(self):
-        for _player in self._players.values():
+        for _player in self._ordered_players():
             _player.yielded = False
+
+    @lru_cache
+    def _ordered_players(self):
+        return sorted(
+            [player for player in self._players.values() if player.in_game()],
+            key=attrgetter("order"),
+        )
