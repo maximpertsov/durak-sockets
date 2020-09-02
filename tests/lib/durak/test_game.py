@@ -21,7 +21,7 @@ def test_serialize(game):
         "attackers": ["anna"],
         "defender": None,
         "draw_pile": ["JC", "3S", "6C"],
-        "durak": None,
+        "durak": "anna",
         "hands": {"anna": ["10D", None, "10C", "2S", "5C", "8D", "2C"]},
         "legal_attacks": {"cards": set([]), "limit": 0},
         "legal_defenses": {},
@@ -30,6 +30,7 @@ def test_serialize(game):
         "players": ["anna"],
         "table": [],
         "trump_suit": "diamonds",
+        "winners": set(),
         "yielded": [],
     }
 
@@ -40,7 +41,7 @@ def test_attack(game):
         "attackers": ["anna"],
         "defender": None,
         "draw_pile": ["JC", "3S", "6C"],
-        "durak": None,
+        "durak": "anna",
         "hands": {"anna": [None, None, "10C", "2S", "5C", "8D", "2C"]},
         "legal_attacks": {"cards": set([]), "limit": 0},
         "legal_defenses": {},
@@ -49,6 +50,7 @@ def test_attack(game):
         "players": ["anna"],
         "table": [["10D"]],
         "trump_suit": "diamonds",
+        "winners": set(),
         "yielded": [],
     }
 
@@ -62,7 +64,7 @@ def test_defend(game):
         "attackers": ["anna"],
         "defender": None,
         "draw_pile": ["JC", "3S", "6C"],
-        "durak": None,
+        "durak": "anna",
         "hands": {"anna": [None, None, "10C", "2S", "5C", "8D", "2C"]},
         "legal_attacks": {"cards": set([]), "limit": 0},
         "legal_defenses": {},
@@ -71,6 +73,7 @@ def test_defend(game):
         "players": ["anna"],
         "table": [["9D", "10D"]],
         "trump_suit": "diamonds",
+        "winners": set(),
         "yielded": [],
     }
 
@@ -90,6 +93,7 @@ def test_durak(game):
         "players": ["anna"],
         "table": [],
         "trump_suit": "diamonds",
+        "winners": set(),
         "yielded": [],
     }
 
@@ -133,6 +137,7 @@ def test_draw(game_3p):
         "players": ["anna", "vasyl", "igor"],
         "table": [],
         "trump_suit": "diamonds",
+        "winners": set(),
         "yielded": [],
     }
 
@@ -160,6 +165,7 @@ def test_draw_with_pass_count(game_3p):
         "players": ["anna", "vasyl", "igor"],
         "table": [],
         "trump_suit": "diamonds",
+        "winners": set(),
         "yielded": [],
     }
 
@@ -183,6 +189,7 @@ def test_legal_defenses(game_3p):
         "players": ["anna", "vasyl", "igor"],
         "table": [["10S"]],
         "trump_suit": "diamonds",
+        "winners": set(),
         "yielded": [],
     }
 
@@ -206,6 +213,7 @@ def test_legal_attacks(game_3p):
         "players": ["anna", "vasyl", "igor"],
         "table": [["4S"]],
         "trump_suit": "diamonds",
+        "winners": set(),
         "yielded": [],
     }
 
@@ -229,6 +237,7 @@ def test_legal_passes(game_3p):
         "players": ["anna", "vasyl", "igor"],
         "table": [["7S"]],
         "trump_suit": "diamonds",
+        "winners": set(),
         "yielded": [],
     }
 
@@ -256,5 +265,6 @@ def test_legal_passes_when_on_deck_defender_has_no_cards(game_3p):
         "players": ["anna", "vasyl", "igor"],
         "table": [["7S"]],
         "trump_suit": "diamonds",
+        "winners": set(),
         "yielded": [],
     }

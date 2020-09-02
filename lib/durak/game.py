@@ -54,13 +54,14 @@ class Game:
             "pass_count": self._pass_count,
             "players": [player.name for player in self._ordered_players()],
             "trump_suit": self._trump_suit,
+            "winners": self.winners(),
             "yielded": [player.name for player in self._yielded_players()],
         }
 
-    def durak(self):
-        if self._draw_pile.size():
-            return None
+    def winners(self):
+        return set(self._ordered_players()) - set(self._active_players())
 
+    def durak(self):
         if len(self._active_players()) == 1:
             return self._active_players()[0]
 
@@ -125,6 +126,7 @@ class Game:
             player = self._active_players()[index_with_passes]
             player.draw(draw_pile=self._draw_pile)
         self._pass_count = 0
+        self._active_players.cache_clear()
 
     def collect(self, *, player):
         self._player(player).take_cards(cards=self._table.collect())
