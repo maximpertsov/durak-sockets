@@ -34,7 +34,7 @@ def test_serialize(game):
 
 
 def test_attack(game):
-    game.attack(player="anna", card="10D")
+    game.attack(player="anna", cards=["10D"])
     assert game.serialize() == {
         "attackers": ["anna"],
         "defender": None,

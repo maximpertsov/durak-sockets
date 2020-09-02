@@ -1,19 +1,16 @@
-from functools import reduce
-
 from lib.durak.game import Game
 
 
 def attack(*, from_state, user, payload):
     game = Game.deserialize(**from_state)
-    game.attack(player=user, **payload)
+    game.attack(player=user, cards=[payload["card"]])
     return game.serialize()
 
 
 def attack_with_many(*, from_state, user, payload):
-    def step(state, card):
-        return attack(from_state=state, user=user, payload={"card": card})
-
-    return reduce(step, payload["cards"], from_state)
+    game = Game.deserialize(**from_state)
+    game.attack(player=user, **payload)
+    return game.serialize()
 
 
 def defend(*, from_state, user, payload):

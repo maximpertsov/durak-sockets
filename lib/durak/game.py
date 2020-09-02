@@ -98,9 +98,13 @@ class Game:
             "limit": limit,
         }
 
-    def attack(self, *, player, card):
+    def _attack(self, *, player, card):
         self._player(player).remove_card(card=card)
         self._table.add_card(card=card)
+
+    def attack(self, *, player, cards):
+        for card in cards:
+            self._attack(player=player, card=card)
         self._clear_yields()
 
     def defend(self, *, player, base_card, card):
