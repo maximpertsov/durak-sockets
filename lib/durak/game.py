@@ -126,7 +126,6 @@ class Game:
             player = self._active_players()[index_with_passes]
             player.draw(draw_pile=self._draw_pile)
         self._pass_count = 0
-        self._active_players.cache_clear()
 
     def collect(self, *, player):
         self._player(player).take_cards(cards=self._table.collect())
