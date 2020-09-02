@@ -44,7 +44,7 @@ class Game:
             "hands": {
                 serialized["name"]: serialized["cards"]
                 for serialized in [
-                    player.serialize() for player in self._active_players()
+                    player.serialize() for player in self._ordered_players()
                 ]
             },
             "legal_attacks": self.legal_attacks(),
