@@ -40,6 +40,7 @@ class Game:
             "attackers": [player.name for player in self._attackers()],
             "defender": getattr(self._defender(), "name", None),
             "draw_pile": self._draw_pile.serialize(),
+            "durak": getattr(self.durak(), "name", None),
             "hands": {
                 serialized["name"]: serialized["cards"]
                 for serialized in [
@@ -55,6 +56,13 @@ class Game:
             "trump_suit": self._trump_suit,
             "yielded": [player.name for player in self._yielded_players()],
         }
+
+    def durak(self):
+        if self._draw_pile.size():
+            return None
+
+        if len(self._ordered_players()) == 1:
+            return self._ordered_players()[0]
 
     def legal_attacks(self):
         if self._defender() is None:

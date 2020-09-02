@@ -21,6 +21,7 @@ def test_serialize(game):
         "attackers": ["anna"],
         "defender": None,
         "draw_pile": ["JC", "3S", "6C"],
+        "durak": None,
         "hands": {"anna": ["10D", None, "10C", "2S", "5C", "8D", "2C"]},
         "legal_attacks": {"cards": set([]), "limit": 0},
         "legal_defenses": {},
@@ -39,6 +40,7 @@ def test_attack(game):
         "attackers": ["anna"],
         "defender": None,
         "draw_pile": ["JC", "3S", "6C"],
+        "durak": None,
         "hands": {"anna": [None, None, "10C", "2S", "5C", "8D", "2C"]},
         "legal_attacks": {"cards": set([]), "limit": 0},
         "legal_defenses": {},
@@ -60,6 +62,7 @@ def test_defend(game):
         "attackers": ["anna"],
         "defender": None,
         "draw_pile": ["JC", "3S", "6C"],
+        "durak": None,
         "hands": {"anna": [None, None, "10C", "2S", "5C", "8D", "2C"]},
         "legal_attacks": {"cards": set([]), "limit": 0},
         "legal_defenses": {},
@@ -67,6 +70,25 @@ def test_defend(game):
         "pass_count": 0,
         "players": ["anna"],
         "table": [["9D", "10D"]],
+        "trump_suit": "diamonds",
+        "yielded": [],
+    }
+
+
+def test_durak(game):
+    game._draw_pile.draw(3)
+    assert game.serialize() == {
+        "attackers": ["anna"],
+        "defender": None,
+        "draw_pile": [],
+        "durak": "anna",
+        "hands": {"anna": ["10D", None, "10C", "2S", "5C", "8D", "2C"]},
+        "legal_attacks": {"cards": set([]), "limit": 0},
+        "legal_defenses": {},
+        "legal_passes": {"cards": set([]), "limit": 0},
+        "pass_count": 0,
+        "players": ["anna"],
+        "table": [],
         "trump_suit": "diamonds",
         "yielded": [],
     }
@@ -95,6 +117,7 @@ def test_draw(game_3p):
         "attackers": ["anna"],
         "defender": "vasyl",
         "draw_pile": ["8D"],
+        "durak": None,
         "hands": {
             "anna": ["9H", "3S", "KH", "4C", "4H", "7D"],
             "vasyl": ["7C", "6D", "JS", "7H", "9C", "9D"],
@@ -121,6 +144,7 @@ def test_draw_with_pass_count(game_3p):
         "attackers": ["anna"],
         "defender": "vasyl",
         "draw_pile": ["8D"],
+        "durak": None,
         "hands": {
             "anna": ["9H", "3S", "KH", "4C", "4H", "10C"],
             "vasyl": ["7C", "6D", "JS", "7H", "7D", "9C"],
@@ -146,6 +170,7 @@ def test_legal_defenses(game_3p):
         "attackers": ["anna", "igor"],
         "defender": "vasyl",
         "draw_pile": ["7D", "9C", "9D", "10C", "8D"],
+        "durak": None,
         "hands": {
             "anna": ["9H", "3S", "KH", "4C", "4H", None],
             "vasyl": ["7C", "6D", "JS", "7H", None, None],
@@ -168,6 +193,7 @@ def test_legal_attacks(game_3p):
         "attackers": ["anna", "igor"],
         "defender": "vasyl",
         "draw_pile": ["7D", "9C", "9D", "10C", "8D"],
+        "durak": None,
         "hands": {
             "anna": ["9H", "3S", "KH", "4C", "4H", None],
             "vasyl": ["7C", "6D", "JS", "7H", None, None],
@@ -190,6 +216,7 @@ def test_legal_passes(game_3p):
         "attackers": ["anna", "igor"],
         "defender": "vasyl",
         "draw_pile": ["7D", "9C", "9D", "10C", "8D"],
+        "durak": None,
         "hands": {
             "anna": ["9H", "3S", "KH", "4C", "4H", None],
             "vasyl": ["7C", "6D", "JS", "7H", None, None],
@@ -216,6 +243,7 @@ def test_legal_passes_when_on_deck_defender_has_no_cards(game_3p):
         "attackers": ["anna", "igor"],
         "defender": "vasyl",
         "draw_pile": ["7D", "9C", "9D", "10C", "8D"],
+        "durak": None,
         "hands": {
             "anna": ["9H", "3S", "KH", "4C", "4H", None],
             "vasyl": ["7C", "6D", "JS", "7H", None, None],
