@@ -1,6 +1,7 @@
 import pytest
 
-from lib.durak import DrawPile, Player
+from lib.durak.draw_pile import DrawPile
+from lib.durak.player import Player
 
 
 @pytest.fixture
@@ -47,15 +48,12 @@ def test_card_count_and_in_game(player):
     kwargs = {"name": "anna", "order": 0}
 
     player = Player(cards=["10D"], **kwargs)
-    assert player.in_game()
     assert player.card_count() == 1
 
     player = Player(cards=[None], **kwargs)
-    assert player.in_game()
     assert player.card_count() == 0
 
     player = Player(cards=[], **kwargs)
-    assert not player.in_game()
     assert player.card_count() == 0
 
 

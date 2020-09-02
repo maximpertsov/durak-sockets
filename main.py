@@ -76,7 +76,12 @@ async def transform_and_persist(message):
     data = json.loads(message)
 
     try:
-        data["to_state"] = actions[data["type"]](
+        try:
+            action = actions[data["type"]]
+        except KeyError:
+            raise IllegalAction
+
+        data["to_state"] = action(
             from_state=data["from_state"], user=data["user"], payload=data["payload"]
         )
 
@@ -88,7 +93,7 @@ async def transform_and_persist(message):
             headers={"Content-Type": "application/json"},
             data=json.dumps(data, cls=MessageEncoder),
         )
-    except (KeyError, IllegalAction):
+    except IllegalAction:
         data["to_state"] = deepcopy(data["from_state"])
 
     return json.dumps(data, cls=MessageEncoder)
