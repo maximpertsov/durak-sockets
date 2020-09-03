@@ -10,7 +10,18 @@ from lib.durak.table import Table
 class Game:
     @classmethod
     def deserialize(
-        cls, *, draw_pile, hands, pass_count, players, table, trump_suit, yielded
+        cls,
+        *,
+        draw_pile,
+        hands,
+        pass_count,
+        players,
+        table,
+        trump_suit,
+        yielded,
+        lowest_rank,
+        with_passing,
+        attack_limit
     ):
         return cls(
             draw_pile=DrawPile(draw_pile=draw_pile),
@@ -26,14 +37,31 @@ class Game:
             pass_count=pass_count,
             table=Table(table=table),
             trump_suit=trump_suit,
+            lowest_rank=lowest_rank,
+            with_passing=with_passing,
+            attack_limit=attack_limit
         )
 
-    def __init__(self, *, draw_pile, pass_count, players, table, trump_suit):
+    def __init__(
+        self,
+        *,
+        draw_pile,
+        pass_count,
+        players,
+        table,
+        trump_suit,
+        lowest_rank,
+        with_passing,
+        attack_limit
+    ):
         self._draw_pile = draw_pile
         self._pass_count = pass_count
         self._players = players
         self._table = table
         self._trump_suit = trump_suit
+        self._lowest_rank = lowest_rank
+        self._attack_limit = attack_limit
+        self._with_passing = with_passing
 
     def serialize(self):
         return {
@@ -56,6 +84,9 @@ class Game:
             "trump_suit": self._trump_suit,
             "winners": set(player.name for player in self.winners()),
             "yielded": [player.name for player in self._yielded_players()],
+            "lowest_rank": self._lowest_rank,
+            "attack_limit": self._attack_limit,
+            "with_passing": self._with_passing,
         }
 
     def winners(self):
