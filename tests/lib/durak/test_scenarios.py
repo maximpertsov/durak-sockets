@@ -1,4 +1,4 @@
-from lib.durak import pass_with_many, yield_attack
+from lib.durak import collect, pass_with_many, yield_attack
 
 
 def test_pass_with_last_card():
@@ -91,5 +91,55 @@ def test_defend_successfully_after_attack_plays_last_card():
         "legal_passes": {"cards": set([]), "limit": 5},
         "with_passing": True,
         "legal_attacks": {"cards": set(["KS", "JD"]), "limit": 5},
+        "legal_defenses": {},
+    }
+
+
+def test_collect_rotates_properly():
+    assert collect(
+        from_state={
+            "hands": {
+                "anna": [None],
+                "igor": ["9S", "6S", "6D", "JD", "QD", "JC", "JS", "QH", "QS"],
+                "vasyl": ["8C", "6H"],
+                "grusha": [],
+            },
+            "table": [["KS"]],
+            "players": ["anna", "vasyl", "igor", "grusha"],
+            "yielded": [],
+            "draw_pile": [],
+            "pass_count": 0,
+            "trump_suit": "spades",
+            "lowest_rank": "6",
+            "attack_limit": 6,
+            "with_passing": True,
+        },
+        user="vasyl",
+        payload={},
+    ) == {
+        "durak": None,
+        "hands": {
+            "anna": [],
+            "igor": ["9S", "6S", "6D", "JD", "QD", "JC", "JS", "QH", "QS"],
+            "vasyl": ["8C", "6H", "KS"],
+            "grusha": [],
+        },
+        "table": [],
+        "players": ["igor", "anna", "vasyl", "grusha"],
+        "winners": set(["anna", "grusha"]),
+        "yielded": [],
+        "defender": "vasyl",
+        "attackers": ["igor"],
+        "draw_pile": [],
+        "pass_count": 0,
+        "trump_suit": "spades",
+        "lowest_rank": "6",
+        "attack_limit": 6,
+        "legal_passes": {"cards": set([]), "limit": 9},
+        "with_passing": True,
+        "legal_attacks": {
+            "cards": set(["QS", "JS", "9S", "JD", "QD", "JC", "6D", "QH", "6S"]),
+            "limit": 3,
+        },
         "legal_defenses": {},
     }
