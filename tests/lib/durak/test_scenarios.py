@@ -240,3 +240,53 @@ def test_collect_rotates_properly():
         },
         "legal_defenses": {},
     }
+
+
+def test_yielding_when_defender_wins():
+    assert yield_attack(
+        from_state={
+            "hands": {
+                "anna": [None, None, None, None],
+                "igor": ["KC", None, "6D"],
+                "vasyl": ["AC", "8H", "10D", None, "AS", None, "9C", "9H", "QD", "9S"],
+                "grusha": [None, "KH", "AD", "KD", "JH"],
+            },
+            "table": [["QH", "8D"], ["QS", "KS"], ["8C", "9D"], ["8S", "JD"]],
+            "players": ["grusha", "anna", "vasyl", "igor"],
+            "yielded": ["vasyl", "igor"],
+            "draw_pile": [],
+            "pass_count": 1,
+            "trump_suit": "diamonds",
+            "lowest_rank": "6",
+            "attack_limit": 6,
+            "with_passing": True,
+        },
+        payload={},
+        user="grusha",
+    ) == {
+        "durak": None,
+        "hands": {
+            "anna": [],
+            "igor": ["KC", "6D"],
+            "vasyl": ["AC", "8H", "10D", "AS", "9C", "9H", "QD", "9S"],
+            "grusha": ["KH", "AD", "KD", "JH"],
+        },
+        "table": [],
+        "players": ["anna", "vasyl", "igor", "grusha"],
+        "winners": set(["anna"]),
+        "yielded": [],
+        "defender": "igor",
+        "attackers": ["vasyl"],
+        "draw_pile": [],
+        "pass_count": 0,
+        "trump_suit": "diamonds",
+        "lowest_rank": "6",
+        "attack_limit": 6,
+        "legal_passes": {"cards": set(), "limit": 4},
+        "with_passing": True,
+        "legal_attacks": {
+            "cards": set(["9C", "AS", "9H", "9S", "QD", "AC", "8H", "10D"]),
+            "limit": 2,
+        },
+        "legal_defenses": {},
+    }

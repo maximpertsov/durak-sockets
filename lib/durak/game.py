@@ -227,10 +227,7 @@ class Game:
         return next_players_with_cards[0]
 
     def _no_more_attacks(self):
-        not_yielded = set(self._active_players()).difference(
-            set(self._yielded_players())
-        )
-        return not_yielded == set([self._defender()])
+        return set(self._attackers()).issubset(set(self._yielded_players()))
 
     def _yielded_players(self):
         return [player for player in self._active_players() if player.yielded]
