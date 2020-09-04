@@ -39,7 +39,7 @@ class Game:
             trump_suit=trump_suit,
             lowest_rank=lowest_rank,
             with_passing=with_passing,
-            attack_limit=attack_limit
+            attack_limit=attack_limit,
         )
 
     def __init__(
@@ -184,35 +184,40 @@ class Game:
         self._rotate()
 
     def _rotate(self, *, skip=0):
+        players = self._ordered_players_with_cards_in_round()
         shift = skip + 1
-        players = self._active_players()[shift:] + self._active_players()[:shift]
-        for order, player in enumerate(players):
-            player.order = order
+        for index, player in enumerate(players):
+            player.order = (index - shift) % len(players)
         self._active_players.cache_clear()
 
     def _player(self, player):
         return self._players[player]
 
     def _defender(self):
-        if len(self._active_players()) < 2:
+        players = self._ordered_players_with_cards_in_round()
+        if len(players) < 2:
             return
-        return self._active_players()[1]
+        return players[1]
 
     def _attackers(self):
-        if not self._active_players():
+        players = self._ordered_players_with_cards_in_round()
+        if not players:
             return []
-        if len(self._active_players()) == 1 or not self._table.cards():
-            return self._active_players()[:1]
 
-        return [
-            player for player in self._active_players() if player != self._defender()
+        potential_attackers = [
+            player
+            for player in players
+            if player != self._defender() and player.cards()
         ]
+
+        return potential_attackers if self._table.cards() else potential_attackers[:1]
 
     def _pass_recipient(self):
         if not self._defender():
             return
 
-        players_from_defender = self._active_players()[2:] + [self._active_players()[0]]
+        players = self._ordered_players_with_cards_in_round()
+        players_from_defender = players[2:] + [players[0]]
         next_players_with_cards = [
             player for player in players_from_defender if player.cards()
         ]
@@ -239,6 +244,11 @@ class Game:
             player
             for player in self._ordered_players()
             if self._draw_pile.size() or player.cards()
+        ]
+
+    def _ordered_players_with_cards_in_round(self):
+        return [
+            player for player in self._ordered_players() if player.had_cards_in_round()
         ]
 
     def _ordered_players(self):

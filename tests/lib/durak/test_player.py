@@ -44,17 +44,20 @@ def test_remove_card(player):
     }
 
 
-def test_card_count_and_in_game(player):
+def test_card_count_and_had_cards_in_round(player):
     kwargs = {"name": "anna", "order": 0}
 
     player = Player(cards=["10D"], **kwargs)
     assert player.card_count() == 1
+    assert player.had_cards_in_round()
 
     player = Player(cards=[None], **kwargs)
     assert player.card_count() == 0
+    assert player.had_cards_in_round()
 
     player = Player(cards=[], **kwargs)
     assert player.card_count() == 0
+    assert not player.had_cards_in_round()
 
 
 def test_draw_from_pile():

@@ -19,7 +19,6 @@ class Player:
         return len(self.cards())
 
     def take_cards(self, *, cards):
-        # TODO: maybe compacting should happen client-side?
         self._compact_hand()
         self._cards += cards
 
@@ -31,11 +30,13 @@ class Player:
     def draw(self, *, draw_pile):
         draw_count = max(self.HAND_SIZE - self.card_count(), 0)
         self.take_cards(cards=draw_pile.draw(count=draw_count))
-        # TODO: maybe compacting should happen client-side?
         self._compact_hand()
 
     def _compact_hand(self):
         self._cards = self.cards()
+
+    def had_cards_in_round(self):
+        return bool(self._cards)
 
     def cards(self):
         return [card for card in self._cards if card]

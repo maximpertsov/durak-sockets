@@ -4,7 +4,16 @@ from lib.durak.game import Game
 
 
 @pytest.fixture
-def game():
+def static_parameters():
+    return {
+        "lowest_rank": "6",
+        "attack_limit": 6,
+        "with_passing": True,
+    }
+
+
+@pytest.fixture
+def game(static_parameters):
     return Game.deserialize(
         draw_pile=["JC", "3S", "6C"],
         hands={"anna": ["10D", None, "10C", "2S", "5C", "8D", "2C"]},
@@ -13,10 +22,11 @@ def game():
         table=[],
         trump_suit="diamonds",
         yielded=[],
+        **static_parameters
     )
 
 
-def test_serialize(game):
+def test_serialize(game, static_parameters):
     assert game.serialize() == {
         "attackers": ["anna"],
         "defender": None,
@@ -32,10 +42,11 @@ def test_serialize(game):
         "trump_suit": "diamonds",
         "winners": set(),
         "yielded": [],
+        **static_parameters,
     }
 
 
-def test_attack(game):
+def test_attack(game, static_parameters):
     game.attack(player="anna", cards=["10D"])
     assert game.serialize() == {
         "attackers": ["anna"],
@@ -52,10 +63,11 @@ def test_attack(game):
         "trump_suit": "diamonds",
         "winners": set(),
         "yielded": [],
+        **static_parameters,
     }
 
 
-def test_defend(game):
+def test_defend(game, static_parameters):
     game._table.add_card(card="9D")
     game.defend(
         base_card="9D", player="anna", card="10D",
@@ -75,10 +87,11 @@ def test_defend(game):
         "trump_suit": "diamonds",
         "winners": set(),
         "yielded": [],
+        **static_parameters,
     }
 
 
-def test_durak(game):
+def test_durak(game, static_parameters):
     game._draw_pile.draw(3)
     assert game.serialize() == {
         "attackers": ["anna"],
@@ -95,11 +108,12 @@ def test_durak(game):
         "trump_suit": "diamonds",
         "winners": set(),
         "yielded": [],
+        **static_parameters,
     }
 
 
 @pytest.fixture
-def game_3p():
+def game_3p(static_parameters):
     return Game.deserialize(
         draw_pile=["7D", "9C", "9D", "10C", "8D"],
         hands={
@@ -112,10 +126,11 @@ def game_3p():
         table=[],
         trump_suit="diamonds",
         yielded=[],
+        **static_parameters
     )
 
 
-def test_draw(game_3p):
+def test_draw(game_3p, static_parameters):
     game_3p.draw()
     assert game_3p.serialize() == {
         "attackers": ["anna"],
@@ -139,10 +154,11 @@ def test_draw(game_3p):
         "trump_suit": "diamonds",
         "winners": set(),
         "yielded": [],
+        **static_parameters,
     }
 
 
-def test_draw_with_pass_count(game_3p):
+def test_draw_with_pass_count(game_3p, static_parameters):
     game_3p._pass_count = 2
     game_3p.draw()
     assert game_3p.serialize() == {
@@ -167,10 +183,11 @@ def test_draw_with_pass_count(game_3p):
         "trump_suit": "diamonds",
         "winners": set(),
         "yielded": [],
+        **static_parameters,
     }
 
 
-def test_legal_defenses(game_3p):
+def test_legal_defenses(game_3p, static_parameters):
     game_3p._table.add_card(card="10S")
     assert game_3p.serialize() == {
         "attackers": ["anna", "igor"],
@@ -191,10 +208,11 @@ def test_legal_defenses(game_3p):
         "trump_suit": "diamonds",
         "winners": set(),
         "yielded": [],
+        **static_parameters,
     }
 
 
-def test_legal_attacks(game_3p):
+def test_legal_attacks(game_3p, static_parameters):
     game_3p._table.add_card(card="4S")
     assert game_3p.serialize() == {
         "attackers": ["anna", "igor"],
@@ -215,10 +233,11 @@ def test_legal_attacks(game_3p):
         "trump_suit": "diamonds",
         "winners": set(),
         "yielded": [],
+        **static_parameters,
     }
 
 
-def test_legal_passes(game_3p):
+def test_legal_passes(game_3p, static_parameters):
     game_3p._table.add_card(card="7S")
     assert game_3p.serialize() == {
         "attackers": ["anna", "igor"],
@@ -239,17 +258,18 @@ def test_legal_passes(game_3p):
         "trump_suit": "diamonds",
         "winners": set(),
         "yielded": [],
+        **static_parameters,
     }
 
 
-def test_legal_passes_when_on_deck_defender_has_no_cards(game_3p):
+def test_legal_passes_when_on_deck_defender_has_no_cards(game_3p, static_parameters):
     game_3p._table.add_card(card="7S")
 
     for card in ["8H", "JD", "KS", "5H", "JC"]:
         game_3p._player("igor").remove_card(card=card)
 
     assert game_3p.serialize() == {
-        "attackers": ["anna", "igor"],
+        "attackers": ["anna"],
         "defender": "vasyl",
         "draw_pile": ["7D", "9C", "9D", "10C", "8D"],
         "durak": None,
@@ -267,4 +287,5 @@ def test_legal_passes_when_on_deck_defender_has_no_cards(game_3p):
         "trump_suit": "diamonds",
         "winners": set(),
         "yielded": [],
+        **static_parameters,
     }
