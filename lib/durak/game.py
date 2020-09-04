@@ -249,7 +249,9 @@ class Game:
     @lru_cache
     def _ordered_players_with_cards_in_round(self):
         return [
-            player for player in self._ordered_players() if player.had_cards_in_round()
+            player
+            for player in self._ordered_players()
+            if player.had_cards_in_round() or self._draw_pile.size()
         ]
 
     def _ordered_players(self):
