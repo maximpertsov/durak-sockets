@@ -184,7 +184,7 @@ class Game:
         self._rotate()
 
     def _rotate(self, *, skip=0):
-        players = self._ordered_players_with_cards_in_round()
+        players = self._ordered_players()
         shift = skip + 1
         for index, player in enumerate(players):
             player.order = (index - shift) % len(players)
