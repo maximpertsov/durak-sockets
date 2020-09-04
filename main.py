@@ -3,11 +3,11 @@ from copy import deepcopy
 from os import environ
 
 import requests
+
 from broadcaster import Broadcast
 from fastapi import FastAPI, WebSocket
 from fastapi.concurrency import run_until_first_complete
 from fastapi.middleware.cors import CORSMiddleware
-
 from lib.durak import (attack, attack_with_many, collect, defend, pass_card,
                        pass_with_many, start_game, yield_attack)
 from lib.durak.exceptions import IllegalAction
@@ -96,4 +96,5 @@ async def transform_and_persist(message):
     except IllegalAction:
         data["to_state"] = deepcopy(data["from_state"])
 
+    del data["from_state"]
     return json.dumps(data, cls=MessageEncoder)
