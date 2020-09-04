@@ -1,4 +1,3 @@
-from functools import lru_cache
 from itertools import chain
 from operator import attrgetter
 
@@ -151,10 +150,11 @@ class Game:
         self._clear_yields()
 
     def draw(self):
-        player_count = len(self._active_players())
+        players = self._ordered_players_with_cards_in_round()
+        player_count = len(players)
         for index in range(player_count):
             index_with_passes = (index - self._pass_count) % player_count
-            player = self._active_players()[index_with_passes]
+            player = players[index_with_passes]
             player.draw(draw_pile=self._draw_pile)
         self._pass_count = 0
 
@@ -188,7 +188,6 @@ class Game:
         shift = skip + 1
         for index, player in enumerate(players):
             player.order = (index - shift) % len(players)
-        self._active_players.cache_clear()
 
     def _player(self, player):
         return self._players[player]
@@ -238,7 +237,6 @@ class Game:
         for _player in self._active_players():
             _player.yielded = False
 
-    @lru_cache
     def _active_players(self):
         return [
             player
