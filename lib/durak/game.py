@@ -1,3 +1,4 @@
+from functools import lru_cache
 from itertools import chain
 from operator import attrgetter
 
@@ -184,10 +185,11 @@ class Game:
         self._rotate()
 
     def _rotate(self, *, skip=0):
-        players = self._ordered_players()
+        players = self._ordered_players_with_cards_in_round()
         shift = skip + 1
         for index, player in enumerate(players):
             player.order = (index - shift) % len(players)
+        self._ordered_players_with_cards_in_round.cache_clear()
 
     def _player(self, player):
         return self._players[player]
@@ -244,6 +246,7 @@ class Game:
             if self._draw_pile.size() or player.cards()
         ]
 
+    @lru_cache
     def _ordered_players_with_cards_in_round(self):
         return [
             player for player in self._ordered_players() if player.had_cards_in_round()
