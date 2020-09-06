@@ -53,6 +53,7 @@ def test_start_game():
                 "attack_limit": 6,
                 "with_passing": True,
                 "durak": None,
+                "collector": None,
             },
             user="anna",
             payload={},
@@ -96,6 +97,7 @@ def test_start_game():
             "limit": 6,
         },
         "legal_defenses": {},
+        "collector": None,
     }
 
 
@@ -118,6 +120,7 @@ def test_pass_with_last_card():
             "attack_limit": 6,
             "with_passing": True,
             "durak": None,
+            "collector": None,
         },
         user="anna",
         payload={"cards": ["10H"]},
@@ -144,6 +147,7 @@ def test_pass_with_last_card():
         "with_passing": True,
         "legal_attacks": {"cards": set(), "limit": 0},
         "legal_defenses": {"10D": set(["AH"]), "10H": set(["AH"])},
+        "collector": None,
     }
 
 
@@ -166,6 +170,7 @@ def test_defend_successfully_after_attack_plays_last_card():
             "attack_limit": 6,
             "with_passing": True,
             "durak": None,
+            "collector": None,
         },
         user="igor",
         payload={},
@@ -192,6 +197,7 @@ def test_defend_successfully_after_attack_plays_last_card():
         "with_passing": True,
         "legal_attacks": {"cards": set(["KS", "JD"]), "limit": 5},
         "legal_defenses": {},
+        "collector": None,
     }
 
 
@@ -214,6 +220,7 @@ def test_collect_rotates_properly():
             "attack_limit": 6,
             "with_passing": True,
             "durak": None,
+            "collector": None,
         },
         user="vasyl",
         payload={},
@@ -243,6 +250,7 @@ def test_collect_rotates_properly():
             "limit": 3,
         },
         "legal_defenses": {},
+        "collector": None,
     }
 
 
@@ -265,11 +273,11 @@ def test_yielding_when_defender_wins():
             "attack_limit": 6,
             "with_passing": True,
             "durak": None,
+            "collector": None,
         },
         payload={},
         user="grusha",
     ) == {
-        "durak": None,
         "hands": {
             "anna": [],
             "igor": ["KC", "6D"],
@@ -294,4 +302,6 @@ def test_yielding_when_defender_wins():
             "limit": 2,
         },
         "legal_defenses": {},
+        "durak": None,
+        "collector": None,
     }
