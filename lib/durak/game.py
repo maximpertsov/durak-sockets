@@ -68,7 +68,7 @@ class Game:
 
     def durak(self):
         if self._durak:
-            return self._durak
+            return self._player(self._durak)
 
         if len(self._active_players()) == 1:
             return self._active_players()[0]

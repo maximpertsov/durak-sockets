@@ -295,3 +295,9 @@ def test_legal_passes_when_on_deck_defender_has_no_cards(game_3p, static_paramet
         "yielded": [],
         **static_parameters,
     }
+
+
+def test_durak_persists(game_3p, static_parameters):
+    game_3p._durak = "anna"
+    serialized = game_3p.serialize()
+    assert serialized["durak"] == "anna"
