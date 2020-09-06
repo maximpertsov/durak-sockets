@@ -7,7 +7,7 @@ from lib.durak.game import Game
 def static_parameters():
     return {
         "lowest_rank": "6",
-        "attack_limit": 6,
+        "attack_limit": 100,
         "with_passing": True,
     }
 
@@ -276,6 +276,34 @@ def test_legal_passes(game_3p, static_parameters):
         "winners": set(),
         "yielded": [],
         **static_parameters,
+    }
+
+
+def test_legal_attacks_and_passes_with_limits(game_3p, static_parameters):
+    game_3p._table.add_card(card="7S")
+    game_3p._attack_limit = 3
+    assert game_3p.serialize() == {
+        **static_parameters,
+        "attackers": ["anna", "igor"],
+        "attack_limit": 3,
+        "collector": None,
+        "defender": "vasyl",
+        "draw_pile": ["7D", "9C", "9D", "10C", "8D"],
+        "durak": None,
+        "hands": {
+            "anna": ["9H", "3S", "KH", "4C", "4H", None],
+            "vasyl": ["7C", "6D", "JS", "7H", None, None],
+            "igor": ["8H", "JD", "KS", "5H", "JC", None],
+        },
+        "pass_count": 0,
+        "legal_attacks": {"cards": set([]), "limit": 2},
+        "legal_defenses": {"7S": set(["JS", "6D"])},
+        "legal_passes": {"cards": set(["7C", "7H"]), "limit": 2},
+        "players": ["anna", "vasyl", "igor"],
+        "table": [["7S"]],
+        "trump_suit": "diamonds",
+        "winners": set(),
+        "yielded": [],
     }
 
 

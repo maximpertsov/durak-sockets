@@ -79,9 +79,8 @@ class Game:
         if self._defender() is None:
             return {"cards": set([]), "limit": 0}
 
-        limit = max(
-            0, len(self._defender().cards()) - len(self._table.undefended_cards())
-        )
+        attack_limit = min(len(self._defender().cards()), self._attack_limit)
+        limit = max(0, attack_limit - len(self._table.undefended_cards()))
         attacker_cards = set(
             chain.from_iterable(player.cards() for player in self._attackers())
         )
@@ -106,9 +105,8 @@ class Game:
         if self._pass_recipient() is None:
             return {"cards": set([]), "limit": 0}
 
-        limit = max(
-            0, len(self._pass_recipient().cards()) - len(self._table.undefended_cards())
-        )
+        attack_limit = min(len(self._pass_recipient().cards()), self._attack_limit)
+        limit = max(0, attack_limit - len(self._table.undefended_cards()))
         defender_cards = set(self._defender().cards())
         return {
             "cards": defender_cards & self._table.legal_passes(),
