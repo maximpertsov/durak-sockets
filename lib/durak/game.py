@@ -35,6 +35,7 @@ class Game:
         self._lowest_rank = state["lowest_rank"]
         self._attack_limit = state["attack_limit"]
         self._with_passing = state["with_passing"]
+        self._durak = state["durak"]
 
     def serialize(self):
         return {
@@ -66,6 +67,9 @@ class Game:
         return set(self._ordered_players()) - set(self._active_players())
 
     def durak(self):
+        if self._durak:
+            return self._durak
+
         if len(self._active_players()) == 1:
             return self._active_players()[0]
 

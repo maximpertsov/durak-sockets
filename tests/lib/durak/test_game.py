@@ -16,6 +16,7 @@ def static_parameters():
 def game(static_parameters):
     return Game.deserialize(
         {
+            "durak": None,
             "draw_pile": ["JC", "3S", "6C"],
             "hands": {"anna": ["10D", None, "10C", "2S", "5C", "8D", "2C"]},
             "pass_count": 0,
@@ -118,6 +119,7 @@ def test_durak(game, static_parameters):
 def game_3p(static_parameters):
     return Game.deserialize(
         {
+            "durak": None,
             "draw_pile": ["7D", "9C", "9D", "10C", "8D"],
             "hands": {
                 "anna": ["9H", "3S", "KH", "4C", "4H", None],
