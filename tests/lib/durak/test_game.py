@@ -15,14 +15,17 @@ def static_parameters():
 @pytest.fixture
 def game(static_parameters):
     return Game.deserialize(
-        draw_pile=["JC", "3S", "6C"],
-        hands={"anna": ["10D", None, "10C", "2S", "5C", "8D", "2C"]},
-        pass_count=0,
-        players=["anna"],
-        table=[],
-        trump_suit="diamonds",
-        yielded=[],
-        **static_parameters
+        {
+            "durak": None,
+            "draw_pile": ["JC", "3S", "6C"],
+            "hands": {"anna": ["10D", None, "10C", "2S", "5C", "8D", "2C"]},
+            "pass_count": 0,
+            "players": ["anna"],
+            "table": [],
+            "trump_suit": "diamonds",
+            "yielded": [],
+            **static_parameters,
+        }
     )
 
 
@@ -115,18 +118,21 @@ def test_durak(game, static_parameters):
 @pytest.fixture
 def game_3p(static_parameters):
     return Game.deserialize(
-        draw_pile=["7D", "9C", "9D", "10C", "8D"],
-        hands={
-            "anna": ["9H", "3S", "KH", "4C", "4H", None],
-            "vasyl": ["7C", "6D", "JS", "7H", None, None],
-            "igor": ["8H", "JD", "KS", "5H", "JC", None],
-        },
-        pass_count=0,
-        players=["anna", "vasyl", "igor"],
-        table=[],
-        trump_suit="diamonds",
-        yielded=[],
-        **static_parameters
+        {
+            "durak": None,
+            "draw_pile": ["7D", "9C", "9D", "10C", "8D"],
+            "hands": {
+                "anna": ["9H", "3S", "KH", "4C", "4H", None],
+                "vasyl": ["7C", "6D", "JS", "7H", None, None],
+                "igor": ["8H", "JD", "KS", "5H", "JC", None],
+            },
+            "pass_count": 0,
+            "players": ["anna", "vasyl", "igor"],
+            "table": [],
+            "trump_suit": "diamonds",
+            "yielded": [],
+            **static_parameters,
+        }
     )
 
 
@@ -289,3 +295,9 @@ def test_legal_passes_when_on_deck_defender_has_no_cards(game_3p, static_paramet
         "yielded": [],
         **static_parameters,
     }
+
+
+def test_durak_persists(game_3p, static_parameters):
+    game_3p._durak = "anna"
+    serialized = game_3p.serialize()
+    assert serialized["durak"] == "anna"
