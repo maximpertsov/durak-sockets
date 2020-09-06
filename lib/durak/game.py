@@ -9,59 +9,32 @@ from lib.durak.table import Table
 
 class Game:
     @classmethod
-    def deserialize(
-        cls,
-        *,
-        draw_pile,
-        hands,
-        pass_count,
-        players,
-        table,
-        trump_suit,
-        yielded,
-        lowest_rank,
-        with_passing,
-        attack_limit
-    ):
+    def deserialize(cls, state):
         return cls(
-            draw_pile=DrawPile(draw_pile=draw_pile),
+            draw_pile=DrawPile(draw_pile=state["draw_pile"]),
             players={
                 player: Player(
                     name=player,
-                    cards=hands[player],
+                    cards=state["hands"][player],
                     order=order,
-                    yielded=player in yielded,
+                    yielded=player in state["yielded"],
                 )
-                for order, player in enumerate(players)
+                for order, player in enumerate(state["players"])
             },
-            pass_count=pass_count,
-            table=Table(table=table),
-            trump_suit=trump_suit,
-            lowest_rank=lowest_rank,
-            with_passing=with_passing,
-            attack_limit=attack_limit,
+            table=Table(table=state["table"]),
+            state=state,
         )
 
-    def __init__(
-        self,
-        *,
-        draw_pile,
-        pass_count,
-        players,
-        table,
-        trump_suit,
-        lowest_rank,
-        with_passing,
-        attack_limit
-    ):
+    def __init__(self, *, draw_pile, players, table, state):
         self._draw_pile = draw_pile
-        self._pass_count = pass_count
         self._players = players
         self._table = table
-        self._trump_suit = trump_suit
-        self._lowest_rank = lowest_rank
-        self._attack_limit = attack_limit
-        self._with_passing = with_passing
+
+        self._pass_count = state["pass_count"]
+        self._trump_suit = state["trump_suit"]
+        self._lowest_rank = state["lowest_rank"]
+        self._attack_limit = state["attack_limit"]
+        self._with_passing = state["with_passing"]
 
     def serialize(self):
         return {
