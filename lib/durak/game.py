@@ -36,6 +36,7 @@ class Game:
         self._attack_limit = state["attack_limit"]
         self._with_passing = state["with_passing"]
         self._durak = state["durak"]
+        self._collector = state["collector"]
 
     def serialize(self):
         return {
@@ -61,6 +62,7 @@ class Game:
             "lowest_rank": self._lowest_rank,
             "attack_limit": self._attack_limit,
             "with_passing": self._with_passing,
+            "collector": self._collector,
         }
 
     def winners(self):
@@ -137,7 +139,9 @@ class Game:
         self._pass_count = 0
 
     def collect(self, *, player):
+        # TODO: make collector collect instead of specifying a player?
         self._player(player).take_cards(cards=self._table.collect())
+        self._collector = None
         self.draw()
         self._rotate(skip=1)
         self._clear_yields()

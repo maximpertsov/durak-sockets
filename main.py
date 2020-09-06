@@ -3,12 +3,12 @@ from copy import deepcopy
 from os import environ
 
 import requests
-
 from broadcaster import Broadcast
 from fastapi import FastAPI, WebSocket
 from fastapi.concurrency import run_until_first_complete
 from fastapi.middleware.cors import CORSMiddleware
-from lib.durak import (attack, attack_with_many, collect, defend, pass_card,
+
+from lib.durak import (attack, attack_with_many, collect, defend, give_up, pass_card,
                        pass_with_many, start_game, yield_attack)
 from lib.durak.exceptions import IllegalAction
 
@@ -58,10 +58,11 @@ actions = {
     "attacked": attack,
     "attacked_with_many": attack_with_many,
     "defended": defend,
-    "yielded_attack": yield_attack,
+    "gave_up": give_up,
     "collected": collect,
     "passed": pass_card,
     "passed_with_many": pass_with_many,
+    "yielded_attack": yield_attack,
 }
 
 
