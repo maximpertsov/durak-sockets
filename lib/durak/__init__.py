@@ -30,12 +30,6 @@ def give_up(*, from_state, user, payload):
     return game.serialize()
 
 
-def collect(*, from_state, user, payload):
-    game = Game.deserialize(from_state)
-    game.collect(player=user, **payload)
-    return game.serialize()
-
-
 def pass_card(*, from_state, user, payload):
     game = Game.deserialize(from_state)
     game.pass_cards(player=user, cards=[payload["card"]])
