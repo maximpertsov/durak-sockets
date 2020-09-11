@@ -1,4 +1,4 @@
-from lib.durak import collect, pass_with_many, start_game, yield_attack
+from lib.durak import pass_with_many, start_game, yield_attack
 
 
 def test_start_game():
@@ -202,7 +202,7 @@ def test_defend_successfully_after_attack_plays_last_card():
 
 
 def test_collect_rotates_properly():
-    assert collect(
+    assert yield_attack(
         from_state={
             "hands": {
                 "anna": [None],
@@ -212,7 +212,7 @@ def test_collect_rotates_properly():
             },
             "table": [["KS"]],
             "players": ["anna", "vasyl", "igor", "grusha"],
-            "yielded": [],
+            "yielded": ["igor", "grusha"],
             "draw_pile": [],
             "pass_count": 0,
             "trump_suit": "spades",
@@ -220,9 +220,9 @@ def test_collect_rotates_properly():
             "attack_limit": 100,
             "with_passing": True,
             "durak": None,
-            "collector": None,
+            "collector": "vasyl",
         },
-        user="vasyl",
+        user="anna",
         payload={},
     ) == {
         "durak": None,

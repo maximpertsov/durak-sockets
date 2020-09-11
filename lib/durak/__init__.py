@@ -26,13 +26,8 @@ def yield_attack(*, from_state, user, payload):
 
 
 def give_up(*, from_state, user, payload):
-    game = Game.deserialize({**from_state, "collector": user})
-    return game.serialize()
-
-
-def collect(*, from_state, user, payload):
     game = Game.deserialize(from_state)
-    game.collect(player=user, **payload)
+    game.give_up(player=user)
     return game.serialize()
 
 

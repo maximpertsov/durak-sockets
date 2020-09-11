@@ -90,6 +90,9 @@ class Game:
         }
 
     def legal_defenses(self):
+        if self._collector:
+            return {}
+
         if self._defender() is None:
             return {}
 
@@ -127,6 +130,28 @@ class Game:
         self._table.stack_card(base_card=base_card, card=card)
         self._clear_yields()
 
+    def yield_attack(self, *, player):
+        self._player(player).yielded = True
+        if not self._no_more_attacks():
+            return
+
+        if self._collector:
+            self.collect()
+            return
+
+        # TODO: refactor into method?
+        self._table.clear()
+        self.draw()
+        self._rotate()
+        self._clear_yields()
+
+    def collect(self):
+        self._player(self._collector).take_cards(cards=self._table.collect())
+        self.draw()
+        self._rotate(skip=1)
+        self._collector = None
+        self._clear_yields()
+
     def draw(self):
         players = self._ordered_players_with_cards_in_round()
         player_count = len(players)
@@ -135,22 +160,6 @@ class Game:
             player = players[index_with_passes]
             player.draw(draw_pile=self._draw_pile)
         self._pass_count = 0
-
-    def collect(self, *, player):
-        # TODO: make collector collect instead of specifying a player?
-        self._player(player).take_cards(cards=self._table.collect())
-        self._collector = None
-        self.draw()
-        self._rotate(skip=1)
-        self._clear_yields()
-
-    def yield_attack(self, *, player):
-        self._player(player).yielded = True
-        if self._no_more_attacks():
-            self._table.clear()
-            self.draw()
-            self._rotate()
-            self._clear_yields()
 
     def _pass_card(self, *, player, card):
         self._player(player).remove_card(card=card)
@@ -162,6 +171,10 @@ class Game:
         self._pass_count += 1
         self._clear_yields()
         self._rotate()
+
+    def give_up(self, *, player):
+        self._collector = player
+        self._clear_yields()
 
     def _rotate(self, *, skip=0):
         players = self._ordered_players_with_cards_in_round()
