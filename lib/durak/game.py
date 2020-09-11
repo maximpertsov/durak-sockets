@@ -172,6 +172,10 @@ class Game:
         self._clear_yields()
         self._rotate()
 
+    def give_up(self, *, player):
+        self._collector = player
+        self._clear_yields()
+
     def _rotate(self, *, skip=0):
         players = self._ordered_players_with_cards_in_round()
         shift = skip + 1
