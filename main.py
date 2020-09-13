@@ -45,7 +45,7 @@ async def channel_ws(websocket: WebSocket, channel: str):
 async def channel_ws_receiver(websocket: WebSocket, channel: str):
     async for message in websocket.iter_text():
         await broadcast.publish(
-            channel=channel, message=await handle_message(message)
+            channel=channel, message=await handle_message(channel, message)
         )
 
 
@@ -55,7 +55,7 @@ async def channel_ws_sender(websocket: WebSocket, channel: str):
             await websocket.send_text(event.message)
 
 
-async def handle_message(message, channel: str):
+async def handle_message(channel: str, message):
     if channel == "durak":
         return await handle_durak_message(message)
 
