@@ -93,7 +93,7 @@ async def transform_and_persist(message):
 
 async def persist(data):
     async with httpx.AsyncClient() as client:
-        return await client.post(
+        await client.post(
             "{}/game/{}/events".format(BASE_API_URL, data["game"]),
             headers={"Content-Type": "application/json"},
             data=json.dumps(data, cls=MessageEncoder),
