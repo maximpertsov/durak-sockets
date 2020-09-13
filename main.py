@@ -2,7 +2,7 @@ import json
 from copy import deepcopy
 from os import environ
 
-import requests
+import httpx
 from broadcaster import Broadcast
 from fastapi import FastAPI, WebSocket
 from fastapi.concurrency import run_until_first_complete
@@ -80,21 +80,21 @@ async def transform_and_persist(message):
             action = actions[data["type"]]
         except KeyError:
             raise IllegalAction
-
         data["to_state"] = action(
             from_state=data["from_state"], user=data["user"], payload=data["payload"]
         )
-
-        # persist
-        url = "{}/game/{}/events".format(BASE_API_URL, data["game"])
-        # TODO: make this async with request_threads?
-        requests.post(
-            url,
-            headers={"Content-Type": "application/json"},
-            data=json.dumps(data, cls=MessageEncoder),
-        )
+        await persist(data)
     except IllegalAction:
         data["to_state"] = deepcopy(data["from_state"])
 
     del data["from_state"]
     return json.dumps(data, cls=MessageEncoder)
+
+
+async def persist(data):
+    async with httpx.AsyncClient() as client:
+        await client.post(
+            "{}/game/{}/events".format(BASE_API_URL, data["game"]),
+            headers={"Content-Type": "application/json"},
+            data=json.dumps(data, cls=MessageEncoder),
+        )
