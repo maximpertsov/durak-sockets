@@ -45,7 +45,7 @@ async def channel_ws(websocket: WebSocket, channel: str):
 async def channel_ws_receiver(websocket: WebSocket, channel: str):
     async for message in websocket.iter_text():
         await broadcast.publish(
-            channel=channel, message=await transform_and_persist(message)
+            channel=channel, message=await handle_message(message)
         )
 
 
@@ -53,6 +53,13 @@ async def channel_ws_sender(websocket: WebSocket, channel: str):
     async with broadcast.subscribe(channel=channel) as subscriber:
         async for event in subscriber:
             await websocket.send_text(event.message)
+
+
+async def handle_message(message, channel: str):
+    if channel == "durak":
+        return await handle_durak_message(message)
+
+    return message
 
 
 actions = {
@@ -74,7 +81,7 @@ class MessageEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
 
 
-async def transform_and_persist(message):
+async def handle_durak_message(message):
     data = json.loads(message)
 
     try:
