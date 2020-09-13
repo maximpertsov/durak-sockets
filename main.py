@@ -17,6 +17,8 @@ broadcast = Broadcast(environ.get("REDISCLOUD_URL", "redis://localhost:6379"))
 app = FastAPI(on_startup=[broadcast.connect], on_shutdown=[broadcast.disconnect])
 
 origins = [
+    "http://localhost:3002",
+    "http://localhost:3003",
     "https://xchi.online",
     "https://xdurak.xyz",
     "https://maximpertsov.github.io",
