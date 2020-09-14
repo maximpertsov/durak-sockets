@@ -1,3 +1,6 @@
+from lib.durak.card import get_suit, get_value
+
+
 class Player:
     HAND_SIZE = 6
 
@@ -20,12 +23,18 @@ class Player:
 
     def organize_cards(self, *, strategy, trump_suit):
         self._compact_hand()
-        if strategy == 'group_by_rank':
-            return
-        elif strategy == 'group_by_suit':
-            return
-        elif strategy == 'group_by_rank_and_trumps':
-            return
+        if strategy == "group_by_rank":
+            self._cards.sort(key=lambda card: (get_value(card), get_suit(card)))
+        elif strategy == "group_by_suit":
+            self._cards.sort(key=lambda card: (get_suit(card), get_value(card)))
+        elif strategy == "group_by_rank_and_trump":
+            self._cards.sort(
+                key=lambda card: (
+                    1 if get_suit(card) == trump_suit else 0,
+                    get_value(card),
+                    get_suit(card),
+                )
+            )
 
     def take_cards(self, *, cards):
         self._compact_hand()
