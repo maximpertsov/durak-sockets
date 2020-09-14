@@ -18,6 +18,15 @@ class Player:
     def card_count(self):
         return len(self.cards())
 
+    def organize_cards(self, *, strategy, trump_suit):
+        self._compact_hand()
+        if strategy == 'group_by_rank':
+            return
+        elif strategy == 'group_by_suit':
+            return
+        elif strategy == 'group_by_rank_and_trumps':
+            return
+
     def take_cards(self, *, cards):
         self._compact_hand()
         self._cards += cards
