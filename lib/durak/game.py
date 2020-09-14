@@ -2,12 +2,17 @@ from functools import lru_cache
 from itertools import chain
 from operator import attrgetter
 
+from lib.durak.card import get_rank
 from lib.durak.draw_pile import DrawPile
+from lib.durak.exceptions import IllegalAction
 from lib.durak.player import Player
 from lib.durak.table import Table
 
 
 class Game:
+    class DifferentRanks(IllegalAction):
+        pass
+
     @classmethod
     def deserialize(cls, state):
         return cls(
@@ -121,6 +126,9 @@ class Game:
         self._table.add_card(card=card)
 
     def attack(self, *, player, cards):
+        if len(set(get_rank(card) for card in cards)) > 1:
+            raise self.DifferentRanks
+
         for card in cards:
             self._attack(player=player, card=card)
         self._clear_yields()

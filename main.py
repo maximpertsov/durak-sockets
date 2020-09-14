@@ -95,6 +95,7 @@ async def handle_durak_message(message):
         await persist(data)
     except IllegalAction:
         data["to_state"] = deepcopy(data["from_state"])
+        data["no_display"] = True
 
     del data["from_state"]
     return json.dumps(data, cls=MessageEncoder)

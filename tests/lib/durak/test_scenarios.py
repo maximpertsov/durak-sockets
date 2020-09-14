@@ -1,4 +1,7 @@
-from lib.durak import pass_with_many, start_game, yield_attack
+import pytest
+
+from lib.durak import attack_with_many, pass_with_many, start_game, yield_attack
+from lib.durak.game import Game
 
 
 def test_start_game():
@@ -305,3 +308,78 @@ def test_yielding_when_defender_wins():
         "durak": None,
         "collector": None,
     }
+
+
+def test_cannot_attack_with_unmatched_rank():
+    with pytest.raises(Game.DifferentRanks):
+        attack_with_many(
+            from_state={
+                "durak": None,
+                "hands": {
+                    "john": ["KC", "KH", "QC", "JS", "6S", "7C"],
+                    "cyril": [
+                        "QH",
+                        "6C",
+                        "JC",
+                        "6D",
+                        "7D",
+                        "7H",
+                        "JH",
+                        "7S",
+                        "AS",
+                        "JD",
+                        "KD",
+                        "AH",
+                    ],
+                    "kevin": ["AC", "AD", "KS", "QD", "6H", "QS"],
+                    "maxim": [
+                        "10H",
+                        "8S",
+                        "9S",
+                        "8C",
+                        "9C",
+                        "8H",
+                        "9H",
+                        "8D",
+                        "10D",
+                        "9D",
+                        "10C",
+                        "10S",
+                    ],
+                },
+                "table": [],
+                "players": ["cyril", "kevin", "john", "maxim"],
+                "winners": [],
+                "yielded": [],
+                "defender": "kevin",
+                "attackers": ["cyril"],
+                "collector": None,
+                "draw_pile": [],
+                "pass_count": 0,
+                "trump_suit": "clubs",
+                "lowest_rank": "6",
+                "attack_limit": 6,
+                "legal_passes": {"cards": [], "limit": 6},
+                "with_passing": True,
+                "legal_attacks": {
+                    "cards": [
+                        "QH",
+                        "7D",
+                        "JH",
+                        "6D",
+                        "JC",
+                        "AS",
+                        "JD",
+                        "7H",
+                        "7S",
+                        "AH",
+                        "6C",
+                        "KD",
+                    ],
+                    "limit": 6,
+                },
+                "legal_defenses": {},
+            },
+            payload={"cards": ["KD", "6D"]},
+            user="cyril",
+        )
