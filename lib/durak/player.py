@@ -1,3 +1,6 @@
+from lib.durak.card import get_suit, get_value
+
+
 class Player:
     HAND_SIZE = 6
 
@@ -17,6 +20,32 @@ class Player:
 
     def card_count(self):
         return len(self.cards())
+
+    # TODO: ensure that null cards are not required for game logic.
+    # Assuming that's true, you can remove the (100, ...) tuples.
+    def organize_cards(self, *, strategy, trump_suit):
+        if strategy == "group_by_rank":
+            self._cards.sort(
+                key=lambda card: (get_value(card), get_suit(card))
+                if card
+                else (100, 100)
+            )
+        elif strategy == "group_by_suit":
+            self._cards.sort(
+                key=lambda card: (get_suit(card), get_value(card))
+                if card
+                else (100, 100)
+            )
+        elif strategy == "group_by_rank_and_trump":
+            self._cards.sort(
+                key=lambda card: (
+                    1 if get_suit(card) == trump_suit else 0,
+                    get_value(card),
+                    get_suit(card),
+                )
+                if card
+                else (100, 100, 100)
+            )
 
     def take_cards(self, *, cards):
         self._compact_hand()

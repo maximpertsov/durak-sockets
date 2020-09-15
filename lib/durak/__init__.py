@@ -47,3 +47,9 @@ def start_game(*, from_state, user, payload):
     game = Game.deserialize(from_state)
     game.draw()
     return game.serialize()
+
+
+def organize_cards(*, from_state, user, payload):
+    game = Game.deserialize(from_state)
+    game.organize_cards(player=user, **payload)
+    return game.serialize()
