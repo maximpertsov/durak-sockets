@@ -7,11 +7,21 @@ from lib.durak.game import Game
 from main import handle_durak_message
 
 
-@pytest.mark.asyncio
-async def test_start_game(mocker):
+@pytest.fixture
+def assert_message(mocker):
     mocked_persist = mocker.patch("main.persist")
 
-    assert json.loads(await handle_durak_message(
+    async def wrapped(from_state, to_state):
+        result = await handle_durak_message(from_state)
+        assert json.loads(result) == json.loads(to_state)
+        mocked_persist.assert_called_once()
+
+    return wrapped
+
+
+@pytest.mark.asyncio
+async def test_start_game(assert_message):
+    await assert_message(
         json.dumps(
             {
                 "type": "started_game",
@@ -69,56 +79,56 @@ async def test_start_game(mocker):
                 "user": "anna",
                 "payload": {},
             }
-        )
-    )) == json.loads(json.dumps(
-        {
-            "type": "started_game",
-            "to_state": {
-                "durak": None,
-                "hands": {
-                    "anna": ["10C", "QC", "JS", "6S", "9D", "7S"],
-                    "igor": ["KC", "9H", "QH", "JC", "8H", "10H"],
-                    "vasyl": ["QD", "AS", "10D", "7H", "10S", "9C"],
-                    "grusha": ["QS", "KH", "AD", "KD", "JH", "8S"],
+        ),
+        json.dumps(
+            {
+                "type": "started_game",
+                "to_state": {
+                    "durak": None,
+                    "hands": {
+                        "anna": ["10C", "QC", "JS", "6S", "9D", "7S"],
+                        "igor": ["KC", "9H", "QH", "JC", "8H", "10H"],
+                        "vasyl": ["QD", "AS", "10D", "7H", "10S", "9C"],
+                        "grusha": ["QS", "KH", "AD", "KD", "JH", "8S"],
+                    },
+                    "table": [],
+                    "players": ["anna", "vasyl", "igor", "grusha"],
+                    "winners": [],
+                    "yielded": [],
+                    "defender": "vasyl",
+                    "attackers": ["anna"],
+                    "draw_pile": [
+                        "AH",
+                        "6C",
+                        "7C",
+                        "7D",
+                        "6D",
+                        "6H",
+                        "AC",
+                        "8D",
+                        "9S",
+                        "KS",
+                        "8C",
+                        "JD",
+                    ],
+                    "pass_count": 0,
+                    "trump_suit": "diamonds",
+                    "lowest_rank": "6",
+                    "attack_limit": 100,
+                    "legal_passes": {"cards": [], "limit": 6},
+                    "with_passing": True,
+                    "legal_attacks": {
+                        "cards": sorted(["QC", "10C", "JS", "6S", "7S", "9D"]),
+                        "limit": 6,
+                    },
+                    "legal_defenses": {},
+                    "collector": None,
                 },
-                "table": [],
-                "players": ["anna", "vasyl", "igor", "grusha"],
-                "winners": [],
-                "yielded": [],
-                "defender": "vasyl",
-                "attackers": ["anna"],
-                "draw_pile": [
-                    "AH",
-                    "6C",
-                    "7C",
-                    "7D",
-                    "6D",
-                    "6H",
-                    "AC",
-                    "8D",
-                    "9S",
-                    "KS",
-                    "8C",
-                    "JD",
-                ],
-                "pass_count": 0,
-                "trump_suit": "diamonds",
-                "lowest_rank": "6",
-                "attack_limit": 100,
-                "legal_passes": {"cards": [], "limit": 6},
-                "with_passing": True,
-                "legal_attacks": {
-                    "cards": sorted(["QC", "10C", "JS", "6S", "7S", "9D"]),
-                    "limit": 6,
-                },
-                "legal_defenses": {},
-                "collector": None,
-            },
-            "user": "anna",
-            "payload": {},
-        }
-    ))
-    mocked_persist.assert_called_once()
+                "user": "anna",
+                "payload": {},
+            }
+        ),
+    )
 
 
 def test_pass_with_last_card():
