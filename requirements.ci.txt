@@ -44,7 +44,6 @@ pytest-asyncio==0.14.0
 pytest-mock==3.3.1
 pytest-watch==4.2.0
 requests==2.24.0
-respx==0.12.1
 rfc3986==1.4.0
 six==1.15.0
 sniffio==1.1.0
