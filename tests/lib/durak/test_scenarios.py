@@ -1,3 +1,4 @@
+import glob
 import json
 import os
 
@@ -7,8 +8,10 @@ from lib.durak import attack_with_many, pass_with_many, yield_attack
 from lib.durak.game import Game
 from main import handle_durak_message
 
-SCENARIO_INPUTS_DIRECTORY = os.path.join(
-    os.path.dirname(os.path.realpath(__file__)), "scenario_inputs"
+SCENARIO_INPUT_FILES = glob.glob(
+    os.path.join(
+        os.path.dirname(os.path.realpath(__file__)), "scenario_inputs", "*.json"
+    )
 )
 
 
@@ -24,11 +27,23 @@ def assert_handle_message(mocker):
     return wrapped
 
 
+@pytest.fixture
+def assert_snapshot_matches(assert_handle_message, snapshot):
+    async def wrapped(input_path):
+        _, snapshot_key = os.path.split(input_path)
+        with open(input_path, "r") as f:
+            actual = await handle_durak_message(f.read())
+            snapshot.assert_match(actual, snapshot_key)
+
+    return wrapped
+
+
 @pytest.mark.asyncio
-async def test_start_game(assert_handle_message, snapshot):
-    input_file = os.path.join(SCENARIO_INPUTS_DIRECTORY, "started_game.json")
-    with open(input_file, "r") as f:
-        snapshot.assert_match(await handle_durak_message(f.read()))
+async def test_start_game(assert_snapshot_matches):
+    # NOTE: this should not be parametrized since that causes local
+    # file paths to be injected into the snapshot results
+    for input_path in SCENARIO_INPUT_FILES:
+        await assert_snapshot_matches(input_path)
 
 
 def test_pass_with_last_card():
