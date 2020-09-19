@@ -30,20 +30,19 @@ def assert_handle_message(mocker):
 @pytest.fixture
 def assert_snapshot_matches(assert_handle_message, snapshot):
     async def wrapped(input_path):
-        _, snapshot_key = os.path.split(input_path)
         with open(input_path, "r") as f:
             actual = await handle_durak_message(f.read())
-            snapshot.assert_match(actual, snapshot_key)
+            snapshot.assert_match(actual)
 
     return wrapped
 
 
 @pytest.mark.asyncio
-async def test_start_game(assert_snapshot_matches):
-    # NOTE: this should not be parametrized since that causes local
-    # file paths to be injected into the snapshot results
-    for input_path in SCENARIO_INPUT_FILES:
-        await assert_snapshot_matches(input_path)
+@pytest.mark.parametrize(
+    "input_path", SCENARIO_INPUT_FILES, ids=lambda p: os.path.split(p)[1]
+)
+async def test_scenarios(input_path, assert_snapshot_matches):
+    await assert_snapshot_matches(input_path)
 
 
 def test_pass_with_last_card():
