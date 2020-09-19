@@ -8,7 +8,7 @@ from main import handle_durak_message
 
 
 @pytest.fixture
-def assert_message(mocker):
+def assert_handle_message(mocker):
     mocked_persist = mocker.patch("main.persist")
 
     async def wrapped(from_state, to_state):
@@ -20,114 +20,68 @@ def assert_message(mocker):
 
 
 @pytest.mark.asyncio
-async def test_start_game(assert_message):
-    await assert_message(
-        json.dumps(
-            {
-                "type": "started_game",
-                "from_state": {
-                    "draw_pile": [
-                        "10C",
-                        "QC",
-                        "JS",
-                        "6S",
-                        "9D",
-                        "7S",
-                        "QD",
-                        "AS",
-                        "10D",
-                        "7H",
-                        "10S",
-                        "9C",
-                        "KC",
-                        "9H",
-                        "QH",
-                        "JC",
-                        "8H",
-                        "10H",
-                        "QS",
-                        "KH",
-                        "AD",
-                        "KD",
-                        "JH",
-                        "8S",
-                        "AH",
-                        "6C",
-                        "7C",
-                        "7D",
-                        "6D",
-                        "6H",
-                        "AC",
-                        "8D",
-                        "9S",
-                        "KS",
-                        "8C",
-                        "JD",
-                    ],
-                    "hands": {"anna": [], "vasyl": [], "igor": [], "grusha": []},
-                    "players": ["anna", "vasyl", "igor", "grusha"],
-                    "pass_count": 0,
-                    "table": [],
-                    "trump_suit": "diamonds",
-                    "yielded": [],
-                    "lowest_rank": "6",
-                    "attack_limit": 100,
-                    "with_passing": True,
-                    "durak": None,
-                    "collector": None,
-                },
-                "user": "anna",
-                "payload": {},
-            }
-        ),
-        json.dumps(
-            {
-                "type": "started_game",
-                "to_state": {
-                    "durak": None,
-                    "hands": {
-                        "anna": ["10C", "QC", "JS", "6S", "9D", "7S"],
-                        "igor": ["KC", "9H", "QH", "JC", "8H", "10H"],
-                        "vasyl": ["QD", "AS", "10D", "7H", "10S", "9C"],
-                        "grusha": ["QS", "KH", "AD", "KD", "JH", "8S"],
+async def test_start_game(assert_handle_message, snapshot):
+    snapshot.assert_match(
+        await handle_durak_message(
+            json.dumps(
+                {
+                    "type": "started_game",
+                    "from_state": {
+                        "draw_pile": [
+                            "10C",
+                            "QC",
+                            "JS",
+                            "6S",
+                            "9D",
+                            "7S",
+                            "QD",
+                            "AS",
+                            "10D",
+                            "7H",
+                            "10S",
+                            "9C",
+                            "KC",
+                            "9H",
+                            "QH",
+                            "JC",
+                            "8H",
+                            "10H",
+                            "QS",
+                            "KH",
+                            "AD",
+                            "KD",
+                            "JH",
+                            "8S",
+                            "AH",
+                            "6C",
+                            "7C",
+                            "7D",
+                            "6D",
+                            "6H",
+                            "AC",
+                            "8D",
+                            "9S",
+                            "KS",
+                            "8C",
+                            "JD",
+                        ],
+                        "hands": {"anna": [], "vasyl": [], "igor": [], "grusha": [],},
+                        "players": ["anna", "vasyl", "igor", "grusha"],
+                        "pass_count": 0,
+                        "table": [],
+                        "trump_suit": "diamonds",
+                        "yielded": [],
+                        "lowest_rank": "6",
+                        "attack_limit": 100,
+                        "with_passing": True,
+                        "durak": None,
+                        "collector": None,
                     },
-                    "table": [],
-                    "players": ["anna", "vasyl", "igor", "grusha"],
-                    "winners": [],
-                    "yielded": [],
-                    "defender": "vasyl",
-                    "attackers": ["anna"],
-                    "draw_pile": [
-                        "AH",
-                        "6C",
-                        "7C",
-                        "7D",
-                        "6D",
-                        "6H",
-                        "AC",
-                        "8D",
-                        "9S",
-                        "KS",
-                        "8C",
-                        "JD",
-                    ],
-                    "pass_count": 0,
-                    "trump_suit": "diamonds",
-                    "lowest_rank": "6",
-                    "attack_limit": 100,
-                    "legal_passes": {"cards": [], "limit": 6},
-                    "with_passing": True,
-                    "legal_attacks": {
-                        "cards": sorted(["QC", "10C", "JS", "6S", "7S", "9D"]),
-                        "limit": 6,
-                    },
-                    "legal_defenses": {},
-                    "collector": None,
-                },
-                "user": "anna",
-                "payload": {},
-            }
-        ),
+                    "user": "anna",
+                    "payload": {},
+                }
+            )
+        )
     )
 
 
