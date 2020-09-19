@@ -4,7 +4,7 @@ import os
 
 import pytest
 
-from lib.durak import attack_with_many, pass_with_many, yield_attack
+from lib.durak import attack_with_many, yield_attack
 from lib.durak.game import Game
 from main import handle_durak_message
 
@@ -43,56 +43,6 @@ def assert_snapshot_matches(assert_handle_message, snapshot):
 )
 async def test_scenarios(input_path, assert_snapshot_matches):
     await assert_snapshot_matches(input_path)
-
-
-def test_pass_with_last_card():
-    assert pass_with_many(
-        from_state={
-            "hands": {
-                "anna": ["10H"],
-                "igor": ["9S", "QC"],
-                "vasyl": ["AH", "10C"],
-                "grusha": ["QS", None, "KH"],
-            },
-            "table": [["10D"]],
-            "players": ["grusha", "anna", "vasyl", "igor"],
-            "yielded": [],
-            "draw_pile": [],
-            "pass_count": 0,
-            "trump_suit": "hearts",
-            "lowest_rank": "6",
-            "attack_limit": 100,
-            "with_passing": True,
-            "durak": None,
-            "collector": None,
-        },
-        user="anna",
-        payload={"cards": ["10H"]},
-    ) == {
-        "durak": None,
-        "hands": {
-            "anna": [None],
-            "igor": ["9S", "QC"],
-            "vasyl": ["AH", "10C"],
-            "grusha": ["QS", None, "KH"],
-        },
-        "table": [["10D"], ["10H"]],
-        "players": ["anna", "vasyl", "igor", "grusha"],
-        "winners": set(["anna"]),
-        "yielded": [],
-        "defender": "vasyl",
-        "attackers": ["igor", "grusha"],
-        "draw_pile": [],
-        "pass_count": 1,
-        "trump_suit": "hearts",
-        "lowest_rank": "6",
-        "attack_limit": 100,
-        "legal_passes": {"cards": set(["10C"]), "limit": 0},
-        "with_passing": True,
-        "legal_attacks": {"cards": set(), "limit": 0},
-        "legal_defenses": {"10D": set(["AH"]), "10H": set(["AH"])},
-        "collector": None,
-    }
 
 
 def test_defend_successfully_after_attack_plays_last_card():
