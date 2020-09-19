@@ -1,10 +1,15 @@
 import json
+import os
 
 import pytest
 
 from lib.durak import attack_with_many, pass_with_many, yield_attack
 from lib.durak.game import Game
 from main import handle_durak_message
+
+SCENARIO_INPUTS_DIRECTORY = os.path.join(
+    os.path.dirname(os.path.realpath(__file__)), "scenario_inputs"
+)
 
 
 @pytest.fixture
@@ -21,68 +26,9 @@ def assert_handle_message(mocker):
 
 @pytest.mark.asyncio
 async def test_start_game(assert_handle_message, snapshot):
-    snapshot.assert_match(
-        await handle_durak_message(
-            json.dumps(
-                {
-                    "type": "started_game",
-                    "from_state": {
-                        "draw_pile": [
-                            "10C",
-                            "QC",
-                            "JS",
-                            "6S",
-                            "9D",
-                            "7S",
-                            "QD",
-                            "AS",
-                            "10D",
-                            "7H",
-                            "10S",
-                            "9C",
-                            "KC",
-                            "9H",
-                            "QH",
-                            "JC",
-                            "8H",
-                            "10H",
-                            "QS",
-                            "KH",
-                            "AD",
-                            "KD",
-                            "JH",
-                            "8S",
-                            "AH",
-                            "6C",
-                            "7C",
-                            "7D",
-                            "6D",
-                            "6H",
-                            "AC",
-                            "8D",
-                            "9S",
-                            "KS",
-                            "8C",
-                            "JD",
-                        ],
-                        "hands": {"anna": [], "vasyl": [], "igor": [], "grusha": [],},
-                        "players": ["anna", "vasyl", "igor", "grusha"],
-                        "pass_count": 0,
-                        "table": [],
-                        "trump_suit": "diamonds",
-                        "yielded": [],
-                        "lowest_rank": "6",
-                        "attack_limit": 100,
-                        "with_passing": True,
-                        "durak": None,
-                        "collector": None,
-                    },
-                    "user": "anna",
-                    "payload": {},
-                }
-            )
-        )
-    )
+    input_file = os.path.join(SCENARIO_INPUTS_DIRECTORY, "started_game.json")
+    with open(input_file, "r") as f:
+        snapshot.assert_match(await handle_durak_message(f.read()))
 
 
 def test_pass_with_last_card():
