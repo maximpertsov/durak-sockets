@@ -17,3 +17,11 @@ snapshots[
 snapshots[
     "test_scenarios[defend_successfully_after_attack_plays_last_card.json] 1"
 ] = '{"type": "yielded_attack", "user": "igor", "payload": {}, "to_state": {"durak": null, "hands": {"anna": ["KS", "JD"], "igor": ["9S", "QD", "6S", "6D", "JS"], "vasyl": ["JC", "QS", "8C", "QH", "6H"], "grusha": []}, "table": [], "players": ["anna", "vasyl", "igor", "grusha"], "winners": ["grusha"], "yielded": [], "defender": "vasyl", "attackers": ["anna"], "draw_pile": [], "pass_count": 0, "trump_suit": "spades", "lowest_rank": "6", "attack_limit": 100, "legal_passes": {"cards": [], "limit": 5}, "with_passing": true, "legal_attacks": {"cards": ["JD", "KS"], "limit": 5}, "legal_defenses": {}, "collector": null}}'
+
+snapshots[
+    "test_scenarios[collect_rotates_properly.json] 1"
+] = '{"type": "yielded_attack", "user": "anna", "payload": {}, "to_state": {"durak": null, "hands": {"anna": [], "igor": ["9S", "6S", "6D", "JD", "QD", "JC", "JS", "QH", "QS"], "vasyl": ["8C", "6H", "KS"], "grusha": []}, "table": [], "players": ["igor", "anna", "vasyl", "grusha"], "winners": ["anna", "grusha"], "yielded": [], "defender": "vasyl", "attackers": ["igor"], "draw_pile": [], "pass_count": 0, "trump_suit": "spades", "lowest_rank": "6", "attack_limit": 100, "legal_passes": {"cards": [], "limit": 9}, "with_passing": true, "legal_attacks": {"cards": ["6D", "6S", "9S", "JC", "JD", "JS", "QD", "QH", "QS"], "limit": 3}, "legal_defenses": {}, "collector": null}}'
+
+snapshots[
+    "test_scenarios[yielding_when_defender_wins.json] 1"
+] = '{"type": "yielded_attack", "user": "grusha", "payload": {}, "to_state": {"hands": {"anna": [], "igor": ["KC", "6D"], "vasyl": ["AC", "8H", "10D", "AS", "9C", "9H", "QD", "9S"], "grusha": ["KH", "AD", "KD", "JH"]}, "table": [], "players": ["anna", "vasyl", "igor", "grusha"], "winners": ["anna"], "yielded": [], "defender": "igor", "attackers": ["vasyl"], "draw_pile": [], "pass_count": 0, "trump_suit": "diamonds", "lowest_rank": "6", "attack_limit": 100, "legal_passes": {"cards": [], "limit": 4}, "with_passing": true, "legal_attacks": {"cards": ["10D", "8H", "9C", "9H", "9S", "AC", "AS", "QD"], "limit": 2}, "legal_defenses": {}, "durak": null, "collector": null}}'

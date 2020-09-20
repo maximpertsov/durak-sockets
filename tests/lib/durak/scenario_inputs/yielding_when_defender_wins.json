@@ -1,0 +1,75 @@
+{
+  "type": "yielded_attack",
+  "from_state": {
+    "hands": {
+      "anna": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "igor": [
+        "KC",
+        null,
+        "6D"
+      ],
+      "vasyl": [
+        "AC",
+        "8H",
+        "10D",
+        null,
+        "AS",
+        null,
+        "9C",
+        "9H",
+        "QD",
+        "9S"
+      ],
+      "grusha": [
+        null,
+        "KH",
+        "AD",
+        "KD",
+        "JH"
+      ]
+    },
+    "table": [
+      [
+        "QH",
+        "8D"
+      ],
+      [
+        "QS",
+        "KS"
+      ],
+      [
+        "8C",
+        "9D"
+      ],
+      [
+        "8S",
+        "JD"
+      ]
+    ],
+    "players": [
+      "grusha",
+      "anna",
+      "vasyl",
+      "igor"
+    ],
+    "yielded": [
+      "vasyl",
+      "igor"
+    ],
+    "draw_pile": [],
+    "pass_count": 1,
+    "trump_suit": "diamonds",
+    "lowest_rank": "6",
+    "attack_limit": 100,
+    "with_passing": true,
+    "durak": null,
+    "collector": null
+  },
+  "payload": {},
+  "user": "grusha"
+}
