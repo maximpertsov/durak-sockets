@@ -1,0 +1,49 @@
+{
+  "type": "passed_with_many",
+  "from_state": {
+    "hands": {
+      "anna": [
+        "10H"
+      ],
+      "igor": [
+        "9S",
+        "QC"
+      ],
+      "vasyl": [
+        "AH",
+        "10C"
+      ],
+      "grusha": [
+        "QS",
+        null,
+        "KH"
+      ]
+    },
+    "table": [
+      [
+        "10D"
+      ]
+    ],
+    "players": [
+      "grusha",
+      "anna",
+      "vasyl",
+      "igor"
+    ],
+    "yielded": [],
+    "draw_pile": [],
+    "pass_count": 0,
+    "trump_suit": "hearts",
+    "lowest_rank": "6",
+    "attack_limit": 100,
+    "with_passing": true,
+    "durak": null,
+    "collector": null
+  },
+  "user": "anna",
+  "payload": {
+    "cards": [
+      "10H"
+    ]
+  }
+}

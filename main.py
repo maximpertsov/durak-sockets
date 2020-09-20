@@ -77,7 +77,7 @@ actions = {
 class MessageEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, set):
-            return list(obj)
+            return sorted(obj)
         return json.JSONEncoder.default(self, obj)
 
 

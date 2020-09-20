@@ -26,4 +26,4 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.ci.txt
     - name: Run Tests
-      run: pytest
+      run: pytest -vv
