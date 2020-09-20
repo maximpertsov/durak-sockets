@@ -13,3 +13,7 @@ snapshots[
 snapshots[
     "test_scenarios[passed_with_last_card.json] 1"
 ] = '{"type": "passed_with_many", "user": "anna", "payload": {"cards": ["10H"]}, "to_state": {"durak": null, "hands": {"anna": [null], "igor": ["9S", "QC"], "vasyl": ["AH", "10C"], "grusha": ["QS", null, "KH"]}, "table": [["10D"], ["10H"]], "players": ["anna", "vasyl", "igor", "grusha"], "winners": ["anna"], "yielded": [], "defender": "vasyl", "attackers": ["igor", "grusha"], "draw_pile": [], "pass_count": 1, "trump_suit": "hearts", "lowest_rank": "6", "attack_limit": 100, "legal_passes": {"cards": ["10C"], "limit": 0}, "with_passing": true, "legal_attacks": {"cards": [], "limit": 0}, "legal_defenses": {"10D": ["AH"], "10H": ["AH"]}, "collector": null}}'
+
+snapshots[
+    "test_scenarios[defend_successfully_after_attack_plays_last_card.json] 1"
+] = '{"type": "yielded_attack", "user": "igor", "payload": {}, "to_state": {"durak": null, "hands": {"anna": ["KS", "JD"], "igor": ["9S", "QD", "6S", "6D", "JS"], "vasyl": ["JC", "QS", "8C", "QH", "6H"], "grusha": []}, "table": [], "players": ["anna", "vasyl", "igor", "grusha"], "winners": ["grusha"], "yielded": [], "defender": "vasyl", "attackers": ["anna"], "draw_pile": [], "pass_count": 0, "trump_suit": "spades", "lowest_rank": "6", "attack_limit": 100, "legal_passes": {"cards": [], "limit": 5}, "with_passing": true, "legal_attacks": {"cards": ["JD", "KS"], "limit": 5}, "legal_defenses": {}, "collector": null}}'
