@@ -21,7 +21,7 @@ pdbpp = "^0.10.2"
 ipython = "^7.17.0"
 pytest-mock = "^3.3.1"
 pytest-asyncio = "^0.14.0"
-pytest-snapshot = "^0.4.2"
+snapshottest = "^0.5.1"
 
 [build-system]
 requires = ["poetry>=0.12"]
