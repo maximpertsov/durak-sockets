@@ -13,7 +13,6 @@ broadcaster = { git = "https://github.com/maximpertsov/broadcaster.git", branch 
 asyncio-redis = "^0.16.0"
 requests = "^2.24.0"
 httpx = "^0.14.3"
-snapshottest = "^0.5.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.0.1"
