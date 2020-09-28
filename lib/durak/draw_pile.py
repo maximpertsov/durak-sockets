@@ -10,6 +10,7 @@ class DrawPile:
     def serialize(self):
         return self._draw_pile
 
+    @property
     def _draw_pile(self):
         return [
             card
