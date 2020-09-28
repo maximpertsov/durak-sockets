@@ -1,4 +1,5 @@
 from itertools import product
+from random import Random
 
 SUITS = ["clubs", "diamonds", "hearts", "spades"]
 RANKS = [
@@ -40,6 +41,13 @@ _DATA_BY_CARD = {
 
 def get_all_cards():
     return list(_DATA_BY_CARD)
+
+
+def get_all_cards_shuffled(seed):
+    cards = get_all_cards()
+    cards.sort(key=lambda card: _DATA_BY_CARD[card]["sort_key"])
+    Random(seed).shuffle(cards)
+    return cards
 
 
 def get_rank(card):
