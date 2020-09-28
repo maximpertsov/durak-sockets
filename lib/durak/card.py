@@ -26,8 +26,15 @@ def _key(rank, suit):
 
 
 _DATA_BY_CARD = {
-    _key(rank, suit): {"rank": rank, "suit": suit, "value": index}
-    for (index, rank), suit in product(enumerate(RANKS), SUITS)
+    _key(rank, suit): {
+        "sort_key": sort_key,
+        "rank": rank,
+        "suit": suit,
+        "value": rank_value,
+    }
+    for sort_key, ((rank_value, rank), suit) in enumerate(
+        product(enumerate(RANKS), SUITS)
+    )
 }
 
 
