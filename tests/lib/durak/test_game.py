@@ -7,8 +7,8 @@ from lib.durak.game import Game
 def static_parameters():
     return {
         "attack_limit": 100,
+        "lowest_rank": "2",
         "seed": 0.4,
-        "lowest_rank": "6",
         "with_passing": True,
     }
 
@@ -24,8 +24,8 @@ def game(mocked_draw_cards, static_parameters):
         {
             "collector": None,
             "durak": None,
-            "draw_pile": ["JC", "3S", "6C"],
             "drawn_cards": [],
+            "draw_pile": ["JC", "3S", "6C"],
             "hands": {"anna": ["10D", None, "10C", "2S", "5C", "8D", "2C"]},
             "pass_count": 0,
             "players": ["anna"],
@@ -40,9 +40,10 @@ def game(mocked_draw_cards, static_parameters):
 def test_serialize(game, static_parameters):
     assert game.serialize() == {
         "attackers": ["anna"],
+        "cards_left": 3,
         "collector": None,
+        "drawn_cards": set(),
         "defender": None,
-        "draw_pile": ["JC", "3S", "6C"],
         "durak": "anna",
         "hands": {"anna": ["10D", None, "10C", "2S", "5C", "8D", "2C"]},
         "legal_attacks": {"cards": set([]), "limit": 0},
@@ -58,75 +59,77 @@ def test_serialize(game, static_parameters):
     }
 
 
-# def test_attack(game, static_parameters):
-#     game.attack(player="anna", cards=["10D"])
-#     assert game.serialize() == {
-#         "attackers": ["anna"],
-#         "collector": None,
-#         "defender": None,
-#         "draw_pile": ["JC", "3S", "6C"],
-#         "durak": "anna",
-#         "hands": {"anna": [None, None, "10C", "2S", "5C", "8D", "2C"]},
-#         "legal_attacks": {"cards": set([]), "limit": 0},
-#         "legal_defenses": {},
-#         "legal_passes": {"cards": set([]), "limit": 0},
-#         "pass_count": 0,
-#         "players": ["anna"],
-#         "table": [["10D"]],
-#         "trump_suit": "diamonds",
-#         "winners": set(),
-#         "yielded": [],
-#         **static_parameters,
-#     }
-#
-#
-# def test_defend(game, static_parameters):
-#     game._table.add_card(card="9D")
-#     game.defend(
-#         base_card="9D", player="anna", card="10D",
-#     )
-#     assert game.serialize() == {
-#         "attackers": ["anna"],
-#         "collector": None,
-#         "defender": None,
-#         "draw_pile": ["JC", "3S", "6C"],
-#         "durak": "anna",
-#         "hands": {"anna": [None, None, "10C", "2S", "5C", "8D", "2C"]},
-#         "legal_attacks": {"cards": set([]), "limit": 0},
-#         "legal_defenses": {},
-#         "legal_passes": {"cards": set([]), "limit": 0},
-#         "pass_count": 0,
-#         "players": ["anna"],
-#         "table": [["9D", "10D"]],
-#         "trump_suit": "diamonds",
-#         "winners": set(),
-#         "yielded": [],
-#         **static_parameters,
-#     }
-#
-#
-# def test_durak(game, static_parameters):
-#     game._draw_pile.draw(3)
-#     assert game.serialize() == {
-#         "attackers": ["anna"],
-#         "collector": None,
-#         "defender": None,
-#         "draw_pile": [],
-#         "durak": "anna",
-#         "hands": {"anna": ["10D", None, "10C", "2S", "5C", "8D", "2C"]},
-#         "legal_attacks": {"cards": set([]), "limit": 0},
-#         "legal_defenses": {},
-#         "legal_passes": {"cards": set([]), "limit": 0},
-#         "pass_count": 0,
-#         "players": ["anna"],
-#         "table": [],
-#         "trump_suit": "diamonds",
-#         "winners": set(),
-#         "yielded": [],
-#         **static_parameters,
-#     }
-#
-#
+def test_attack(game, static_parameters):
+    game.attack(player="anna", cards=["10D"])
+    assert game.serialize() == {
+        "attackers": ["anna"],
+        "cards_left": 3,
+        "collector": None,
+        "defender": None,
+        "drawn_cards": set(),
+        "durak": "anna",
+        "hands": {"anna": [None, None, "10C", "2S", "5C", "8D", "2C"]},
+        "legal_attacks": {"cards": set([]), "limit": 0},
+        "legal_defenses": {},
+        "legal_passes": {"cards": set([]), "limit": 0},
+        "pass_count": 0,
+        "players": ["anna"],
+        "table": [["10D"]],
+        "trump_suit": "diamonds",
+        "winners": set(),
+        "yielded": [],
+        **static_parameters,
+    }
+
+
+def test_defend(game, static_parameters):
+    game._table.add_card(card="9D")
+    game.defend(
+        base_card="9D", player="anna", card="10D",
+    )
+    assert game.serialize() == {
+        "attackers": ["anna"],
+        "cards_left": 3,
+        "collector": None,
+        "defender": None,
+        "drawn_cards": set(),
+        "durak": "anna",
+        "hands": {"anna": [None, None, "10C", "2S", "5C", "8D", "2C"]},
+        "legal_attacks": {"cards": set([]), "limit": 0},
+        "legal_defenses": {},
+        "legal_passes": {"cards": set([]), "limit": 0},
+        "pass_count": 0,
+        "players": ["anna"],
+        "table": [["9D", "10D"]],
+        "trump_suit": "diamonds",
+        "winners": set(),
+        "yielded": [],
+        **static_parameters,
+    }
+
+
+def test_durak(game, static_parameters):
+    game._draw_pile.draw(3)
+    assert game.serialize() == {
+        "attackers": ["anna"],
+        "collector": None,
+        "defender": None,
+        "drawn_cards": set(["JC", "3S", "6C"]),
+        "durak": "anna",
+        "hands": {"anna": ["10D", None, "10C", "2S", "5C", "8D", "2C"]},
+        "legal_attacks": {"cards": set([]), "limit": 0},
+        "legal_defenses": {},
+        "legal_passes": {"cards": set([]), "limit": 0},
+        "pass_count": 0,
+        "players": ["anna"],
+        "table": [],
+        "trump_suit": "diamonds",
+        "winners": set(),
+        "yielded": [],
+        **static_parameters,
+    }
+
+
 # @pytest.fixture
 # def game_3p(static_parameters):
 #     return Game.deserialize(
