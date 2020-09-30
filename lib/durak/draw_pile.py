@@ -8,7 +8,12 @@ class DrawPile:
         self._lowest_rank = lowest_rank
 
     def serialize(self):
-        return self._draw_pile
+        return {
+            "cards_left": self.size(),
+            "drawn_cards": self._drawn_cards,
+            "lowest_rank": self._lowest_rank,
+            "seed": self._seed,
+        }
 
     @property
     def _draw_pile(self):

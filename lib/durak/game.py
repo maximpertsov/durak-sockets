@@ -51,7 +51,6 @@ class Game:
         return {
             "attackers": [player.name for player in self._attackers()],
             "defender": getattr(self._defender(), "name", None),
-            "draw_pile": self._draw_pile.serialize(),
             "durak": getattr(self.durak(), "name", None),
             "hands": {
                 serialized["name"]: serialized["cards"]
@@ -72,6 +71,7 @@ class Game:
             "attack_limit": self._attack_limit,
             "with_passing": self._with_passing,
             "collector": self._collector,
+            **self._draw_pile.serialize()
         }
 
     def winners(self):
