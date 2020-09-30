@@ -6,8 +6,9 @@ from lib.durak.game import Game
 @pytest.fixture
 def static_parameters():
     return {
-        "lowest_rank": "6",
         "attack_limit": 100,
+        "seed": 0.4,
+        "lowest_rank": "6",
         "with_passing": True,
     }
 
@@ -300,6 +301,7 @@ def test_legal_attacks_and_passes_with_limits(game_3p, static_parameters):
         "legal_defenses": {"7S": set(["JS", "6D"])},
         "legal_passes": {"cards": set(["7C", "7H"]), "limit": 2},
         "players": ["anna", "vasyl", "igor"],
+        "seed": 0.4,
         "table": [["7S"]],
         "trump_suit": "diamonds",
         "winners": set(),

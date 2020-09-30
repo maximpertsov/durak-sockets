@@ -1,6 +1,7 @@
 {
   "type": "started_game",
   "from_state": {
+    "seed": 0.4,
     "draw_pile": [
       "10C",
       "QC",

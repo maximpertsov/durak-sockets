@@ -1,6 +1,7 @@
 {
   "type": "attacked_with_many",
   "from_state": {
+    "seed": 0.4,
     "durak": null,
     "hands": {
       "john": [

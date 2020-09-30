@@ -16,7 +16,11 @@ class Game:
     @classmethod
     def deserialize(cls, state):
         return cls(
-            draw_pile=DrawPile(draw_pile=state["draw_pile"]),
+            draw_pile=DrawPile(
+                drawn_cards=state["hands"],
+                seed=state["seed"],
+                lowest_rank=state["lowest_rank"],
+            ),
             players={
                 player: Player(
                     name=player,
