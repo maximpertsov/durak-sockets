@@ -131,57 +131,63 @@ def test_durak(game, static_parameters):
     }
 
 
-# @pytest.fixture
-# def game_3p(static_parameters):
-#     return Game.deserialize(
-#         {
-#             "collector": None,
-#             "durak": None,
-#             "draw_pile": ["7D", "9C", "9D", "10C", "8D"],
-#             "hands": {
-#                 "anna": ["9H", "3S", "KH", "4C", "4H", None],
-#                 "vasyl": ["7C", "6D", "JS", "7H", None, None],
-#                 "igor": ["8H", "JD", "KS", "5H", "JC", None],
-#             },
-#             "pass_count": 0,
-#             "players": ["anna", "vasyl", "igor"],
-#             "table": [],
-#             "trump_suit": "diamonds",
-#             "yielded": [],
-#             **static_parameters,
-#         }
-#     )
-#
-#
-# def test_draw(game_3p, static_parameters):
-#     game_3p.draw()
-#     assert game_3p.serialize() == {
-#         "attackers": ["anna"],
-#         "collector": None,
-#         "defender": "vasyl",
-#         "draw_pile": ["8D"],
-#         "durak": None,
-#         "hands": {
-#             "anna": ["9H", "3S", "KH", "4C", "4H", "7D"],
-#             "vasyl": ["7C", "6D", "JS", "7H", "9C", "9D"],
-#             "igor": ["8H", "JD", "KS", "5H", "JC", "10C"],
-#         },
-#         "legal_attacks": {
-#             "cards": set(["9H", "3S", "KH", "4C", "4H", "7D"]),
-#             "limit": 6,
-#         },
-#         "legal_defenses": {},
-#         "legal_passes": {"cards": set([]), "limit": 6},
-#         "pass_count": 0,
-#         "players": ["anna", "vasyl", "igor"],
-#         "table": [],
-#         "trump_suit": "diamonds",
-#         "winners": set(),
-#         "yielded": [],
-#         **static_parameters,
-#     }
-#
-#
+@pytest.fixture
+def mocked_draw_cards_3p(get_draw_pile_cards):
+    return get_draw_pile_cards(["7D", "9C", "9D", "10C", "8D"])
+
+
+@pytest.fixture
+def game_3p(mocked_draw_cards_3p, static_parameters):
+    return Game.deserialize(
+        {
+            "collector": None,
+            "drawn_cards": [],
+            "durak": None,
+            "hands": {
+                "anna": ["9H", "3S", "KH", "4C", "4H", None],
+                "vasyl": ["7C", "6D", "JS", "7H", None, None],
+                "igor": ["8H", "JD", "KS", "5H", "JC", None],
+            },
+            "pass_count": 0,
+            "players": ["anna", "vasyl", "igor"],
+            "table": [],
+            "trump_suit": "diamonds",
+            "yielded": [],
+            **static_parameters,
+        }
+    )
+
+
+def test_draw(game_3p, static_parameters):
+    game_3p.draw()
+    assert game_3p.serialize() == {
+        "attackers": ["anna"],
+        "cards_left": 1,
+        "drawn_cards": set(["7D", "9C", "9D", "10C"]),
+        "collector": None,
+        "defender": "vasyl",
+        "durak": None,
+        "hands": {
+            "anna": ["9H", "3S", "KH", "4C", "4H", "7D"],
+            "vasyl": ["7C", "6D", "JS", "7H", "9C", "9D"],
+            "igor": ["8H", "JD", "KS", "5H", "JC", "10C"],
+        },
+        "legal_attacks": {
+            "cards": set(["9H", "3S", "KH", "4C", "4H", "7D"]),
+            "limit": 6,
+        },
+        "legal_defenses": {},
+        "legal_passes": {"cards": set([]), "limit": 6},
+        "pass_count": 0,
+        "players": ["anna", "vasyl", "igor"],
+        "table": [],
+        "trump_suit": "diamonds",
+        "winners": set(),
+        "yielded": [],
+        **static_parameters,
+    }
+
+
 # def test_draw_with_pass_count(game_3p, static_parameters):
 #     game_3p._pass_count = 2
 #     game_3p.draw()
