@@ -112,6 +112,7 @@ def test_durak(game, static_parameters):
     game._draw_pile.draw(3)
     assert game.serialize() == {
         "attackers": ["anna"],
+        "cards_left": 0,
         "collector": None,
         "defender": None,
         "drawn_cards": set(["JC", "3S", "6C"]),
