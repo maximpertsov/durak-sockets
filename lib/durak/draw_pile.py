@@ -44,9 +44,12 @@ class DrawPile:
     def _is_drawable(self, card):
         if card in self._drawn_cards:
             return False
-        if self._is_drawable_rank(card):
-            return False
-        return True
+        return self._is_drawable_rank(card)
 
     def _is_drawable_rank(self, card):
-        return self._lowest_rank == "6" and get_rank(card) in "2345"
+        if self._lowest_rank == "2":
+            return True
+        if self._lowest_rank == "6":
+            return get_rank(card) not in "2345"
+
+        raise ValueError(f"Invalid lowest rank {self._lowest_rank}")
