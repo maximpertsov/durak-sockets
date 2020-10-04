@@ -5,65 +5,78 @@
     "attackers": [
       "anna"
     ],
+    "cards_left": 12,
     "collector": null,
     "defender": "vasyl",
-    "draw_pile": [
-      "AH",
+    "drawn_cards": [
+      "10C",
       "6C",
-      "7C",
-      "7D",
       "6D",
       "6H",
-      "AC",
+      "7H",
+      "7S",
       "8D",
+      "8S",
+      "9C",
+      "9D",
+      "9H",
       "9S",
-      "KS",
-      "8C",
-      "JD"
+      "AC",
+      "AD",
+      "AH",
+      "AS",
+      "JH",
+      "KC",
+      "KD",
+      "KH",
+      "QC",
+      "QD",
+      "QH",
+      "QS"
     ],
     "durak": null,
     "hands": {
       "anna": [
-        "10C",
-        "QC",
-        "JS",
-        "6S",
-        "9D",
-        "7S"
+        "7H",
+        "6H",
+        "KH",
+        "QD",
+        "6D",
+        "KD"
       ],
       "grusha": [
         "QS",
-        "KH",
-        "AD",
-        "KD",
-        "JH",
-        "8S"
+        "9C",
+        "AC",
+        "9D",
+        "AH",
+        "AS"
       ],
       "igor": [
-        "KC",
-        "9H",
+        "JH",
+        "8S",
+        "6C",
         "QH",
-        "JC",
-        "8H",
-        "10H"
+        "QC",
+        "8D"
       ],
       "vasyl": [
-        "QD",
-        "AS",
-        "10D",
-        "7H",
-        "10S",
-        "9C"
+        "9H",
+        "7S",
+        "AD",
+        "10C",
+        "KC",
+        "9S"
       ]
     },
     "legal_attacks": {
       "cards": [
-        "10C",
-        "6S",
-        "7S",
-        "9D",
-        "JS",
-        "QC"
+        "6D",
+        "6H",
+        "7H",
+        "KD",
+        "KH",
+        "QD"
       ],
       "limit": 6
     },
@@ -80,6 +93,7 @@
       "igor",
       "grusha"
     ],
+    "seed": 0.4,
     "table": [],
     "trump_suit": "diamonds",
     "winners": [],
