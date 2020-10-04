@@ -80,4 +80,5 @@ def test_draw_from_pile(mocked_draw_cards):
         "drawn_cards": set(["2S", "5C", "8D", "2C"]),
         "lowest_rank": "2",
         "seed": 0.4,
+        "trump_suit": "spades",
     }
