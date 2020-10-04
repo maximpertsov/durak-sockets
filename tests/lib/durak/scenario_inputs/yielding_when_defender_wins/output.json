@@ -1,0 +1,135 @@
+{
+  "payload": {},
+  "to_state": {
+    "attack_limit": 100,
+    "attackers": [
+      "anna"
+    ],
+    "cards_left": 24,
+    "collector": null,
+    "defender": "vasyl",
+    "drawn_cards": [
+      "10C",
+      "10D",
+      "10H",
+      "10S",
+      "2C",
+      "2D",
+      "2H",
+      "2S",
+      "3C",
+      "3D",
+      "3H",
+      "3S",
+      "4C",
+      "4D",
+      "4H",
+      "4S",
+      "5C",
+      "5D",
+      "5H",
+      "5S",
+      "6C",
+      "6D",
+      "6H",
+      "6S",
+      "7C",
+      "7D",
+      "7H",
+      "7S",
+      "8C",
+      "8D",
+      "8H",
+      "8S",
+      "9C",
+      "9D",
+      "9H",
+      "9S",
+      "AC",
+      "AD",
+      "AH",
+      "AS",
+      "JC",
+      "JD",
+      "JH",
+      "JS",
+      "KC",
+      "KD",
+      "KH",
+      "KS",
+      "QC",
+      "QD",
+      "QH",
+      "QS"
+    ],
+    "durak": null,
+    "hands": {
+      "anna": [
+        "9H",
+        "7S",
+        "AD",
+        "10C",
+        "KC",
+        "9S"
+      ],
+      "grusha": [
+        "KH",
+        "AD",
+        "KD",
+        "JH",
+        "6D",
+        "KD"
+      ],
+      "igor": [
+        "KC",
+        "6D",
+        "7H",
+        "6H",
+        "KH",
+        "QD"
+      ],
+      "vasyl": [
+        "AC",
+        "8H",
+        "10D",
+        "AS",
+        "9C",
+        "9H",
+        "QD",
+        "9S"
+      ]
+    },
+    "legal_attacks": {
+      "cards": [
+        "10C",
+        "7S",
+        "9H",
+        "9S",
+        "AD",
+        "KC"
+      ],
+      "limit": 8
+    },
+    "legal_defenses": {},
+    "legal_passes": {
+      "cards": [],
+      "limit": 6
+    },
+    "lowest_rank": "6",
+    "pass_count": 0,
+    "players": [
+      "anna",
+      "vasyl",
+      "igor",
+      "grusha"
+    ],
+    "seed": 0.4,
+    "table": [],
+    "trump_suit": "diamonds",
+    "winners": [],
+    "with_passing": true,
+    "yielded": []
+  },
+  "type": "yielded_attack",
+  "user": "grusha"
+}

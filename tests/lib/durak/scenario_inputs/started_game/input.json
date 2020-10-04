@@ -1,0 +1,30 @@
+{
+  "type": "started_game",
+  "from_state": {
+    "seed": 0.4,
+    "drawn_cards": [],
+    "hands": {
+      "anna": [],
+      "vasyl": [],
+      "igor": [],
+      "grusha": []
+    },
+    "players": [
+      "anna",
+      "vasyl",
+      "igor",
+      "grusha"
+    ],
+    "pass_count": 0,
+    "table": [],
+    "trump_suit": "diamonds",
+    "yielded": [],
+    "lowest_rank": "6",
+    "attack_limit": 100,
+    "with_passing": true,
+    "durak": null,
+    "collector": null
+  },
+  "user": "anna",
+  "payload": {}
+}
