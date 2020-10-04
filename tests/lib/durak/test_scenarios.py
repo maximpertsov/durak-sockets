@@ -16,7 +16,7 @@ SCENARIO_OUTPUT_FILENAME = "output.json"
 
 def format_json(json_text):
     loaded = json.loads(json_text)
-    return json.dumps(loaded, indent=2)
+    return json.dumps(loaded, indent=2, sort_keys=True)
 
 
 @pytest.fixture
