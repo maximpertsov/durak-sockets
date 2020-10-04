@@ -75,7 +75,7 @@ class Game:
 
     @property
     def _trump_suit(self):
-        self._draw_pile.trump_suit
+        return self._draw_pile.trump_suit
 
     def winners(self):
         return set(self._ordered_players()) - set(self._active_players())
