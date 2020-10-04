@@ -16,7 +16,11 @@ SCENARIO_OUTPUT_FILENAME = "output.json"
 
 def format_json(json_text):
     loaded = json.loads(json_text)
-    return json.dumps(loaded, indent=2, sort_keys=True)
+    dumped = json.dumps(loaded, indent=2, sort_keys=True)
+
+    # Add a newline
+    # https://codeyarns.github.io/tech/2017-02-22-python-json-dump-misses-last-newline.html
+    return dumped + "\n"
 
 
 @pytest.fixture
