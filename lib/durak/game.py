@@ -40,7 +40,6 @@ class Game:
         self._table = table
 
         self._pass_count = state["pass_count"]
-        self._trump_suit = state["trump_suit"]
         self._lowest_rank = state["lowest_rank"]
         self._attack_limit = state["attack_limit"]
         self._with_passing = state["with_passing"]
@@ -73,6 +72,10 @@ class Game:
             "collector": self._collector,
             **self._draw_pile.serialize()
         }
+
+    @property
+    def _trump_suit(self):
+        self._draw_pile.trump_suit
 
     def winners(self):
         return set(self._ordered_players()) - set(self._active_players())

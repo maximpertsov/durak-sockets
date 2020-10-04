@@ -1,4 +1,4 @@
-from lib.durak.card import get_all_cards_shuffled, get_rank
+from lib.durak.card import get_all_cards_shuffled, get_rank, get_suit
 
 
 class DrawPile:
@@ -13,7 +13,25 @@ class DrawPile:
             "drawn_cards": self._drawn_cards,
             "lowest_rank": self._lowest_rank,
             "seed": self._seed,
+            "trump_suit": self.trump_suit,
         }
+
+    def size(self):
+        return len(self._draw_pile)
+
+    def draw(self, count):
+        drawn_cards = self._draw_pile[:count]
+        self._drawn_cards.update(drawn_cards)
+        return drawn_cards
+
+    @property
+    def trump_suit(self):
+        last_card = [
+            card
+            for card in get_all_cards_shuffled(self._seed)
+            if self._is_drawable_rank(card)
+        ][-1]
+        return get_suit(last_card)
 
     @property
     def _draw_pile(self):
@@ -26,14 +44,9 @@ class DrawPile:
     def _is_drawable(self, card):
         if card in self._drawn_cards:
             return False
-        if self._lowest_rank == "6" and get_rank(card) in "2345":
+        if self._is_drawable_rank(card):
             return False
         return True
 
-    def size(self):
-        return len(self._draw_pile)
-
-    def draw(self, count):
-        drawn_cards = self._draw_pile[:count]
-        self._drawn_cards.update(drawn_cards)
-        return drawn_cards
+    def _is_drawable_rank(self, card):
+        return self._lowest_rank == "6" and get_rank(card) in "2345"
