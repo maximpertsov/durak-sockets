@@ -1,5 +1,4 @@
 import json
-from copy import deepcopy
 from os import environ
 
 import httpx
@@ -7,7 +6,7 @@ from broadcaster import Broadcast
 from fastapi import FastAPI, WebSocket
 from fastapi.concurrency import run_until_first_complete
 from fastapi.middleware.cors import CORSMiddleware
-from lib.durak import (attack, attack_with_many, defend, give_up, organize_cards,
+from lib.durak import (noop, attack, attack_with_many, defend, give_up, organize_cards,
                        pass_card, pass_with_many, start_game, yield_attack)
 from lib.durak.exceptions import IllegalAction
 
@@ -94,7 +93,7 @@ async def handle_durak_message(message):
         )
         await persist(data)
     except IllegalAction:
-        data["to_state"] = deepcopy(data["from_state"])
+        data["to_state"] = noop(from_state=data["from_state"])
         data["no_display"] = True
 
     del data["from_state"]

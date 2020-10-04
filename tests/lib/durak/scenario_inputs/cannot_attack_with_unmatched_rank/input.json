@@ -1,7 +1,12 @@
 {
-  "type": "attacked_with_many",
   "from_state": {
-    "seed": 0.4,
+    "attack_limit": 6,
+    "attackers": [
+      "cyril"
+    ],
+    "collector": null,
+    "defender": "kevin",
+    "draw_pile": [],
     "drawn_cards": [
       "10C",
       "10D",
@@ -58,14 +63,6 @@
     ],
     "durak": null,
     "hands": {
-      "john": [
-        "KC",
-        "KH",
-        "QC",
-        "JS",
-        "6S",
-        "7C"
-      ],
       "cyril": [
         "QH",
         "6C",
@@ -79,6 +76,14 @@
         "JD",
         "KD",
         "AH"
+      ],
+      "john": [
+        "KC",
+        "KH",
+        "QC",
+        "JS",
+        "6S",
+        "7C"
       ],
       "kevin": [
         "AC",
@@ -103,30 +108,6 @@
         "10S"
       ]
     },
-    "table": [],
-    "players": [
-      "cyril",
-      "kevin",
-      "john",
-      "maxim"
-    ],
-    "winners": [],
-    "yielded": [],
-    "defender": "kevin",
-    "attackers": [
-      "cyril"
-    ],
-    "collector": null,
-    "draw_pile": [],
-    "pass_count": 0,
-    "trump_suit": "clubs",
-    "lowest_rank": "6",
-    "attack_limit": 6,
-    "legal_passes": {
-      "cards": [],
-      "limit": 6
-    },
-    "with_passing": true,
     "legal_attacks": {
       "cards": [
         "QH",
@@ -144,7 +125,25 @@
       ],
       "limit": 6
     },
-    "legal_defenses": {}
+    "legal_defenses": {},
+    "legal_passes": {
+      "cards": [],
+      "limit": 6
+    },
+    "lowest_rank": "6",
+    "pass_count": 0,
+    "players": [
+      "cyril",
+      "kevin",
+      "john",
+      "maxim"
+    ],
+    "seed": 0.4,
+    "table": [],
+    "trump_suit": "clubs",
+    "winners": [],
+    "with_passing": true,
+    "yielded": []
   },
   "payload": {
     "cards": [
@@ -152,5 +151,6 @@
       "6D"
     ]
   },
+  "type": "attacked_with_many",
   "user": "cyril"
 }

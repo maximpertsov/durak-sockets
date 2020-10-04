@@ -1,6 +1,10 @@
 from lib.durak.game import Game
 
 
+def noop(*, from_state):
+    return Game.deserialize(from_state).serialize()
+
+
 def attack(*, from_state, user, payload):
     game = Game.deserialize(from_state)
     game.attack(player=user, cards=[payload["card"]])
