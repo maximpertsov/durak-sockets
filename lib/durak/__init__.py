@@ -49,8 +49,15 @@ def pass_with_many(*, from_state, user, payload):
     return game.serialize()
 
 
+# TODO: change to "join" game
 def start_game(*, from_state, user, payload):
     state = deepcopy(from_state)
+
+    joined = set(state['joined']) | user
+    if joined != set(state['players']):
+        state.update(joined=joined)
+        return state
+
     state.update(
         collector=None,
         drawn_cards=[],
