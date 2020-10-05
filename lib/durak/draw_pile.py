@@ -12,6 +12,7 @@ class DrawPile:
             "cards_left": self.size(),
             "drawn_cards": self._drawn_cards,
             "lowest_rank": self._lowest_rank,
+            "last_card": self.last_card,
             "seed": self._seed,
             "trump_suit": self.trump_suit,
         }
@@ -26,12 +27,15 @@ class DrawPile:
 
     @property
     def trump_suit(self):
-        last_card = [
+        return get_suit(self.last_card)
+
+    @property
+    def last_card(self):
+        return [
             card
             for card in get_all_cards_shuffled(self._seed)
             if self._is_drawable_rank(card)
         ][-1]
-        return get_suit(last_card)
 
     @property
     def _draw_pile(self):
