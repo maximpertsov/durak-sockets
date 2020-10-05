@@ -16,7 +16,11 @@ class Game:
     @classmethod
     def deserialize(cls, state):
         return cls(
-            draw_pile=DrawPile(draw_pile=state["draw_pile"]),
+            draw_pile=DrawPile(
+                drawn_cards=state["drawn_cards"],
+                seed=state["seed"],
+                lowest_rank=state["lowest_rank"],
+            ),
             players={
                 player: Player(
                     name=player,
@@ -36,7 +40,6 @@ class Game:
         self._table = table
 
         self._pass_count = state["pass_count"]
-        self._trump_suit = state["trump_suit"]
         self._lowest_rank = state["lowest_rank"]
         self._attack_limit = state["attack_limit"]
         self._with_passing = state["with_passing"]
@@ -47,7 +50,6 @@ class Game:
         return {
             "attackers": [player.name for player in self._attackers()],
             "defender": getattr(self._defender(), "name", None),
-            "draw_pile": self._draw_pile.serialize(),
             "durak": getattr(self.durak(), "name", None),
             "hands": {
                 serialized["name"]: serialized["cards"]
@@ -68,7 +70,12 @@ class Game:
             "attack_limit": self._attack_limit,
             "with_passing": self._with_passing,
             "collector": self._collector,
+            **self._draw_pile.serialize()
         }
+
+    @property
+    def _trump_suit(self):
+        return self._draw_pile.trump_suit
 
     def winners(self):
         return set(self._ordered_players()) - set(self._active_players())

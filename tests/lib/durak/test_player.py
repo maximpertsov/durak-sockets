@@ -60,9 +60,14 @@ def test_card_count_and_had_cards_in_round(player):
     assert not player.had_cards_in_round()
 
 
-def test_draw_from_pile():
-    player = Player(name="anna", cards=["10D", None, "10C"], order=0,)
-    draw_pile = DrawPile(draw_pile=["2S", "5C", "8D", "2C", "AS"])
+@pytest.fixture
+def mocked_draw_cards(get_draw_pile_cards):
+    return get_draw_pile_cards(["2S", "5C", "8D", "2C", "AS"])
+
+
+def test_draw_from_pile(mocked_draw_cards):
+    player = Player(name="anna", cards=["10D", None, "10C"], order=0)
+    draw_pile = DrawPile(drawn_cards=[], lowest_rank="2", seed=0.4)
     player.draw(draw_pile=draw_pile)
     assert player.serialize() == {
         "name": "anna",
@@ -70,6 +75,11 @@ def test_draw_from_pile():
         "order": 0,
         "yielded": False,
     }
-    assert draw_pile.serialize() == [
-        "AS",
-    ]
+    assert draw_pile.serialize() == {
+        "cards_left": 1,
+        "drawn_cards": set(["2S", "5C", "8D", "2C"]),
+        "last_card": "AS",
+        "lowest_rank": "2",
+        "seed": 0.4,
+        "trump_suit": "spades",
+    }
