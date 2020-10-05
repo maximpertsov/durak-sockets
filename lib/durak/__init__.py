@@ -51,7 +51,16 @@ def pass_with_many(*, from_state, user, payload):
 
 def start_game(*, from_state, user, payload):
     state = deepcopy(from_state)
-    state.update(hands={player: [] for player in from_state["players"]})
+    state.update(
+        collector=None,
+        drawn_cards=[],
+        durak=None,
+        hands={player: [] for player in from_state["players"]},
+        pass_count=0,
+        table=[],
+        yielded=[],
+    )
+
     game = Game.deserialize(state)
     game.draw()
     return game.serialize()
