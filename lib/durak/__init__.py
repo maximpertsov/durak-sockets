@@ -53,7 +53,7 @@ def pass_with_many(*, from_state, user, payload):
 def start_game(*, from_state, user, payload):
     state = deepcopy(from_state)
 
-    joined = set(state['joined']) | user
+    joined = set(state.get('joined', [])) | set([user])
     if joined != set(state['players']):
         state.update(joined=joined)
         return state
