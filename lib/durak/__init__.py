@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 from lib.durak.game import Game
 
 
@@ -48,7 +50,9 @@ def pass_with_many(*, from_state, user, payload):
 
 
 def start_game(*, from_state, user, payload):
-    game = Game.deserialize(from_state)
+    state = deepcopy(from_state)
+    state.update(hands={player: [] for player in from_state["players"]})
+    game = Game.deserialize(state)
     game.draw()
     return game.serialize()
 

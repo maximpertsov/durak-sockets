@@ -4,7 +4,7 @@ from lib.durak.card import get_suit, get_value
 class Player:
     HAND_SIZE = 6
 
-    def __init__(self, *, name, cards, order, yielded=False):
+    def __init__(self, *, name, order, cards, yielded=False):
         self.name = name
         self._cards = cards
         self.order = order
