@@ -78,6 +78,7 @@ def test_draw_from_pile(mocked_draw_cards):
     assert draw_pile.serialize() == {
         "cards_left": 1,
         "drawn_cards": set(["2S", "5C", "8D", "2C"]),
+        "last_card": "AS",
         "lowest_rank": "2",
         "seed": 0.4,
         "trump_suit": "spades",
