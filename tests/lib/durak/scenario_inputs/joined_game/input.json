@@ -1,0 +1,18 @@
+
+{
+  "type": "started_game",
+  "from_state": {
+    "seed": 0.4,
+    "players": [
+      "anna",
+      "vasyl",
+      "igor",
+      "grusha"
+    ],
+    "lowest_rank": "6",
+    "attack_limit": 100,
+    "with_passing": true
+  },
+  "user": "anna",
+  "payload": {}
+}
