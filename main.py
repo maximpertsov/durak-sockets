@@ -7,7 +7,7 @@ from fastapi import FastAPI, WebSocket
 from fastapi.concurrency import run_until_first_complete
 from fastapi.middleware.cors import CORSMiddleware
 from lib.durak import (noop, attack, attack_with_many, defend, give_up, organize_cards,
-                       pass_card, pass_with_many, start_game, yield_attack)
+                       pass_card, pass_with_many, join_game, yield_attack)
 from lib.durak.exceptions import IllegalAction
 
 BASE_API_URL = environ.get("BASE_API_URL", "http://localhost:8000/api")
@@ -61,7 +61,7 @@ async def handle_message(channel: str, message):
 
 
 actions = {
-    "started_game": start_game,
+    "joined_game": join_game,
     "attacked": attack,
     "attacked_with_many": attack_with_many,
     "defended": defend,
