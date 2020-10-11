@@ -49,7 +49,6 @@ def pass_with_many(*, from_state, user, payload):
     return game.serialize()
 
 
-# TODO: change to "join" game
 def join_game(*, from_state, user, payload):
     state = deepcopy(from_state)
 
