@@ -8,6 +8,7 @@
       "igor",
       "grusha"
     ],
+    "joined": ["vasyl", "igor", "grusha"],
     "lowest_rank": "6",
     "attack_limit": 100,
     "with_passing": true
