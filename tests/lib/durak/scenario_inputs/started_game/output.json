@@ -101,6 +101,6 @@
     "with_passing": true,
     "yielded": []
   },
-  "type": "started_game",
+  "type": "joined_game",
   "user": "anna"
 }

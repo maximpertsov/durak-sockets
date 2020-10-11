@@ -1,5 +1,5 @@
 {
-  "type": "started_game",
+  "type": "joined_game",
   "from_state": {
     "seed": 0.4,
     "players": [

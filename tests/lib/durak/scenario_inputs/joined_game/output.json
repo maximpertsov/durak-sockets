@@ -15,6 +15,6 @@
     "seed": 0.4,
     "with_passing": true
   },
-  "type": "started_game",
+  "type": "joined_game",
   "user": "anna"
 }

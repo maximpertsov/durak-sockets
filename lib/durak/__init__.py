@@ -50,7 +50,7 @@ def pass_with_many(*, from_state, user, payload):
 
 
 # TODO: change to "join" game
-def start_game(*, from_state, user, payload):
+def join_game(*, from_state, user, payload):
     state = deepcopy(from_state)
 
     joined = set(state.get('joined', [])) | set([user])
