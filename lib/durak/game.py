@@ -1,4 +1,3 @@
-from functools import lru_cache
 from itertools import chain
 from operator import attrgetter
 
@@ -70,7 +69,7 @@ class Game:
             "attack_limit": self._attack_limit,
             "with_passing": self._with_passing,
             "collector": self._collector,
-            **self._draw_pile.serialize()
+            **self._draw_pile.serialize(),
         }
 
     @property
@@ -201,7 +200,6 @@ class Game:
         shift = skip + 1
         for index, player in enumerate(players):
             player.order = (index - shift) % len(players)
-        self._ordered_players_with_cards_in_round.cache_clear()
 
     def _player(self, player):
         return self._players[player]
@@ -255,12 +253,11 @@ class Game:
             if self._draw_pile.size() or player.cards()
         ]
 
-    @lru_cache
     def _ordered_players_with_cards_in_round(self):
         return [
             player
             for player in self._ordered_players()
-            if player.had_cards_in_round() or self._draw_pile.size()
+            if "done" not in player.statuses
         ]
 
     def _ordered_players(self):

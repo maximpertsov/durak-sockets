@@ -4,11 +4,12 @@ from lib.durak.card import get_suit, get_value
 class Player:
     HAND_SIZE = 6
 
-    def __init__(self, *, name, order, cards, yielded=False):
+    def __init__(self, *, name, order, cards, statuses=None, yielded=False):
         self.name = name
         self._cards = cards
         self.order = order
         self.yielded = yielded
+        self.statuses = set(statuses) if statuses else set()
 
     def serialize(self):
         return {
@@ -60,6 +61,9 @@ class Player:
         draw_count = max(self.HAND_SIZE - self.card_count(), 0)
         self.take_cards(cards=draw_pile.draw(count=draw_count))
         self._compact_hand()
+
+        if not self.cards():
+            self.statuses.add("done")
 
     def _compact_hand(self):
         self._cards = self.cards()
