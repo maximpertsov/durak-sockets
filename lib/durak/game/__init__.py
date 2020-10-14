@@ -1,5 +1,4 @@
 from functools import lru_cache
-from itertools import chain
 from operator import attrgetter
 
 from lib.durak.card import get_rank
@@ -7,6 +6,8 @@ from lib.durak.draw_pile import DrawPile
 from lib.durak.exceptions import IllegalAction
 from lib.durak.player import Player
 from lib.durak.table import Table
+
+from .queries import LegalAttacks
 
 
 class Game:
@@ -70,7 +71,7 @@ class Game:
             "attack_limit": self._attack_limit,
             "with_passing": self._with_passing,
             "collector": self._collector,
-            **self._draw_pile.serialize()
+            **self._draw_pile.serialize(),
         }
 
     @property
@@ -88,18 +89,7 @@ class Game:
             return self._active_players()[0]
 
     def legal_attacks(self):
-        if self._defender() is None:
-            return {"cards": set([]), "limit": 0}
-
-        attack_limit = min(len(self._defender().cards()), self._attack_limit)
-        limit = max(0, attack_limit - len(self._table.undefended_cards()))
-        attacker_cards = set(
-            chain.from_iterable(player.cards() for player in self._attackers())
-        )
-        return {
-            "cards": attacker_cards & self._table.legal_attacks(),
-            "limit": limit,
-        }
+        return LegalAttacks.result(game=self)
 
     def legal_defenses(self):
         if self._collector:
