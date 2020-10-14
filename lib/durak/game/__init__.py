@@ -7,7 +7,7 @@ from lib.durak.exceptions import IllegalAction
 from lib.durak.player import Player
 from lib.durak.table import Table
 
-from .queries import LegalAttacks, LegalDefenses
+from .queries import LegalAttacks, LegalDefenses, LegalPasses
 
 
 class Game:
@@ -95,16 +95,7 @@ class Game:
         return LegalDefenses.result(game=self)
 
     def legal_passes(self):
-        if self._pass_recipient() is None:
-            return {"cards": set([]), "limit": 0}
-
-        attack_limit = min(len(self._pass_recipient().cards()), self._attack_limit)
-        limit = max(0, attack_limit - len(self._table.undefended_cards()))
-        defender_cards = set(self._defender().cards())
-        return {
-            "cards": defender_cards & self._table.legal_passes(),
-            "limit": limit,
-        }
+        return LegalPasses.result(game=self)
 
     def _attack(self, *, player, card):
         self._player(player).remove_card(card=card)

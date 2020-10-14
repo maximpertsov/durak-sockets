@@ -68,3 +68,48 @@ class LegalDefenses:
     @property
     def _defender(self):
         return self._game._defender()
+
+
+class LegalPasses:
+    @classmethod
+    def result(cls, *, game):
+        return cls(game=game)._legal_passes
+
+    def __init__(self, *, game):
+        self._game = game
+
+    @property
+    def _legal_passes(self):
+        if self._game._pass_recipient() is None:
+            return {"cards": set(), "limit": 0}
+
+        return {
+            "cards": self._cards,
+            "limit": self._limit,
+        }
+
+    @property
+    def _cards(self):
+        if self._pass_recipient is None:
+            return set()
+
+        return set(self._defender.cards()) & self._game._table.legal_passes()
+
+    @property
+    def _limit(self):
+        if self._pass_recipient is None:
+            return 0
+
+        recipient_card_count = len(self._pass_recipient.cards())
+        attack_limit = min(recipient_card_count, self._game._attack_limit)
+        undefended_card_count = len(self._game._table.undefended_cards())
+
+        return max(0, attack_limit - undefended_card_count)
+
+    @property
+    def _pass_recipient(self):
+        return self._game._pass_recipient()
+
+    @property
+    def _defender(self):
+        return self._game._defender()
