@@ -7,7 +7,7 @@ from lib.durak.exceptions import IllegalAction
 from lib.durak.player import Player
 from lib.durak.table import Table
 
-from .queries import LegalAttacks
+from .queries import LegalAttacks, LegalDefenses
 
 
 class Game:
@@ -92,19 +92,7 @@ class Game:
         return LegalAttacks.result(game=self)
 
     def legal_defenses(self):
-        if self._collector:
-            return {}
-
-        if self._defender() is None:
-            return {}
-
-        defender_cards = set(self._defender().cards())
-        return {
-            base_card: defender_cards & cards
-            for base_card, cards in self._table.legal_defenses(
-                trump_suit=self._trump_suit
-            ).items()
-        }
+        return LegalDefenses.result(game=self)
 
     def legal_passes(self):
         if self._pass_recipient() is None:
