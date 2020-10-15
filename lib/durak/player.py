@@ -48,8 +48,8 @@ class Player:
             )
 
     def take_cards(self, *, cards):
-        self._compact_hand()
         self._cards += cards
+        self._compact_hand()
 
     def remove_card(self, *, card):
         self._cards = [
