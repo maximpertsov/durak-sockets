@@ -1,5 +1,4 @@
 from functools import lru_cache
-from itertools import chain
 from operator import attrgetter
 
 from lib.durak.card import get_rank
@@ -7,6 +6,8 @@ from lib.durak.draw_pile import DrawPile
 from lib.durak.exceptions import IllegalAction
 from lib.durak.player import Player
 from lib.durak.table import Table
+
+from .queries import LegalAttacks, LegalDefenses, LegalPasses
 
 
 class Game:
@@ -57,9 +58,9 @@ class Game:
                     player.serialize() for player in self._ordered_players()
                 ]
             },
-            "legal_attacks": self.legal_attacks(),
-            "legal_defenses": self.legal_defenses(),
-            "legal_passes": self.legal_passes(),
+            "legal_attacks": LegalAttacks.result(game=self),
+            "legal_defenses": LegalDefenses.result(game=self),
+            "legal_passes": LegalPasses.result(game=self),
             "table": self._table.serialize(),
             "pass_count": self._pass_count,
             "players": [player.name for player in self._ordered_players()],
@@ -70,7 +71,7 @@ class Game:
             "attack_limit": self._attack_limit,
             "with_passing": self._with_passing,
             "collector": self._collector,
-            **self._draw_pile.serialize()
+            **self._draw_pile.serialize(),
         }
 
     @property
@@ -86,47 +87,6 @@ class Game:
 
         if len(self._active_players()) == 1:
             return self._active_players()[0]
-
-    def legal_attacks(self):
-        if self._defender() is None:
-            return {"cards": set([]), "limit": 0}
-
-        attack_limit = min(len(self._defender().cards()), self._attack_limit)
-        limit = max(0, attack_limit - len(self._table.undefended_cards()))
-        attacker_cards = set(
-            chain.from_iterable(player.cards() for player in self._attackers())
-        )
-        return {
-            "cards": attacker_cards & self._table.legal_attacks(),
-            "limit": limit,
-        }
-
-    def legal_defenses(self):
-        if self._collector:
-            return {}
-
-        if self._defender() is None:
-            return {}
-
-        defender_cards = set(self._defender().cards())
-        return {
-            base_card: defender_cards & cards
-            for base_card, cards in self._table.legal_defenses(
-                trump_suit=self._trump_suit
-            ).items()
-        }
-
-    def legal_passes(self):
-        if self._pass_recipient() is None:
-            return {"cards": set([]), "limit": 0}
-
-        attack_limit = min(len(self._pass_recipient().cards()), self._attack_limit)
-        limit = max(0, attack_limit - len(self._table.undefended_cards()))
-        defender_cards = set(self._defender().cards())
-        return {
-            "cards": defender_cards & self._table.legal_passes(),
-            "limit": limit,
-        }
 
     def _attack(self, *, player, card):
         self._player(player).remove_card(card=card)
@@ -224,19 +184,6 @@ class Game:
         ]
 
         return potential_attackers if self._table.cards() else potential_attackers[:1]
-
-    def _pass_recipient(self):
-        if not self._defender():
-            return
-
-        players = self._ordered_players_with_cards_in_round()
-        players_from_defender = players[2:] + [players[0]]
-        next_players_with_cards = [
-            player for player in players_from_defender if player.cards()
-        ]
-        if not next_players_with_cards:
-            return
-        return next_players_with_cards[0]
 
     def _no_more_attacks(self):
         return set(self._attackers()).issubset(set(self._yielded_players()))
