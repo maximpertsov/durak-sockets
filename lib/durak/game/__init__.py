@@ -58,9 +58,9 @@ class Game:
                     player.serialize() for player in self._ordered_players()
                 ]
             },
-            "legal_attacks": self.legal_attacks(),
-            "legal_defenses": self.legal_defenses(),
-            "legal_passes": self.legal_passes(),
+            "legal_attacks": LegalAttacks.result(game=self),
+            "legal_defenses": LegalDefenses.result(game=self),
+            "legal_passes": LegalPasses.result(game=self),
             "table": self._table.serialize(),
             "pass_count": self._pass_count,
             "players": [player.name for player in self._ordered_players()],
@@ -87,15 +87,6 @@ class Game:
 
         if len(self._active_players()) == 1:
             return self._active_players()[0]
-
-    def legal_attacks(self):
-        return LegalAttacks.result(game=self)
-
-    def legal_defenses(self):
-        return LegalDefenses.result(game=self)
-
-    def legal_passes(self):
-        return LegalPasses.result(game=self)
 
     def _attack(self, *, player, card):
         self._player(player).remove_card(card=card)
