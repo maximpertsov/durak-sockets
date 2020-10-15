@@ -194,19 +194,6 @@ class Game:
 
         return potential_attackers if self._table.cards() else potential_attackers[:1]
 
-    def _pass_recipient(self):
-        if not self._defender():
-            return
-
-        players = self._ordered_players_with_cards_in_round()
-        players_from_defender = players[2:] + [players[0]]
-        next_players_with_cards = [
-            player for player in players_from_defender if player.cards()
-        ]
-        if not next_players_with_cards:
-            return
-        return next_players_with_cards[0]
-
     def _no_more_attacks(self):
         return set(self._attackers()).issubset(set(self._yielded_players()))
 

@@ -80,7 +80,7 @@ class LegalPasses:
 
     @property
     def _legal_passes(self):
-        if self._game._pass_recipient() is None:
+        if self._pass_recipient is None:
             return {"cards": set(), "limit": 0}
 
         return {
@@ -108,7 +108,17 @@ class LegalPasses:
 
     @property
     def _pass_recipient(self):
-        return self._game._pass_recipient()
+        if not self._defender:
+            return
+
+        players = self._game._ordered_players_with_cards_in_round()
+        players_from_defender = players[2:] + [players[0]]
+        next_players_with_cards = [
+            player for player in players_from_defender if player.cards()
+        ]
+        if not next_players_with_cards:
+            return
+        return next_players_with_cards[0]
 
     @property
     def _defender(self):
