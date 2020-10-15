@@ -1,16 +1,26 @@
 from itertools import chain
 
 
-class LegalAttacks:
+class Base:
     @classmethod
     def result(cls, *, game):
-        return cls(game=game)._legal_attacks
+        return cls(game=game)._result
 
     def __init__(self, *, game):
         self._game = game
 
     @property
-    def _legal_attacks(self):
+    def _result(self):
+        raise NotImplementedError
+
+    @property
+    def _defender(self):
+        return self._game._defender()
+
+
+class LegalAttacks(Base):
+    @property
+    def _result(self):
         return {
             "cards": self._cards,
             "limit": self._limit,
@@ -34,21 +44,10 @@ class LegalAttacks:
         undefended_cards = len(self._game._table.undefended_cards())
         return max(0, attack_limit - undefended_cards)
 
+
+class LegalDefenses(Base):
     @property
-    def _defender(self):
-        return self._game._defender()
-
-
-class LegalDefenses:
-    @classmethod
-    def result(cls, *, game):
-        return cls(game=game)._legal_defenses
-
-    def __init__(self, *, game):
-        self._game = game
-
-    @property
-    def _legal_defenses(self):
+    def _result(self):
         if self._game._collector:
             return {}
 
@@ -65,21 +64,10 @@ class LegalDefenses:
     def _legal_defenses_for_table_cards(self):
         return self._game._table.legal_defenses(trump_suit=self._game._trump_suit)
 
+
+class LegalPasses(Base):
     @property
-    def _defender(self):
-        return self._game._defender()
-
-
-class LegalPasses:
-    @classmethod
-    def result(cls, *, game):
-        return cls(game=game)._legal_passes
-
-    def __init__(self, *, game):
-        self._game = game
-
-    @property
-    def _legal_passes(self):
+    def _result(self):
         if self._pass_recipient is None:
             return {"cards": set(), "limit": 0}
 
@@ -119,7 +107,3 @@ class LegalPasses:
         if not next_players_with_cards:
             return
         return next_players_with_cards[0]
-
-    @property
-    def _defender(self):
-        return self._game._defender()
