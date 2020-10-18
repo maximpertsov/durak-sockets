@@ -16,6 +16,10 @@ class Game:
 
     @classmethod
     def deserialize(cls, state):
+        player_ids = [
+            player["id"] if isinstance(player, dict) else player
+            for player in state["players"]
+        ]
         return cls(
             draw_pile=DrawPile(
                 drawn_cards=state["drawn_cards"],
@@ -23,13 +27,13 @@ class Game:
                 lowest_rank=state["lowest_rank"],
             ),
             players={
-                player: Player(
-                    name=player,
-                    cards=state["hands"][player],
+                player_id: Player(
+                    name=player_id,
+                    cards=state["hands"][player_id],
                     order=order,
-                    yielded=player in state["yielded"],
+                    yielded=player_id in state["yielded"],
                 )
-                for order, player in enumerate(state["players"])
+                for order, player_id in enumerate(player_ids)
             },
             table=Table(table=state["table"]),
             state=state,
