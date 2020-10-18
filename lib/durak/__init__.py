@@ -52,16 +52,23 @@ def pass_with_many(*, from_state, user, payload):
 def join_game(*, from_state, user, payload):
     state = deepcopy(from_state)
 
-    joined = set(state.get('joined', [])) | set([user])
-    if joined != set(state['players']):
-        state.update(joined=joined)
+    joined = set(state.get("joined", [])) | set([user])
+    player_ids = [
+        player["id"] if isinstance(player, dict) else player
+        for player in state["players"]
+    ]
+    if joined != set(player_ids):
+        # TODO: remove players=player_ids after messages return v2 state
+        state.update(players=player_ids, joined=joined)
         return state
 
     state.update(
+        # TODO: remove players=player_ids after messages return v2 state
+        players=player_ids,
         collector=None,
         drawn_cards=[],
         durak=None,
-        hands={player: [] for player in from_state["players"]},
+        hands={player: [] for player in player_ids},
         pass_count=0,
         table=[],
         yielded=[],

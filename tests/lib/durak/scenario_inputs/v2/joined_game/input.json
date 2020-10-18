@@ -1,0 +1,25 @@
+{
+  "from_state": {
+    "attack_limit": 100,
+    "lowest_rank": "6",
+    "players": [
+      {
+        "id": "anna"
+      },
+      {
+        "id": "vasyl"
+      },
+      {
+        "id": "igor"
+      },
+      {
+        "id": "grusha"
+      }
+    ],
+    "seed": 0.4,
+    "with_passing": true
+  },
+  "payload": {},
+  "type": "joined_game",
+  "user": "anna"
+}

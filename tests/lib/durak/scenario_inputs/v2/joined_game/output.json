@@ -1,0 +1,20 @@
+{
+  "payload": {},
+  "to_state": {
+    "attack_limit": 100,
+    "joined": [
+      "anna"
+    ],
+    "lowest_rank": "6",
+    "players": [
+      "anna",
+      "vasyl",
+      "igor",
+      "grusha"
+    ],
+    "seed": 0.4,
+    "with_passing": true
+  },
+  "type": "joined_game",
+  "user": "anna"
+}
