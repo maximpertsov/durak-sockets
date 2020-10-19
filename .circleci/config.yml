@@ -1,6 +1,7 @@
 version: 2.1
 
 orbs:
+  heroku: circleci/heroku@1.2.2
   python: circleci/python@1.2.0
 
 workflows:
@@ -10,3 +11,9 @@ workflows:
           pkg-manager: poetry
           test-tool: pytest
           version: 3.8.5
+      - heroku/deploy-via-git:
+          requires:
+            - pytest/test
+          filters:
+            branches:
+              only: master
