@@ -8,12 +8,13 @@ workflows:
   main:
     jobs:
       - python/test:
+          name: test
           pkg-manager: poetry
           test-tool: pytest
           version: 3.8.5
       - heroku/deploy-via-git:
           requires:
-            - pytest/test
+            - test
           filters:
             branches:
               only: master
