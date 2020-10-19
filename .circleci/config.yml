@@ -5,7 +5,9 @@ orbs:
 
 jobs:
   build:
-    executor: python/default
+    executor:
+      python/default:
+        tag: 3.8.5
     steps:
       - checkout
       - python/install-packages:
