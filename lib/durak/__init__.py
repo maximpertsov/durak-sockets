@@ -58,13 +58,10 @@ def join_game(*, from_state, user, payload):
         for player in state["players"]
     ]
     if joined != set(player_ids):
-        # TODO: remove players=player_ids after messages return v2 state
-        state.update(players=player_ids, joined=joined)
+        state.update(joined=joined)
         return state
 
     state.update(
-        # TODO: remove players=player_ids after messages return v2 state
-        players=player_ids,
         collector=None,
         drawn_cards=[],
         durak=None,

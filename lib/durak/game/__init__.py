@@ -67,7 +67,7 @@ class Game:
             "legal_passes": LegalPasses.result(game=self),
             "table": self._table.serialize(),
             "pass_count": self._pass_count,
-            "players": [player.name for player in self._ordered_players()],
+            "players": [{"id": player.name} for player in self._ordered_players()],
             "trump_suit": self._trump_suit,
             "winners": set(player.name for player in self.winners()),
             "yielded": [player.name for player in self._yielded_players()],
