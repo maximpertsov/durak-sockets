@@ -3,19 +3,10 @@ version: 2.1
 orbs:
   python: circleci/python@1.2.0
 
-jobs:
-  build:
-    executor:
-      name: python/default
-      tag: 3.8.5
-    steps:
-      - checkout
-      - python/install-packages:
-          pkg-manager: poetry
-      - run:
-          name: Test
-          command: poetry run pytest --version
 workflows:
   main:
     jobs:
-      - build
+      - python/test:
+          pkg-manager: poetry
+          test-tool: pytest
+          version: 3.8.5
