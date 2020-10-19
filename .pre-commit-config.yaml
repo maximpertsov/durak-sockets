@@ -13,6 +13,6 @@ repos:
   - id: update-pip-requirements
     name: Update pip requirements
     description: This hook exports requires from Poetry to pip requirement
-    entry: echo 'HI'
+    entry: ./scripts/update_pip_requirements.sh
     language: script
     stages: [post-commit]
