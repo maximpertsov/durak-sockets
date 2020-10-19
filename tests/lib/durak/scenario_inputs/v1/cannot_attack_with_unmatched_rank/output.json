@@ -141,10 +141,18 @@
     "lowest_rank": "6",
     "pass_count": 0,
     "players": [
-      "cyril",
-      "kevin",
-      "john",
-      "maxim"
+      {
+        "id": "cyril"
+      },
+      {
+        "id": "kevin"
+      },
+      {
+        "id": "john"
+      },
+      {
+        "id": "maxim"
+      }
     ],
     "seed": 0.4,
     "table": [],

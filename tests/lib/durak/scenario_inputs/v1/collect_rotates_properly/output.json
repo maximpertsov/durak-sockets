@@ -106,10 +106,18 @@
     "lowest_rank": "6",
     "pass_count": 0,
     "players": [
-      "igor",
-      "anna",
-      "vasyl",
-      "grusha"
+      {
+        "id": "igor"
+      },
+      {
+        "id": "anna"
+      },
+      {
+        "id": "vasyl"
+      },
+      {
+        "id": "grusha"
+      }
     ],
     "seed": 0.4,
     "table": [],
