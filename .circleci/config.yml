@@ -1,21 +1,19 @@
 version: 2.1
 
 orbs:
-  python: circleci/python@0.2.1
+  python: circleci/python@1.2.0
 
 jobs:
-  build-and-test:
+  build:
     executor: python/default
     steps:
       - checkout
-      - python/load-cache
-      - python/install-deps
-      - python/save-cache
+      - python/install-packages:
+          pkg-manager: poetry
       - run:
-          command: ./manage.py test
           name: Test
-
+          command: poetry run pytest --version
 workflows:
   main:
     jobs:
-      - build-and-test
+      - build
