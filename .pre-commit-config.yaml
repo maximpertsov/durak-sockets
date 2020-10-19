@@ -15,4 +15,5 @@ repos:
     description: This hook exports requires from Poetry to pip requirement
     entry: scripts/update-pip-requirements.sh
     language: script
+    always_run: true
     stages: [post-commit]
