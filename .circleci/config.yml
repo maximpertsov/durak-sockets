@@ -13,6 +13,7 @@ workflows:
           test-tool: pytest
           version: 3.8.5
       - heroku/deploy-via-git:
+          name: deploy
           requires:
             - test
           filters:
