@@ -86,7 +86,9 @@ def test_attack(game, static_parameters):
 def test_defend(game, static_parameters):
     game._table.add_card(card="9D")
     game.defend(
-        base_card="9D", player="anna", card="10D",
+        base_card="9D",
+        player="anna",
+        card="10D",
     )
     assert game.serialize() == {
         "attackers": ["anna"],

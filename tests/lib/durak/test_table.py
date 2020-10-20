@@ -20,7 +20,8 @@ def test_add_card(table):
 
 def test_stack_card(table):
     table.stack_card(
-        base_card="10C", card="JC",
+        base_card="10C",
+        card="JC",
     )
     assert table.serialize() == [
         ["8D", "10D"],
@@ -31,7 +32,8 @@ def test_stack_card(table):
 def test_stack_card_on_nonexistent_base_card(table):
     with pytest.raises(Table.BaseCardNotFound):
         table.stack_card(
-            base_card="8D", card="JC",
+            base_card="8D",
+            card="JC",
         )
 
 
