@@ -7,8 +7,18 @@ from broadcaster import Broadcast
 from fastapi import FastAPI, WebSocket
 from fastapi.concurrency import run_until_first_complete
 from fastapi.middleware.cors import CORSMiddleware
-from lib.durak import (attack, attack_with_many, defend, give_up, join_game, noop,
-                       organize_cards, pass_card, pass_with_many, yield_attack)
+from lib.durak import (
+    attack,
+    attack_with_many,
+    defend,
+    give_up,
+    join_game,
+    noop,
+    organize_cards,
+    pass_card,
+    pass_with_many,
+    yield_attack,
+)
 from lib.durak.exceptions import IllegalAction
 
 BASE_API_URL = environ.get("BASE_API_URL", "http://localhost:8000/api")

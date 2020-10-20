@@ -7,7 +7,9 @@ from lib.durak.player import Player
 @pytest.fixture
 def player():
     return Player(
-        name="anna", cards=["10D", None, "10C", "2S", "5C", "8D", "2C"], order=0,
+        name="anna",
+        cards=["10D", None, "10C", "2S", "5C", "8D", "2C"],
+        order=0,
     )
 
 
