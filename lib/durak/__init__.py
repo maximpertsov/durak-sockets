@@ -53,11 +53,7 @@ def join_game(*, from_state, user, payload):
     state = deepcopy(from_state)
 
     joined = set(state.get("joined", [])) | set([user])
-    player_ids = [
-        player["id"] if isinstance(player, dict) else player
-        for player in state["players"]
-    ]
-    if joined != set(player_ids):
+    if joined != set(state["players"]):
         state.update(joined=joined)
         return state
 
