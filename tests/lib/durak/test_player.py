@@ -16,7 +16,7 @@ def player():
 def test_serialize(player):
     assert player.serialize() == {
         "id": "anna",
-        "cards": ["10D", None, "10C", "2S", "5C", "8D", "2C"],
+        "hand": ["10D", None, "10C", "2S", "5C", "8D", "2C"],
         # "order": 0,
         # "yielded": False,
     }
@@ -30,7 +30,7 @@ def test_take_cards(player):
     player.take_cards(cards=["3S", "4D"])
     assert player.serialize() == {
         "id": "anna",
-        "cards": ["10D", "10C", "2S", "5C", "8D", "2C", "3S", "4D"],
+        "hand": ["10D", "10C", "2S", "5C", "8D", "2C", "3S", "4D"],
         # "order": 0,
         # "yielded": False,
     }
@@ -40,14 +40,14 @@ def test_remove_card(player):
     player.remove_card(card="2S")
     assert player.serialize() == {
         "id": "anna",
-        "cards": ["10D", None, "10C", None, "5C", "8D", "2C"],
+        "hand": ["10D", None, "10C", None, "5C", "8D", "2C"],
         # "order": 0,
         # "yielded": False,
     }
 
 
 def test_card_count_and_had_cards_in_round(player):
-    kwargs = {"id": "anna", "order": 0}
+    kwargs = {"name": "anna", "order": 0}
 
     player = Player(cards=["10D"], **kwargs)
     assert player.card_count() == 1
@@ -73,7 +73,7 @@ def test_draw_from_pile(mocked_draw_cards):
     player.draw(draw_pile=draw_pile)
     assert player.serialize() == {
         "id": "anna",
-        "cards": ["10D", "10C", "2S", "5C", "8D", "2C"],
+        "hand": ["10D", "10C", "2S", "5C", "8D", "2C"],
         # "order": 0,
         # "yielded": False,
     }

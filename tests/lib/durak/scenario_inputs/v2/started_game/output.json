@@ -35,40 +35,6 @@
       "QS"
     ],
     "durak": null,
-    "hands": {
-      "anna": [
-        "7H",
-        "6H",
-        "KH",
-        "QD",
-        "6D",
-        "KD"
-      ],
-      "grusha": [
-        "QS",
-        "9C",
-        "AC",
-        "9D",
-        "AH",
-        "AS"
-      ],
-      "igor": [
-        "JH",
-        "8S",
-        "6C",
-        "QH",
-        "QC",
-        "8D"
-      ],
-      "vasyl": [
-        "9H",
-        "7S",
-        "AD",
-        "10C",
-        "KC",
-        "9S"
-      ]
-    },
     "last_card": "10H",
     "legal_attacks": {
       "cards": [
@@ -90,15 +56,47 @@
     "pass_count": 0,
     "players": [
       {
+        "hand": [
+          "7H",
+          "6H",
+          "KH",
+          "QD",
+          "6D",
+          "KD"
+        ],
         "id": "anna"
       },
       {
+        "hand": [
+          "9H",
+          "7S",
+          "AD",
+          "10C",
+          "KC",
+          "9S"
+        ],
         "id": "vasyl"
       },
       {
+        "hand": [
+          "JH",
+          "8S",
+          "6C",
+          "QH",
+          "QC",
+          "8D"
+        ],
         "id": "igor"
       },
       {
+        "hand": [
+          "QS",
+          "9C",
+          "AC",
+          "9D",
+          "AH",
+          "AS"
+        ],
         "id": "grusha"
       }
     ],
