@@ -25,9 +25,10 @@ def game(mocked_draw_cards, static_parameters):
             "collector": None,
             "durak": None,
             "drawn_cards": [],
-            "hands": {"anna": ["10D", None, "10C", "2S", "5C", "8D", "2C"]},
             "pass_count": 0,
-            "players": [{"id": "anna"}],
+            "players": [
+                {"id": "anna", "hand": ["10D", None, "10C", "2S", "5C", "8D", "2C"]}
+            ],
             "table": [],
             "trump_suit": "clubs",
             "yielded": [],
@@ -86,7 +87,9 @@ def test_attack(game, static_parameters):
 def test_defend(game, static_parameters):
     game._table.add_card(card="9D")
     game.defend(
-        base_card="9D", player="anna", card="10D",
+        base_card="9D",
+        player="anna",
+        card="10D",
     )
     assert game.serialize() == {
         "attackers": ["anna"],
@@ -146,13 +149,12 @@ def game_3p(mocked_draw_cards_3p, static_parameters):
             "collector": None,
             "drawn_cards": [],
             "durak": None,
-            "hands": {
-                "anna": ["9H", "3S", "KH", "4C", "4H", None],
-                "vasyl": ["7C", "6D", "JS", "7H", None, None],
-                "igor": ["8H", "JD", "KS", "5H", "JC", None],
-            },
             "pass_count": 0,
-            "players": [{"id": "anna"}, {"id": "vasyl"}, {"id": "igor"}],
+            "players": [
+                {"id": "anna", "hand": ["9H", "3S", "KH", "4C", "4H", None]},
+                {"id": "vasyl", "hand": ["7C", "6D", "JS", "7H", None, None]},
+                {"id": "igor", "hand": ["8H", "JD", "KS", "5H", "JC", None]},
+            ],
             "table": [],
             "trump_suit": "diamonds",
             "yielded": [],
