@@ -12,10 +12,10 @@ class Player:
 
     def serialize(self):
         return {
-            "name": self.name,
-            "cards": self._cards,
-            "order": self.order,
-            "yielded": self.yielded,
+            "id": self.name,
+            "hand": self._cards,
+            # "order": self.order,
+            # "yielded": self.yielded,
         }
 
     def card_count(self):

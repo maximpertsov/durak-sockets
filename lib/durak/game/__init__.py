@@ -65,18 +65,12 @@ class Game:
             "attackers": [player.name for player in self._attackers()],
             "defender": getattr(self._defender(), "name", None),
             "durak": getattr(self.durak(), "name", None),
-            "hands": {
-                serialized["name"]: serialized["cards"]
-                for serialized in [
-                    player.serialize() for player in self._ordered_players()
-                ]
-            },
             "legal_attacks": LegalAttacks.result(game=self),
             "legal_defenses": LegalDefenses.result(game=self),
             "legal_passes": LegalPasses.result(game=self),
             "table": self._table.serialize(),
             "pass_count": self._pass_count,
-            "players": [{"id": player.name} for player in self._ordered_players()],
+            "players": [player.serialize() for player in self._ordered_players()],
             "trump_suit": self._trump_suit,
             "winners": set(player.name for player in self.winners()),
             "yielded": [player.name for player in self._yielded_players()],
