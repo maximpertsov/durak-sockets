@@ -10,16 +10,25 @@ from lib.durak.table import Table
 from .queries import LegalAttacks, LegalDefenses, LegalPasses
 
 
+# TODO: remove this helper helpers after player schema update is finished
+def get_player_id(state, player):
+    return player["id"] if isinstance(player, dict) else player
+
+
+# TODO: remove this helper helpers after player schema update is finished
+def get_hand(state, player):
+    try:
+        return player["hand"] if isinstance(player, dict) else state["hands"][player]
+    except KeyError:
+        return state["hands"][player["id"]]
+
+
 class Game:
     class DifferentRanks(IllegalAction):
         pass
 
     @classmethod
     def deserialize(cls, state):
-        player_ids = [
-            player["id"] if isinstance(player, dict) else player
-            for player in state["players"]
-        ]
         return cls(
             draw_pile=DrawPile(
                 drawn_cards=state["drawn_cards"],
@@ -27,13 +36,13 @@ class Game:
                 lowest_rank=state["lowest_rank"],
             ),
             players={
-                player_id: Player(
-                    name=player_id,
-                    cards=state["hands"][player_id],
+                get_player_id(state, player): Player(
+                    name=get_player_id(state, player),
+                    cards=get_hand(state, player),
                     order=order,
-                    yielded=player_id in state["yielded"],
+                    yielded=get_player_id(state, player) in state["yielded"],
                 )
-                for order, player_id in enumerate(player_ids)
+                for order, player in enumerate(state["players"])
             },
             table=Table(table=state["table"]),
             state=state,
