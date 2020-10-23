@@ -4,16 +4,20 @@
     "lowest_rank": "6",
     "players": [
       {
-        "id": "anna"
+        "id": "anna",
+        "order": 0
       },
       {
-        "id": "vasyl"
+        "id": "vasyl",
+        "order": 1
       },
       {
-        "id": "igor"
+        "id": "igor",
+        "order": 2
       },
       {
-        "id": "grusha"
+        "id": "grusha",
+        "order": 3
       }
     ],
     "seed": 0.4,

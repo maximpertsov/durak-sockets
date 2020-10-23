@@ -88,7 +88,6 @@
     "pass_count": 0,
     "players": [
       {
-        "id": "cyril",
         "hand": [
           "QH",
           "6C",
@@ -102,10 +101,11 @@
           "JD",
           "KD",
           "AH"
-        ]
+        ],
+        "id": "cyril",
+        "order": 0
       },
       {
-        "id": "kevin",
         "hand": [
           "AC",
           "AD",
@@ -113,10 +113,11 @@
           "QD",
           "6H",
           "QS"
-        ]
+        ],
+        "id": "kevin",
+        "order": 1
       },
       {
-        "id": "john",
         "hand": [
           "KC",
           "KH",
@@ -124,10 +125,11 @@
           "JS",
           "6S",
           "7C"
-        ]
+        ],
+        "id": "john",
+        "order": 2
       },
       {
-        "id": "maxim",
         "hand": [
           "10H",
           "8S",
@@ -141,7 +143,9 @@
           "9D",
           "10C",
           "10S"
-        ]
+        ],
+        "id": "maxim",
+        "order": 3
       }
     ],
     "seed": 0.4,
