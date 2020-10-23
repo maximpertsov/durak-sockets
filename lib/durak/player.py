@@ -49,7 +49,6 @@ class Player:
 
     def take_cards(self, *, cards):
         self._cards += cards
-        self._compact_hand()
 
     def remove_card(self, *, card):
         self._cards = [
@@ -58,12 +57,11 @@ class Player:
 
     def draw(self, *, draw_pile):
         self.take_cards(cards=draw_pile.draw(count=self.draw_count()))
-        self._compact_hand()
 
     def draw_count(self):
         return max(self.HAND_SIZE - self.card_count(), 0)
 
-    def _compact_hand(self):
+    def compact_hand(self):
         self._cards = self.cards()
 
     def had_cards_in_round(self):

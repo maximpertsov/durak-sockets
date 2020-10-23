@@ -217,9 +217,21 @@ def test_draw(game_3p, static_parameters):
         "legal_passes": {"cards": set([]), "limit": 6},
         "pass_count": 0,
         "players": [
-            {"order": 0, "id": "anna", "hand": ["9H", "3S", "KH", "4C", "4H", "7D"]},
-            {"order": 1, "id": "vasyl", "hand": ["7C", "6D", "JS", "7H", "9C", "9D"]},
-            {"order": 2, "id": "igor", "hand": ["8H", "JD", "KS", "5H", "JC", "10C"]},
+            {
+                "order": 0,
+                "id": "anna",
+                "hand": ["9H", "3S", "KH", "4C", "4H", None, "7D"],
+            },
+            {
+                "order": 1,
+                "id": "vasyl",
+                "hand": ["7C", "6D", "JS", "7H", None, None, "9C", "9D"],
+            },
+            {
+                "order": 2,
+                "id": "igor",
+                "hand": ["8H", "JD", "KS", "5H", "JC", None, "10C"],
+            },
         ],
         "table": [],
         "trump_suit": "diamonds",
@@ -248,9 +260,21 @@ def test_draw_with_pass_count(game_3p, static_parameters):
         "legal_passes": {"cards": set([]), "limit": 6},
         "pass_count": 0,
         "players": [
-            {"order": 0, "id": "anna", "hand": ["9H", "3S", "KH", "4C", "4H", "10C"]},
-            {"order": 1, "id": "vasyl", "hand": ["7C", "6D", "JS", "7H", "7D", "9C"]},
-            {"order": 2, "id": "igor", "hand": ["8H", "JD", "KS", "5H", "JC", "9D"]},
+            {
+                "order": 0,
+                "id": "anna",
+                "hand": ["9H", "3S", "KH", "4C", "4H", None, "10C"],
+            },
+            {
+                "order": 1,
+                "id": "vasyl",
+                "hand": ["7C", "6D", "JS", "7H", None, None, "7D", "9C"],
+            },
+            {
+                "order": 2,
+                "id": "igor",
+                "hand": ["8H", "JD", "KS", "5H", "JC", None, "9D"],
+            },
         ],
         "table": [],
         "trump_suit": "diamonds",

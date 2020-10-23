@@ -30,7 +30,7 @@ def test_take_cards(player):
     player.take_cards(cards=["3S", "4D"])
     assert player.serialize() == {
         "id": "anna",
-        "hand": ["10D", "10C", "2S", "5C", "8D", "2C", "3S", "4D"],
+        "hand": ["10D", None, "10C", "2S", "5C", "8D", "2C", "3S", "4D"],
         "order": 0,
         # "yielded": False,
     }
@@ -73,7 +73,7 @@ def test_draw_from_pile(mocked_draw_cards):
     player.draw(draw_pile=draw_pile)
     assert player.serialize() == {
         "id": "anna",
-        "hand": ["10D", "10C", "2S", "5C", "8D", "2C"],
+        "hand": ["10D", None, "10C", "2S", "5C", "8D", "2C"],
         "order": 0,
         # "yielded": False,
     }
