@@ -94,21 +94,24 @@
         "hand": [
           null
         ],
-        "id": "anna"
+        "id": "anna",
+        "order": 0
       },
       {
         "hand": [
           "AH",
           "10C"
         ],
-        "id": "vasyl"
+        "id": "vasyl",
+        "order": 1
       },
       {
         "hand": [
           "9S",
           "QC"
         ],
-        "id": "igor"
+        "id": "igor",
+        "order": 2
       },
       {
         "hand": [
@@ -116,7 +119,8 @@
           null,
           "KH"
         ],
-        "id": "grusha"
+        "id": "grusha",
+        "order": 3
       }
     ],
     "seed": 0.4,

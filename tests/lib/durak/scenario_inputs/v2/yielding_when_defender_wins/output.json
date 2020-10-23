@@ -87,7 +87,8 @@
     "players": [
       {
         "hand": [],
-        "id": "anna"
+        "id": "anna",
+        "order": 0
       },
       {
         "hand": [
@@ -100,14 +101,16 @@
           "QD",
           "9S"
         ],
-        "id": "vasyl"
+        "id": "vasyl",
+        "order": 1
       },
       {
         "hand": [
           "KC",
           "6D"
         ],
-        "id": "igor"
+        "id": "igor",
+        "order": 2
       },
       {
         "hand": [
@@ -116,7 +119,8 @@
           "KD",
           "JH"
         ],
-        "id": "grusha"
+        "id": "grusha",
+        "order": 3
       }
     ],
     "seed": 0.4,
