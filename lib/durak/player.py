@@ -14,7 +14,7 @@ class Player:
         return {
             "id": self.name,
             "hand": self._cards,
-            # "order": self.order,
+            "order": self.order,
             # "yielded": self.yielded,
         }
 
