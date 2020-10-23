@@ -62,52 +62,6 @@
       "QS"
     ],
     "durak": null,
-    "hands": {
-      "cyril": [
-        "QH",
-        "6C",
-        "JC",
-        "6D",
-        "7D",
-        "7H",
-        "JH",
-        "7S",
-        "AS",
-        "JD",
-        "KD",
-        "AH"
-      ],
-      "john": [
-        "KC",
-        "KH",
-        "QC",
-        "JS",
-        "6S",
-        "7C"
-      ],
-      "kevin": [
-        "AC",
-        "AD",
-        "KS",
-        "QD",
-        "6H",
-        "QS"
-      ],
-      "maxim": [
-        "10H",
-        "8S",
-        "9S",
-        "8C",
-        "9C",
-        "8H",
-        "9H",
-        "8D",
-        "10D",
-        "9D",
-        "10C",
-        "10S"
-      ]
-    },
     "legal_attacks": {
       "cards": [
         "QH",
@@ -134,16 +88,60 @@
     "pass_count": 0,
     "players": [
       {
-        "id": "cyril"
+        "id": "cyril",
+        "hand": [
+          "QH",
+          "6C",
+          "JC",
+          "6D",
+          "7D",
+          "7H",
+          "JH",
+          "7S",
+          "AS",
+          "JD",
+          "KD",
+          "AH"
+        ]
       },
       {
-        "id": "kevin"
+        "id": "kevin",
+        "hand": [
+          "AC",
+          "AD",
+          "KS",
+          "QD",
+          "6H",
+          "QS"
+        ]
       },
       {
-        "id": "john"
+        "id": "john",
+        "hand": [
+          "KC",
+          "KH",
+          "QC",
+          "JS",
+          "6S",
+          "7C"
+        ]
       },
       {
-        "id": "maxim"
+        "id": "maxim",
+        "hand": [
+          "10H",
+          "8S",
+          "9S",
+          "8C",
+          "9C",
+          "8H",
+          "9H",
+          "8D",
+          "10D",
+          "9D",
+          "10C",
+          "10S"
+        ]
       }
     ],
     "seed": 0.4,

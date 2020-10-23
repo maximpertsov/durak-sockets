@@ -15,10 +15,10 @@ def player():
 
 def test_serialize(player):
     assert player.serialize() == {
-        "name": "anna",
-        "cards": ["10D", None, "10C", "2S", "5C", "8D", "2C"],
-        "order": 0,
-        "yielded": False,
+        "id": "anna",
+        "hand": ["10D", None, "10C", "2S", "5C", "8D", "2C"],
+        # "order": 0,
+        # "yielded": False,
     }
 
 
@@ -29,20 +29,20 @@ def test_card_count(player):
 def test_take_cards(player):
     player.take_cards(cards=["3S", "4D"])
     assert player.serialize() == {
-        "name": "anna",
-        "cards": ["10D", "10C", "2S", "5C", "8D", "2C", "3S", "4D"],
-        "order": 0,
-        "yielded": False,
+        "id": "anna",
+        "hand": ["10D", "10C", "2S", "5C", "8D", "2C", "3S", "4D"],
+        # "order": 0,
+        # "yielded": False,
     }
 
 
 def test_remove_card(player):
     player.remove_card(card="2S")
     assert player.serialize() == {
-        "name": "anna",
-        "cards": ["10D", None, "10C", None, "5C", "8D", "2C"],
-        "order": 0,
-        "yielded": False,
+        "id": "anna",
+        "hand": ["10D", None, "10C", None, "5C", "8D", "2C"],
+        # "order": 0,
+        # "yielded": False,
     }
 
 
@@ -72,10 +72,10 @@ def test_draw_from_pile(mocked_draw_cards):
     draw_pile = DrawPile(drawn_cards=[], lowest_rank="2", seed=0.4)
     player.draw(draw_pile=draw_pile)
     assert player.serialize() == {
-        "name": "anna",
-        "cards": ["10D", "10C", "2S", "5C", "8D", "2C"],
-        "order": 0,
-        "yielded": False,
+        "id": "anna",
+        "hand": ["10D", "10C", "2S", "5C", "8D", "2C"],
+        # "order": 0,
+        # "yielded": False,
     }
     assert draw_pile.serialize() == {
         "cards_left": 1,

@@ -58,41 +58,39 @@
       "QS"
     ],
     "durak": null,
-    "hands": {
-      "anna": [
-        null
-      ],
-      "grusha": [],
-      "igor": [
-        "9S",
-        "6S",
-        "6D",
-        "JD",
-        "QD",
-        "JC",
-        "JS",
-        "QH",
-        "QS"
-      ],
-      "vasyl": [
-        "8C",
-        "6H"
-      ]
-    },
     "lowest_rank": "6",
     "pass_count": 0,
     "players": [
       {
-        "id": "anna"
+        "id": "anna",
+        "hand": [
+          null
+        ]
       },
       {
-        "id": "vasyl"
+        "id": "vasyl",
+        "hand": [
+          "8C",
+          "6H"
+        ]
       },
       {
-        "id": "igor"
+        "id": "igor",
+        "hand": [
+          "9S",
+          "6S",
+          "6D",
+          "JD",
+          "QD",
+          "JC",
+          "JS",
+          "QH",
+          "QS"
+        ]
       },
       {
-        "id": "grusha"
+        "id": "grusha",
+        "hand": []
       }
     ],
     "seed": 0.4,

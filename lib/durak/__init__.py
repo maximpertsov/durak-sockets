@@ -61,11 +61,16 @@ def join_game(*, from_state, user, payload):
         state.update(joined=joined)
         return state
 
+    players = [
+        {"id": player["id"] if isinstance(player, dict) else player, "hand": []}
+        for player in state["players"]
+    ]
+
     state.update(
+        players=players,
         collector=None,
         drawn_cards=[],
         durak=None,
-        hands={player: [] for player in player_ids},
         pass_count=0,
         table=[],
         yielded=[],
