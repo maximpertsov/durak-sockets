@@ -1,0 +1,15 @@
+// action 1:
+// type:
+attacked_with_many
+// payload:
+{"cards": ["8C", "8S"]}
+// from_state
+{"seed": 0.227907402, "durak": null, "table": [["8H", "9H"], ["8C"], ["8S"]], "players": [{"id": "igor", "hand": [null, "KH"], "order": 0}, {"id": "grusha", "hand": ["7C", "AH", "7D", "6H", "7S", "9S", null, "10H", "10C"], "order": 1}, {"id": "anna", "hand": ["7H"], "order": 2}, {"id": "vasyl", "hand": [null, null, "9D", "10D", "KC", "KS", "QS", "QH", "QC", "QD"], "order": 3}], "winners": [], "yielded": [], "defender": "grusha", "attackers": ["igor", "anna", "vasyl"], "collector": null, "last_card": "8H", "cards_left": 0, "pass_count": 0, "trump_suit": "hearts", "drawn_cards": ["10C", "10D", "10H", "10S", "6C", "6D", "6H", "6S", "7C", "7D", "7H", "7S", "8C", "8D", "8H", "8S", "9C", "9D", "9H", "9S", "AC", "AD", "AH", "AS", "JC", "JD", "JH", "JS", "KC", "KD", "KH", "KS", "QC", "QD", "QH", "QS"], "lowest_rank": "6", "attack_limit": 6, "legal_passes": {"cards": [], "limit": 0}, "with_passing": true, "legal_attacks": {"cards": ["9D"], "limit": 4}, "legal_defenses": {"8C": ["10C", "10H", "6H", "AH"], "8S": ["10H", "6H", "9S", "AH"]}}
+
+// action 2:
+// type:
+attacked_with_many
+// payload:
+{"cards": ["9D"]}
+// from_state:
+{"seed": 0.227907402, "durak": null, "table": [["8H", "9H"], ["8C"], ["8S"], ["9D"]], "players": [{"id": "igor", "hand": [null, "KH"], "order": 0}, {"id": "grusha", "hand": ["7C", "AH", "7D", "6H", "7S", "9S", null, "10H", "10C"], "order": 1}, {"id": "anna", "hand": ["7H"], "order": 2}, {"id": "vasyl", "hand": [null, null, null, "10D", "KC", "KS", "QS", "QH", "QC", "QD"], "order": 3}], "winners": [], "yielded": [], "defender": "grusha", "attackers": ["igor", "anna", "vasyl"], "collector": null, "last_card": "8H", "cards_left": 0, "pass_count": 0, "trump_suit": "hearts", "drawn_cards": ["10C", "10D", "10H", "10S", "6C", "6D", "6H", "6S", "7C", "7D", "7H", "7S", "8C", "8D", "8H", "8S", "9C", "9D", "9H", "9S", "AC", "AD", "AH", "AS", "JC", "JD", "JH", "JS", "KC", "KD", "KH", "KS", "QC", "QD", "QH", "QS"], "lowest_rank": "6", "attack_limit": 6, "legal_passes": {"cards": [], "limit": 0}, "with_passing": true, "legal_attacks": {"cards": [], "limit": 3}, "legal_defenses": {"8C": ["10C", "10H", "6H", "AH"], "8S": ["10H", "6H", "9S", "AH"], "9D": ["10H", "6H", "AH"]}}
