@@ -166,8 +166,8 @@ class Game:
     def _rotate(self, *, skip=0):
         players = self._ordered_players_with_cards_in_round()
         shift = skip + 1
-        for index, player in enumerate(players):
-            player.order = (index - shift) % len(players)
+        for player in players:
+            player.order = (player.order - shift) % len(players)
         self._ordered_players_with_cards_in_round.cache_clear()
 
     def _player(self, player):
