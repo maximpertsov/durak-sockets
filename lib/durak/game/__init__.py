@@ -229,7 +229,7 @@ class Game:
         ]
 
     def _clear_yields(self):
-        for _player in self._active_players():
+        for _player in self._ordered_players():
             _player.remove_status(Status.YIELDED)
 
     def _active_players(self):
