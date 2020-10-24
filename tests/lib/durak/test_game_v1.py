@@ -54,12 +54,12 @@ def test_serialize(game, static_parameters):
                 "order": 0,
                 "id": "anna",
                 "hand": ["10D", None, "10C", "2S", "5C", "8D", "2C"],
+                "state": set(),
             }
         ],
         "table": [],
         "trump_suit": "clubs",
         "winners": set(),
-        "yielded": [],
         **static_parameters,
     }
 
@@ -83,12 +83,12 @@ def test_attack(game, static_parameters):
                 "order": 0,
                 "id": "anna",
                 "hand": [None, None, "10C", "2S", "5C", "8D", "2C"],
+                "state": set(),
             }
         ],
         "table": [["10D"]],
         "trump_suit": "clubs",
         "winners": set(),
-        "yielded": [],
         **static_parameters,
     }
 
@@ -117,12 +117,12 @@ def test_defend(game, static_parameters):
                 "order": 0,
                 "id": "anna",
                 "hand": [None, None, "10C", "2S", "5C", "8D", "2C"],
+                "state": set(),
             }
         ],
         "table": [["9D", "10D"]],
         "trump_suit": "clubs",
         "winners": set(),
-        "yielded": [],
         **static_parameters,
     }
 
@@ -146,12 +146,12 @@ def test_durak(game, static_parameters):
                 "order": 0,
                 "id": "anna",
                 "hand": ["10D", None, "10C", "2S", "5C", "8D", "2C"],
+                "state": set(),
             }
         ],
         "table": [],
         "trump_suit": "clubs",
         "winners": set(),
-        "yielded": [],
         **static_parameters,
     }
 
@@ -205,22 +205,24 @@ def test_draw(game_3p, static_parameters):
                 "order": 0,
                 "id": "anna",
                 "hand": ["9H", "3S", "KH", "4C", "4H", None, "7D"],
+                "state": set(),
             },
             {
                 "order": 1,
                 "id": "vasyl",
                 "hand": ["7C", "6D", "JS", "7H", None, None, "9C", "9D"],
+                "state": set(),
             },
             {
                 "order": 2,
                 "id": "igor",
                 "hand": ["8H", "JD", "KS", "5H", "JC", None, "10C"],
+                "state": set(),
             },
         ],
         "table": [],
         "trump_suit": "diamonds",
         "winners": set(),
-        "yielded": [],
         **static_parameters,
     }
 
@@ -248,22 +250,24 @@ def test_draw_with_pass_count(game_3p, static_parameters):
                 "order": 0,
                 "id": "anna",
                 "hand": ["9H", "3S", "KH", "4C", "4H", None, "10C"],
+                "state": set(),
             },
             {
                 "order": 1,
                 "id": "vasyl",
                 "hand": ["7C", "6D", "JS", "7H", None, None, "7D", "9C"],
+                "state": set(),
             },
             {
                 "order": 2,
                 "id": "igor",
                 "hand": ["8H", "JD", "KS", "5H", "JC", None, "9D"],
+                "state": set(),
             },
         ],
         "table": [],
         "trump_suit": "diamonds",
         "winners": set(),
-        "yielded": [],
         **static_parameters,
     }
 
@@ -283,14 +287,28 @@ def test_legal_defenses(game_3p, static_parameters):
         "legal_defenses": {"10S": set(["JS", "6D"])},
         "legal_passes": {"cards": set([]), "limit": 4},
         "players": [
-            {"order": 0, "id": "anna", "hand": ["9H", "3S", "KH", "4C", "4H", None]},
-            {"order": 1, "id": "vasyl", "hand": ["7C", "6D", "JS", "7H", None, None]},
-            {"order": 2, "id": "igor", "hand": ["8H", "JD", "KS", "5H", "JC", None]},
+            {
+                "order": 0,
+                "id": "anna",
+                "hand": ["9H", "3S", "KH", "4C", "4H", None],
+                "state": set(),
+            },
+            {
+                "order": 1,
+                "id": "vasyl",
+                "hand": ["7C", "6D", "JS", "7H", None, None],
+                "state": set(),
+            },
+            {
+                "order": 2,
+                "id": "igor",
+                "hand": ["8H", "JD", "KS", "5H", "JC", None],
+                "state": set(),
+            },
         ],
         "table": [["10S"]],
         "trump_suit": "diamonds",
         "winners": set(),
-        "yielded": [],
         **static_parameters,
     }
 
@@ -310,14 +328,28 @@ def test_legal_attacks(game_3p, static_parameters):
         "legal_defenses": {"4S": set(["JS", "6D"])},
         "legal_passes": {"cards": set([]), "limit": 4},
         "players": [
-            {"order": 0, "id": "anna", "hand": ["9H", "3S", "KH", "4C", "4H", None]},
-            {"order": 1, "id": "vasyl", "hand": ["7C", "6D", "JS", "7H", None, None]},
-            {"order": 2, "id": "igor", "hand": ["8H", "JD", "KS", "5H", "JC", None]},
+            {
+                "order": 0,
+                "id": "anna",
+                "hand": ["9H", "3S", "KH", "4C", "4H", None],
+                "state": set(),
+            },
+            {
+                "order": 1,
+                "id": "vasyl",
+                "hand": ["7C", "6D", "JS", "7H", None, None],
+                "state": set(),
+            },
+            {
+                "order": 2,
+                "id": "igor",
+                "hand": ["8H", "JD", "KS", "5H", "JC", None],
+                "state": set(),
+            },
         ],
         "table": [["4S"]],
         "trump_suit": "diamonds",
         "winners": set(),
-        "yielded": [],
         **static_parameters,
     }
 
@@ -337,14 +369,28 @@ def test_legal_passes(game_3p, static_parameters):
         "legal_defenses": {"7S": set(["JS", "6D"])},
         "legal_passes": {"cards": set(["7C", "7H"]), "limit": 4},
         "players": [
-            {"order": 0, "id": "anna", "hand": ["9H", "3S", "KH", "4C", "4H", None]},
-            {"order": 1, "id": "vasyl", "hand": ["7C", "6D", "JS", "7H", None, None]},
-            {"order": 2, "id": "igor", "hand": ["8H", "JD", "KS", "5H", "JC", None]},
+            {
+                "order": 0,
+                "id": "anna",
+                "hand": ["9H", "3S", "KH", "4C", "4H", None],
+                "state": set(),
+            },
+            {
+                "order": 1,
+                "id": "vasyl",
+                "hand": ["7C", "6D", "JS", "7H", None, None],
+                "state": set(),
+            },
+            {
+                "order": 2,
+                "id": "igor",
+                "hand": ["8H", "JD", "KS", "5H", "JC", None],
+                "state": set(),
+            },
         ],
         "table": [["7S"]],
         "trump_suit": "diamonds",
         "winners": set(),
-        "yielded": [],
         **static_parameters,
     }
 
@@ -367,15 +413,29 @@ def test_legal_attacks_and_passes_with_limits(game_3p, static_parameters):
         "legal_defenses": {"7S": set(["JS", "6D"])},
         "legal_passes": {"cards": set(["7C", "7H"]), "limit": 2},
         "players": [
-            {"order": 0, "id": "anna", "hand": ["9H", "3S", "KH", "4C", "4H", None]},
-            {"order": 1, "id": "vasyl", "hand": ["7C", "6D", "JS", "7H", None, None]},
-            {"order": 2, "id": "igor", "hand": ["8H", "JD", "KS", "5H", "JC", None]},
+            {
+                "order": 0,
+                "id": "anna",
+                "hand": ["9H", "3S", "KH", "4C", "4H", None],
+                "state": set(),
+            },
+            {
+                "order": 1,
+                "id": "vasyl",
+                "hand": ["7C", "6D", "JS", "7H", None, None],
+                "state": set(),
+            },
+            {
+                "order": 2,
+                "id": "igor",
+                "hand": ["8H", "JD", "KS", "5H", "JC", None],
+                "state": set(),
+            },
         ],
         "seed": 0.4,
         "table": [["7S"]],
         "trump_suit": "diamonds",
         "winners": set(),
-        "yielded": [],
     }
 
 
@@ -398,14 +458,28 @@ def test_legal_passes_when_on_deck_defender_has_no_cards(game_3p, static_paramet
         "legal_defenses": {"7S": set(["JS", "6D"])},
         "legal_passes": {"cards": set(["7C", "7H"]), "limit": 4},
         "players": [
-            {"order": 0, "id": "anna", "hand": ["9H", "3S", "KH", "4C", "4H", None]},
-            {"order": 1, "id": "vasyl", "hand": ["7C", "6D", "JS", "7H", None, None]},
-            {"order": 2, "id": "igor", "hand": [None, None, None, None, None, None]},
+            {
+                "order": 0,
+                "id": "anna",
+                "hand": ["9H", "3S", "KH", "4C", "4H", None],
+                "state": set(),
+            },
+            {
+                "order": 1,
+                "id": "vasyl",
+                "hand": ["7C", "6D", "JS", "7H", None, None],
+                "state": set(),
+            },
+            {
+                "order": 2,
+                "id": "igor",
+                "hand": [None, None, None, None, None, None],
+                "state": set(),
+            },
         ],
         "table": [["7S"]],
         "trump_suit": "diamonds",
         "winners": set(),
-        "yielded": [],
         **static_parameters,
     }
 

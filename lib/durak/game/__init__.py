@@ -93,7 +93,6 @@ class Game:
             "players": [player.serialize() for player in self._ordered_players()],
             "trump_suit": self._trump_suit,
             "winners": set(player.name for player in self.winners()),
-            "yielded": [player.name for player in self._yielded_players()],
             "lowest_rank": self._lowest_rank,
             "attack_limit": self._attack_limit,
             "with_passing": self._with_passing,

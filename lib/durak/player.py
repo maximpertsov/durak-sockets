@@ -15,6 +15,7 @@ class Player:
             "id": self.name,
             "hand": self._cards,
             "order": self.order,
+            "state": self._state,
         }
 
     def has_status(self, status):
