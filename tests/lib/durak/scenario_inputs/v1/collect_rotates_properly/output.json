@@ -98,11 +98,13 @@
           "QH",
           "QS"
         ],
-        "id": "igor"
+        "id": "igor",
+        "order": 0
       },
       {
         "hand": [],
-        "id": "anna"
+        "id": "anna",
+        "order": 1
       },
       {
         "hand": [
@@ -110,11 +112,13 @@
           "6H",
           "KS"
         ],
-        "id": "vasyl"
+        "id": "vasyl",
+        "order": 2
       },
       {
         "hand": [],
-        "id": "grusha"
+        "id": "grusha",
+        "order": 3
       }
     ],
     "seed": 0.4,

@@ -110,7 +110,8 @@
           "KD",
           "AH"
         ],
-        "id": "cyril"
+        "id": "cyril",
+        "order": 0
       },
       {
         "hand": [
@@ -121,7 +122,8 @@
           "6H",
           "QS"
         ],
-        "id": "kevin"
+        "id": "kevin",
+        "order": 1
       },
       {
         "hand": [
@@ -132,7 +134,8 @@
           "6S",
           "7C"
         ],
-        "id": "john"
+        "id": "john",
+        "order": 2
       },
       {
         "hand": [
@@ -149,7 +152,8 @@
           "10C",
           "10S"
         ],
-        "id": "maxim"
+        "id": "maxim",
+        "order": 3
       }
     ],
     "seed": 0.4,

@@ -1,34 +1,18 @@
 {
   "payload": {},
   "to_state": {
-    "attack_limit": 100,
+    "attack_limit": 6,
     "attackers": [
-      "anna"
+      "grusha"
     ],
     "cards_left": 0,
     "collector": null,
-    "defender": "vasyl",
+    "defender": "anna",
     "drawn_cards": [
       "10C",
       "10D",
       "10H",
       "10S",
-      "2C",
-      "2D",
-      "2H",
-      "2S",
-      "3C",
-      "3D",
-      "3H",
-      "3S",
-      "4C",
-      "4D",
-      "4H",
-      "4S",
-      "5C",
-      "5D",
-      "5H",
-      "5S",
       "6C",
       "6D",
       "6H",
@@ -63,67 +47,60 @@
       "QS"
     ],
     "durak": null,
-    "last_card": "10H",
+    "last_card": "8H",
     "legal_attacks": {
       "cards": [
-        "JD",
+        "KC",
+        "KH",
         "KS"
       ],
-      "limit": 5
+      "limit": 1
     },
     "legal_defenses": {},
     "legal_passes": {
       "cards": [],
-      "limit": 5
+      "limit": 3
     },
     "lowest_rank": "6",
     "pass_count": 0,
     "players": [
       {
-        "hand": [
-          "KS",
-          "JD"
-        ],
-        "id": "anna",
+        "hand": [],
+        "id": "vasyl",
         "order": 0
       },
       {
         "hand": [
-          "JC",
-          "QS",
-          "8C",
-          "QH",
-          "6H"
+          "KC",
+          "KH",
+          "KS"
         ],
-        "id": "vasyl",
+        "id": "grusha",
         "order": 1
       },
       {
         "hand": [
-          "9S",
-          "QD",
-          "6S",
-          "6D",
-          "JS"
+          "AH"
         ],
-        "id": "igor",
+        "id": "anna",
         "order": 2
       },
       {
         "hand": [],
-        "id": "grusha",
-        "order": 3
+        "id": "igor",
+        "order": 2
       }
     ],
-    "seed": 0.4,
+    "seed": 0.227907402,
     "table": [],
     "trump_suit": "hearts",
     "winners": [
-      "grusha"
+      "igor",
+      "vasyl"
     ],
     "with_passing": true,
     "yielded": []
   },
   "type": "yielded_attack",
-  "user": "igor"
+  "user": "anna"
 }

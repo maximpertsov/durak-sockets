@@ -62,26 +62,27 @@
     "pass_count": 1,
     "players": [
       {
-        "id": "grusha",
         "hand": [
           null,
           "KH",
           "AD",
           "KD",
           "JH"
-        ]
+        ],
+        "id": "grusha",
+        "order": 0
       },
       {
-        "id": "anna",
         "hand": [
           null,
           null,
           null,
           null
-        ]
+        ],
+        "id": "anna",
+        "order": 1
       },
       {
-        "id": "vasyl",
         "hand": [
           "AC",
           "8H",
@@ -93,15 +94,18 @@
           "9H",
           "QD",
           "9S"
-        ]
+        ],
+        "id": "vasyl",
+        "order": 2
       },
       {
-        "id": "igor",
         "hand": [
           "KC",
           null,
           "6D"
-        ]
+        ],
+        "id": "igor",
+        "order": 3
       }
     ],
     "seed": 0.4,

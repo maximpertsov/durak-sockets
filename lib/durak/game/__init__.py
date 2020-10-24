@@ -1,4 +1,3 @@
-from functools import lru_cache
 from operator import attrgetter
 
 from lib.durak.card import get_rank
@@ -121,11 +120,7 @@ class Game:
             self.collect()
             return
 
-        # TODO: refactor into method?
-        self._table.clear()
-        self.draw()
-        self._rotate()
-        self._clear_yields()
+        self._successful_defense_cleanup()
 
     def collect(self):
         self._player(self._collector).take_cards(cards=self._table.collect())
@@ -133,6 +128,14 @@ class Game:
         self._rotate(skip=1)
         self._collector = None
         self._clear_yields()
+        self._compact_hands()
+
+    def _successful_defense_cleanup(self):
+        self._table.clear()
+        self.draw()
+        self._rotate()
+        self._clear_yields()
+        self._compact_hands()
 
     def draw(self):
         players = self._ordered_players_with_cards_in_round()
@@ -168,7 +171,10 @@ class Game:
         shift = skip + 1
         for index, player in enumerate(players):
             player.order = (index - shift) % len(players)
-        self._ordered_players_with_cards_in_round.cache_clear()
+
+    def _compact_hands(self):
+        for player in self._ordered_players_with_cards_in_round():
+            player.compact_hand()
 
     def _player(self, player):
         return self._players[player]
@@ -209,7 +215,6 @@ class Game:
             if self._draw_pile.size() or player.cards()
         ]
 
-    @lru_cache
     def _ordered_players_with_cards_in_round(self):
         return [
             player
