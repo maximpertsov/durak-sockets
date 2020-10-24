@@ -1,5 +1,6 @@
 import json
 from copy import deepcopy
+from enum import Enum
 from os import environ
 
 import httpx
@@ -90,6 +91,8 @@ class ActionNotDefined(Exception):
 
 class MessageEncoder(json.JSONEncoder):
     def default(self, obj):
+        if isinstance(obj, Enum):
+            return obj.value
         if isinstance(obj, set):
             return sorted(obj)
         return json.JSONEncoder.default(self, obj)
