@@ -38,7 +38,11 @@ class Game:
                 get_player_id(state, player): Player(
                     name=get_player_id(state, player),
                     cards=get_hand(state, player),
-                    order=order,
+                    order=(
+                        (player.get("order") or order)
+                        if isinstance(player, dict)
+                        else order
+                    ),
                     yielded=get_player_id(state, player) in state["yielded"],
                 )
                 for order, player in enumerate(state["players"])
