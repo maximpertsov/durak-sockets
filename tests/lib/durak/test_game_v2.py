@@ -31,11 +31,11 @@ def game(mocked_draw_cards, static_parameters):
                     "id": "anna",
                     "hand": ["10D", None, "10C", "2S", "5C", "8D", "2C"],
                     "order": 0,
+                    "state": [],
                 }
             ],
             "table": [],
             "trump_suit": "clubs",
-            "yielded": [],
             **static_parameters,
         }
     )
@@ -179,21 +179,23 @@ def game_3p(mocked_draw_cards_3p, static_parameters):
                     "order": 0,
                     "id": "anna",
                     "hand": ["9H", "3S", "KH", "4C", "4H", None],
+                    "state": [],
                 },
                 {
                     "order": 1,
                     "id": "vasyl",
                     "hand": ["7C", "6D", "JS", "7H", None, None],
+                    "state": [],
                 },
                 {
                     "order": 2,
                     "id": "igor",
                     "hand": ["8H", "JD", "KS", "5H", "JC", None],
+                    "state": [],
                 },
             ],
             "table": [],
             "trump_suit": "diamonds",
-            "yielded": [],
             **static_parameters,
         }
     )

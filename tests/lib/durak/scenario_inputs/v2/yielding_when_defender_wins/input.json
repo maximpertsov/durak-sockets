@@ -70,7 +70,8 @@
           "JH"
         ],
         "id": "grusha",
-        "order": 0
+        "order": 0,
+        "state": []
       },
       {
         "hand": [
@@ -80,7 +81,8 @@
           null
         ],
         "id": "anna",
-        "order": 1
+        "order": 1,
+        "state": []
       },
       {
         "hand": [
@@ -96,7 +98,10 @@
           "9S"
         ],
         "id": "vasyl",
-        "order": 2
+        "order": 2,
+        "state": [
+          "yielded"
+        ]
       },
       {
         "hand": [
@@ -105,7 +110,10 @@
           "6D"
         ],
         "id": "igor",
-        "order": 3
+        "order": 3,
+        "state": [
+          "yielded"
+        ]
       }
     ],
     "seed": 0.4,
@@ -128,11 +136,7 @@
       ]
     ],
     "trump_suit": "diamonds",
-    "with_passing": true,
-    "yielded": [
-      "vasyl",
-      "igor"
-    ]
+    "with_passing": true
   },
   "payload": {},
   "type": "yielded_attack",

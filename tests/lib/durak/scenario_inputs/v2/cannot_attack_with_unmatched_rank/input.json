@@ -103,7 +103,8 @@
           "AH"
         ],
         "id": "cyril",
-        "order": 0
+        "order": 0,
+        "state": []
       },
       {
         "hand": [
@@ -115,7 +116,8 @@
           "QS"
         ],
         "id": "kevin",
-        "order": 1
+        "order": 1,
+        "state": []
       },
       {
         "hand": [
@@ -127,7 +129,8 @@
           "7C"
         ],
         "id": "john",
-        "order": 2
+        "order": 2,
+        "state": []
       },
       {
         "hand": [
@@ -145,15 +148,15 @@
           "10S"
         ],
         "id": "maxim",
-        "order": 3
+        "order": 3,
+        "state": []
       }
     ],
     "seed": 0.4,
     "table": [],
     "trump_suit": "clubs",
     "winners": [],
-    "with_passing": true,
-    "yielded": []
+    "with_passing": true
   },
   "payload": {
     "cards": [
