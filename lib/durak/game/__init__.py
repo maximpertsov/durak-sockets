@@ -1,3 +1,4 @@
+from enum import Enum
 from operator import attrgetter
 
 from lib.durak.card import get_rank
@@ -7,6 +8,10 @@ from lib.durak.player import Player
 from lib.durak.table import Table
 
 from .queries import LegalAttacks, LegalDefenses, LegalPasses
+
+
+class Status(Enum):
+    YIELDED = "yielded"
 
 
 # TODO: remove this helper helpers after player schema update is finished
@@ -55,7 +60,7 @@ class Game:
                         if isinstance(player, dict)
                         else order
                     ),
-                    state=set(["yielded"]) if is_yielded(state, player) else set(),
+                    state=set([Status.YIELDED]) if is_yielded(state, player) else set(),
                 )
                 for order, player in enumerate(state["players"])
             },
@@ -128,7 +133,7 @@ class Game:
         self._clear_yields()
 
     def yield_attack(self, *, player):
-        self._player(player).add_status("yielded")
+        self._player(player).add_status(Status.YIELDED)
         if not self._no_more_attacks():
             return
 
@@ -219,12 +224,14 @@ class Game:
 
     def _yielded_players(self):
         return [
-            player for player in self._active_players() if player.has_status("yielded")
+            player
+            for player in self._active_players()
+            if player.has_status(Status.YIELDED)
         ]
 
     def _clear_yields(self):
         for _player in self._active_players():
-            _player.remove_status("yielded")
+            _player.remove_status(Status.YIELDED)
 
     def _active_players(self):
         return [
