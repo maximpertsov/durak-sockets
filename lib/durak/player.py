@@ -8,14 +8,13 @@ class Player:
         self.name = name
         self._cards = cards
         self.order = order
-        self._state = state or set()
+        self._state = set(state) if state else set()
 
     def serialize(self):
         return {
             "id": self.name,
             "hand": self._cards,
             "order": self.order,
-            # "state": self.state
         }
 
     def has_status(self, status):

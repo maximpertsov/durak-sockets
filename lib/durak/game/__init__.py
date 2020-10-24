@@ -60,7 +60,7 @@ class Game:
                         if isinstance(player, dict)
                         else order
                     ),
-                    state=set([Status.YIELDED]) if is_yielded(state, player) else set(),
+                    state=[Status.YIELDED] if is_yielded(state, player) else [],
                 )
                 for order, player in enumerate(state["players"])
             },
