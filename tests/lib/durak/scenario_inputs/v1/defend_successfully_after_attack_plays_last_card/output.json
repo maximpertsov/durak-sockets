@@ -85,7 +85,8 @@
           "JD"
         ],
         "id": "anna",
-        "order": 0
+        "order": 0,
+        "state": []
       },
       {
         "hand": [
@@ -96,7 +97,8 @@
           "6H"
         ],
         "id": "vasyl",
-        "order": 1
+        "order": 1,
+        "state": []
       },
       {
         "hand": [
@@ -107,12 +109,14 @@
           "JS"
         ],
         "id": "igor",
-        "order": 2
+        "order": 2,
+        "state": []
       },
       {
         "hand": [],
         "id": "grusha",
-        "order": 3
+        "order": 3,
+        "state": []
       }
     ],
     "seed": 0.4,
@@ -121,8 +125,7 @@
     "winners": [
       "grusha"
     ],
-    "with_passing": true,
-    "yielded": []
+    "with_passing": true
   },
   "type": "yielded_attack",
   "user": "igor"

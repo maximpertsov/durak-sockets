@@ -17,18 +17,19 @@ def update(path):
         # Transform data
         # ===========================================
         players = []
-        for player in d["from_state"]["players"]:
+        for player in d["to_state"]["players"]:
             p = deepcopy(player)
             p["state"] = []
-            if p["id"] in d["from_state"]["yielded"]:
+            if p["id"] in d["to_state"]["yielded"]:
                 p["state"].append("yielded")
             players.append(p)
 
-        d["from_state"]["players"] = players
-        del d["from_state"]["yielded"]
+        d["to_state"]["players"] = players
+        del d["to_state"]["yielded"]
         # ===========================================
 
         print(d)
+
         # with open(path, "w") as f:
         #     json.dump(d, f, indent=2, sort_keys=True)
         #     f.write("\n")
@@ -37,6 +38,6 @@ def update(path):
 
 
 if __name__ == "__main__":
-    # for path in chain(v1_outputs, v2_outputs):
-    for path in chain(v2_inputs):
+    for path in chain(v1_outputs, v2_outputs):
+    # for path in chain(v2_inputs):
         update(path)

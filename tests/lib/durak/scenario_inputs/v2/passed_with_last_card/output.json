@@ -95,7 +95,8 @@
           null
         ],
         "id": "anna",
-        "order": 0
+        "order": 0,
+        "state": []
       },
       {
         "hand": [
@@ -103,7 +104,8 @@
           "10C"
         ],
         "id": "vasyl",
-        "order": 1
+        "order": 1,
+        "state": []
       },
       {
         "hand": [
@@ -111,7 +113,8 @@
           "QC"
         ],
         "id": "igor",
-        "order": 2
+        "order": 2,
+        "state": []
       },
       {
         "hand": [
@@ -120,7 +123,8 @@
           "KH"
         ],
         "id": "grusha",
-        "order": 3
+        "order": 3,
+        "state": []
       }
     ],
     "seed": 0.4,
@@ -136,8 +140,7 @@
     "winners": [
       "anna"
     ],
-    "with_passing": true,
-    "yielded": []
+    "with_passing": true
   },
   "type": "passed_with_many",
   "user": "anna"

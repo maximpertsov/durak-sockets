@@ -88,7 +88,8 @@
       {
         "hand": [],
         "id": "anna",
-        "order": 0
+        "order": 0,
+        "state": []
       },
       {
         "hand": [
@@ -102,7 +103,8 @@
           "9S"
         ],
         "id": "vasyl",
-        "order": 1
+        "order": 1,
+        "state": []
       },
       {
         "hand": [
@@ -110,7 +112,8 @@
           "6D"
         ],
         "id": "igor",
-        "order": 2
+        "order": 2,
+        "state": []
       },
       {
         "hand": [
@@ -120,7 +123,8 @@
           "JH"
         ],
         "id": "grusha",
-        "order": 3
+        "order": 3,
+        "state": []
       }
     ],
     "seed": 0.4,
@@ -129,8 +133,7 @@
     "winners": [
       "anna"
     ],
-    "with_passing": true,
-    "yielded": []
+    "with_passing": true
   },
   "type": "yielded_attack",
   "user": "grusha"
