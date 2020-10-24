@@ -1,3 +1,4 @@
+from enum import Enum
 from operator import attrgetter
 
 from lib.durak.card import get_rank
@@ -7,6 +8,10 @@ from lib.durak.player import Player
 from lib.durak.table import Table
 
 from .queries import LegalAttacks, LegalDefenses, LegalPasses
+
+
+class Status(Enum):
+    YIELDED = "yielded"
 
 
 # TODO: remove this helper helpers after player schema update is finished
@@ -20,6 +25,18 @@ def get_hand(state, player):
         return player["hand"] if isinstance(player, dict) else state["hands"][player]
     except KeyError:
         return state["hands"][player["id"]]
+
+
+# TODO: remove this helper helpers after player schema update is finished
+def is_yielded(state, player):
+    try:
+        return (
+            "yielded" in player["state"]
+            if isinstance(player, dict)
+            else player in state["yielded"]
+        )
+    except KeyError:
+        return player["id"] in state["yielded"]
 
 
 class Game:
@@ -43,7 +60,7 @@ class Game:
                         if isinstance(player, dict)
                         else order
                     ),
-                    yielded=get_player_id(state, player) in state["yielded"],
+                    state=[Status.YIELDED] if is_yielded(state, player) else [],
                 )
                 for order, player in enumerate(state["players"])
             },
@@ -76,7 +93,6 @@ class Game:
             "players": [player.serialize() for player in self._ordered_players()],
             "trump_suit": self._trump_suit,
             "winners": set(player.name for player in self.winners()),
-            "yielded": [player.name for player in self._yielded_players()],
             "lowest_rank": self._lowest_rank,
             "attack_limit": self._attack_limit,
             "with_passing": self._with_passing,
@@ -116,7 +132,7 @@ class Game:
         self._clear_yields()
 
     def yield_attack(self, *, player):
-        self._player(player).yielded = True
+        self._player(player).add_status(Status.YIELDED)
         if not self._no_more_attacks():
             return
 
@@ -206,11 +222,15 @@ class Game:
         return set(self._attackers()).issubset(set(self._yielded_players()))
 
     def _yielded_players(self):
-        return [player for player in self._active_players() if player.yielded]
+        return [
+            player
+            for player in self._active_players()
+            if player.has_status(Status.YIELDED)
+        ]
 
     def _clear_yields(self):
-        for _player in self._active_players():
-            _player.yielded = False
+        for _player in self._ordered_players():
+            _player.remove_status(Status.YIELDED)
 
     def _active_players(self):
         return [

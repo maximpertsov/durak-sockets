@@ -4,19 +4,28 @@ from lib.durak.card import get_suit, get_value
 class Player:
     HAND_SIZE = 6
 
-    def __init__(self, *, name, order, cards, yielded=False):
+    def __init__(self, *, name, order, cards, state=None):
         self.name = name
         self._cards = cards
         self.order = order
-        self.yielded = yielded
+        self._state = set(state) if state else set()
 
     def serialize(self):
         return {
             "id": self.name,
             "hand": self._cards,
             "order": self.order,
-            # "yielded": self.yielded,
+            "state": self._state,
         }
+
+    def has_status(self, status):
+        return status in self._state
+
+    def add_status(self, status):
+        self._state.add(status)
+
+    def remove_status(self, status):
+        self._state.discard(status)
 
     def card_count(self):
         return len(self.cards())

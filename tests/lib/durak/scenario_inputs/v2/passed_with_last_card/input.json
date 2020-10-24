@@ -68,14 +68,16 @@
           "KH"
         ],
         "id": "grusha",
-        "order": 0
+        "order": 0,
+        "state": []
       },
       {
         "hand": [
           "10H"
         ],
         "id": "anna",
-        "order": 1
+        "order": 1,
+        "state": []
       },
       {
         "hand": [
@@ -83,7 +85,8 @@
           "10C"
         ],
         "id": "vasyl",
-        "order": 2
+        "order": 2,
+        "state": []
       },
       {
         "hand": [
@@ -91,7 +94,8 @@
           "QC"
         ],
         "id": "igor",
-        "order": 3
+        "order": 3,
+        "state": []
       }
     ],
     "seed": 0.4,
@@ -101,8 +105,7 @@
       ]
     ],
     "trump_suit": "hearts",
-    "with_passing": true,
-    "yielded": []
+    "with_passing": true
   },
   "payload": {
     "cards": [

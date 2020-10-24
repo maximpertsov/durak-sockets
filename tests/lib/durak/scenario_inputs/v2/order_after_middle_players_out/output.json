@@ -67,7 +67,8 @@
       {
         "hand": [],
         "id": "vasyl",
-        "order": 0
+        "order": 0,
+        "state": []
       },
       {
         "hand": [
@@ -76,19 +77,22 @@
           "KS"
         ],
         "id": "grusha",
-        "order": 1
+        "order": 1,
+        "state": []
       },
       {
         "hand": [
           "AH"
         ],
         "id": "anna",
-        "order": 2
+        "order": 2,
+        "state": []
       },
       {
         "hand": [],
         "id": "igor",
-        "order": 2
+        "order": 2,
+        "state": []
       }
     ],
     "seed": 0.227907402,
@@ -98,8 +102,7 @@
       "igor",
       "vasyl"
     ],
-    "with_passing": true,
-    "yielded": []
+    "with_passing": true
   },
   "type": "yielded_attack",
   "user": "anna"

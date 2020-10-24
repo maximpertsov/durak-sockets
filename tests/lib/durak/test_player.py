@@ -18,7 +18,7 @@ def test_serialize(player):
         "id": "anna",
         "hand": ["10D", None, "10C", "2S", "5C", "8D", "2C"],
         "order": 0,
-        # "yielded": False,
+        "state": set(),
     }
 
 
@@ -32,7 +32,7 @@ def test_take_cards(player):
         "id": "anna",
         "hand": ["10D", None, "10C", "2S", "5C", "8D", "2C", "3S", "4D"],
         "order": 0,
-        # "yielded": False,
+        "state": set(),
     }
 
 
@@ -42,7 +42,7 @@ def test_remove_card(player):
         "id": "anna",
         "hand": ["10D", None, "10C", None, "5C", "8D", "2C"],
         "order": 0,
-        # "yielded": False,
+        "state": set(),
     }
 
 
@@ -75,7 +75,7 @@ def test_draw_from_pile(mocked_draw_cards):
         "id": "anna",
         "hand": ["10D", None, "10C", "2S", "5C", "8D", "2C"],
         "order": 0,
-        # "yielded": False,
+        "state": set(),
     }
     assert draw_pile.serialize() == {
         "cards_left": 1,
