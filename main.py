@@ -126,10 +126,13 @@ async def handle_durak_message(message):
     return json.dumps(data, cls=MessageEncoder)
 
 
+SCHEMA_VERSION = 1
+
+
 async def persist(data):
     async with httpx.AsyncClient() as client:
         await client.post(
             "{}/game/{}/events".format(BASE_API_URL, data["game"]),
             headers={"Content-Type": "application/json"},
-            data=json.dumps(data, cls=MessageEncoder),
+            data=json.dumps({"version": SCHEMA_VERSION, **data}, cls=MessageEncoder),
         )
