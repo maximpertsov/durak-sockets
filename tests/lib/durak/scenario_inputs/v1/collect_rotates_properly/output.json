@@ -1,14 +1,9 @@
 {
-  "payload": {
-    "cards": [
-      "10H"
-    ]
-  },
+  "payload": {},
   "to_state": {
     "attack_limit": 100,
     "attackers": [
-      "igor",
-      "grusha"
+      "igor"
     ],
     "cards_left": 0,
     "collector": null,
@@ -68,67 +63,77 @@
       "QS"
     ],
     "durak": null,
-    "hands": {
-      "anna": [
-        null
-      ],
-      "grusha": [
-        "QS",
-        null,
-        "KH"
-      ],
-      "igor": [
-        "9S",
-        "QC"
-      ],
-      "vasyl": [
-        "AH",
-        "10C"
-      ]
-    },
     "last_card": "10H",
     "legal_attacks": {
-      "cards": [],
-      "limit": 0
-    },
-    "legal_defenses": {
-      "10D": [
-        "AH"
-      ],
-      "10H": [
-        "AH"
-      ]
-    },
-    "legal_passes": {
       "cards": [
-        "10C"
+        "6D",
+        "6S",
+        "9S",
+        "JC",
+        "JD",
+        "JS",
+        "QD",
+        "QH",
+        "QS"
       ],
-      "limit": 0
+      "limit": 3
+    },
+    "legal_defenses": {},
+    "legal_passes": {
+      "cards": [],
+      "limit": 9
     },
     "lowest_rank": "6",
-    "pass_count": 1,
+    "pass_count": 0,
     "players": [
-      "anna",
-      "vasyl",
-      "igor",
-      "grusha"
+      {
+        "hand": [
+          "9S",
+          "6S",
+          "6D",
+          "JD",
+          "QD",
+          "JC",
+          "JS",
+          "QH",
+          "QS"
+        ],
+        "id": "igor",
+        "order": 0,
+        "state": []
+      },
+      {
+        "hand": [],
+        "id": "anna",
+        "order": 1,
+        "state": []
+      },
+      {
+        "hand": [
+          "8C",
+          "6H",
+          "KS"
+        ],
+        "id": "vasyl",
+        "order": 2,
+        "state": []
+      },
+      {
+        "hand": [],
+        "id": "grusha",
+        "order": 3,
+        "state": []
+      }
     ],
     "seed": 0.4,
-    "table": [
-      [
-        "10D"
-      ],
-      [
-        "10H"
-      ]
-    ],
+    "table": [],
     "trump_suit": "hearts",
     "winners": [
-      "anna"
+      "anna",
+      "grusha"
     ],
-    "with_passing": true,
-    "yielded": []
+    "with_passing": true
   },
-  "type": "passed_with_many",
+  "type": "yielded_attack",
   "user": "anna"
 }

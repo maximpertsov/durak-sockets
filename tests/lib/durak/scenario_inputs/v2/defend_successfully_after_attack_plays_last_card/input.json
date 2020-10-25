@@ -1,0 +1,140 @@
+{
+  "from_state": {
+    "attack_limit": 100,
+    "collector": null,
+    "draw_pile": [],
+    "drawn_cards": [
+      "10C",
+      "10D",
+      "10H",
+      "10S",
+      "2C",
+      "2D",
+      "2H",
+      "2S",
+      "3C",
+      "3D",
+      "3H",
+      "3S",
+      "4C",
+      "4D",
+      "4H",
+      "4S",
+      "5C",
+      "5D",
+      "5H",
+      "5S",
+      "6C",
+      "6D",
+      "6H",
+      "6S",
+      "7C",
+      "7D",
+      "7H",
+      "7S",
+      "8C",
+      "8D",
+      "8H",
+      "8S",
+      "9C",
+      "9D",
+      "9H",
+      "9S",
+      "AC",
+      "AD",
+      "AH",
+      "AS",
+      "JC",
+      "JD",
+      "JH",
+      "JS",
+      "KC",
+      "KD",
+      "KH",
+      "KS",
+      "QC",
+      "QD",
+      "QH",
+      "QS"
+    ],
+    "durak": null,
+    "lowest_rank": "6",
+    "pass_count": 0,
+    "players": [
+      {
+        "hand": [
+          null,
+          null
+        ],
+        "id": "grusha",
+        "order": 0,
+        "state": []
+      },
+      {
+        "hand": [
+          "KS",
+          null,
+          null,
+          null,
+          "JD",
+          null
+        ],
+        "id": "anna",
+        "order": 1,
+        "state": []
+      },
+      {
+        "hand": [
+          "JC",
+          "QS",
+          "8C",
+          "QH",
+          null,
+          "6H"
+        ],
+        "id": "vasyl",
+        "order": 2,
+        "state": [
+          "yielded"
+        ]
+      },
+      {
+        "hand": [
+          "9S",
+          "QD",
+          null,
+          "6S",
+          "6D",
+          "JS"
+        ],
+        "id": "igor",
+        "order": 3,
+        "state": []
+      }
+    ],
+    "seed": 0.4,
+    "table": [
+      [
+        "8H",
+        "AH"
+      ],
+      [
+        "8D",
+        "AD"
+      ],
+      [
+        "AC",
+        "7S"
+      ],
+      [
+        "8S",
+        "AS"
+      ]
+    ],
+    "trump_suit": "spades",
+    "with_passing": true
+  },
+  "payload": {},
+  "type": "yielded_attack",
+  "user": "igor"
+}

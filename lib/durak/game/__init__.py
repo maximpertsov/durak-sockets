@@ -1,4 +1,4 @@
-from functools import lru_cache
+from enum import Enum
 from operator import attrgetter
 
 from lib.durak.card import get_rank
@@ -8,6 +8,35 @@ from lib.durak.player import Player
 from lib.durak.table import Table
 
 from .queries import LegalAttacks, LegalDefenses, LegalPasses
+
+
+class Status(Enum):
+    YIELDED = "yielded"
+
+
+# TODO: remove this helper helpers after player schema update is finished
+def get_player_id(state, player):
+    return player["id"] if isinstance(player, dict) else player
+
+
+# TODO: remove this helper helpers after player schema update is finished
+def get_hand(state, player):
+    try:
+        return player["hand"] if isinstance(player, dict) else state["hands"][player]
+    except KeyError:
+        return state["hands"][player["id"]]
+
+
+# TODO: remove this helper helpers after player schema update is finished
+def is_yielded(state, player):
+    try:
+        return (
+            "yielded" in player["state"]
+            if isinstance(player, dict)
+            else player in state["yielded"]
+        )
+    except KeyError:
+        return player["id"] in state["yielded"]
 
 
 class Game:
@@ -23,11 +52,15 @@ class Game:
                 lowest_rank=state["lowest_rank"],
             ),
             players={
-                player: Player(
-                    name=player,
-                    cards=state["hands"][player],
-                    order=order,
-                    yielded=player in state["yielded"],
+                get_player_id(state, player): Player(
+                    name=get_player_id(state, player),
+                    cards=get_hand(state, player),
+                    order=(
+                        (player.get("order") or order)
+                        if isinstance(player, dict)
+                        else order
+                    ),
+                    state=[Status.YIELDED] if is_yielded(state, player) else [],
                 )
                 for order, player in enumerate(state["players"])
             },
@@ -52,21 +85,14 @@ class Game:
             "attackers": [player.name for player in self._attackers()],
             "defender": getattr(self._defender(), "name", None),
             "durak": getattr(self.durak(), "name", None),
-            "hands": {
-                serialized["name"]: serialized["cards"]
-                for serialized in [
-                    player.serialize() for player in self._ordered_players()
-                ]
-            },
             "legal_attacks": LegalAttacks.result(game=self),
             "legal_defenses": LegalDefenses.result(game=self),
             "legal_passes": LegalPasses.result(game=self),
             "table": self._table.serialize(),
             "pass_count": self._pass_count,
-            "players": [player.name for player in self._ordered_players()],
+            "players": [player.serialize() for player in self._ordered_players()],
             "trump_suit": self._trump_suit,
             "winners": set(player.name for player in self.winners()),
-            "yielded": [player.name for player in self._yielded_players()],
             "lowest_rank": self._lowest_rank,
             "attack_limit": self._attack_limit,
             "with_passing": self._with_passing,
@@ -106,7 +132,7 @@ class Game:
         self._clear_yields()
 
     def yield_attack(self, *, player):
-        self._player(player).yielded = True
+        self._player(player).add_status(Status.YIELDED)
         if not self._no_more_attacks():
             return
 
@@ -114,11 +140,7 @@ class Game:
             self.collect()
             return
 
-        # TODO: refactor into method?
-        self._table.clear()
-        self.draw()
-        self._rotate()
-        self._clear_yields()
+        self._successful_defense_cleanup()
 
     def collect(self):
         self._player(self._collector).take_cards(cards=self._table.collect())
@@ -126,6 +148,14 @@ class Game:
         self._rotate(skip=1)
         self._collector = None
         self._clear_yields()
+        self._compact_hands()
+
+    def _successful_defense_cleanup(self):
+        self._table.clear()
+        self.draw()
+        self._rotate()
+        self._clear_yields()
+        self._compact_hands()
 
     def draw(self):
         players = self._ordered_players_with_cards_in_round()
@@ -161,7 +191,10 @@ class Game:
         shift = skip + 1
         for index, player in enumerate(players):
             player.order = (index - shift) % len(players)
-        self._ordered_players_with_cards_in_round.cache_clear()
+
+    def _compact_hands(self):
+        for player in self._ordered_players_with_cards_in_round():
+            player.compact_hand()
 
     def _player(self, player):
         return self._players[player]
@@ -189,11 +222,15 @@ class Game:
         return set(self._attackers()).issubset(set(self._yielded_players()))
 
     def _yielded_players(self):
-        return [player for player in self._active_players() if player.yielded]
+        return [
+            player
+            for player in self._active_players()
+            if player.has_status(Status.YIELDED)
+        ]
 
     def _clear_yields(self):
-        for _player in self._active_players():
-            _player.yielded = False
+        for _player in self._ordered_players():
+            _player.remove_status(Status.YIELDED)
 
     def _active_players(self):
         return [
@@ -202,7 +239,6 @@ class Game:
             if self._draw_pile.size() or player.cards()
         ]
 
-    @lru_cache
     def _ordered_players_with_cards_in_round(self):
         return [
             player

@@ -4,11 +4,11 @@ import os
 
 import pytest
 
-from main import handle_durak_message
+from lib.durak import handle_message
 
 SCENARIO_INPUT_FILES = glob.glob(
     os.path.join(
-        os.path.dirname(os.path.realpath(__file__)), "scenario_inputs/**/input.json"
+        os.path.dirname(os.path.realpath(__file__)), "scenario_inputs/**/**/input.json"
     )
 )
 SCENARIO_OUTPUT_FILENAME = "output.json"
@@ -25,11 +25,11 @@ def format_json(json_text):
 
 @pytest.fixture
 def assert_snapshot_matches(mocker, snapshot):
-    mocker.patch("main.persist")
+    mocker.patch("lib.durak.persist")
 
     async def wrapped(input_path):
         with open(input_path, "r") as f:
-            actual = format_json(await handle_durak_message(f.read()))
+            actual = format_json(await handle_message(f.read()))
 
         snapshot.snapshot_dir = os.path.dirname(input_path)
         snapshot.assert_match(actual, SCENARIO_OUTPUT_FILENAME)

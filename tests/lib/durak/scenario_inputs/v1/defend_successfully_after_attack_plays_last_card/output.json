@@ -63,27 +63,6 @@
       "QS"
     ],
     "durak": null,
-    "hands": {
-      "anna": [
-        "KS",
-        "JD"
-      ],
-      "grusha": [],
-      "igor": [
-        "9S",
-        "QD",
-        "6S",
-        "6D",
-        "JS"
-      ],
-      "vasyl": [
-        "JC",
-        "QS",
-        "8C",
-        "QH",
-        "6H"
-      ]
-    },
     "last_card": "10H",
     "legal_attacks": {
       "cards": [
@@ -100,10 +79,45 @@
     "lowest_rank": "6",
     "pass_count": 0,
     "players": [
-      "anna",
-      "vasyl",
-      "igor",
-      "grusha"
+      {
+        "hand": [
+          "KS",
+          "JD"
+        ],
+        "id": "anna",
+        "order": 0,
+        "state": []
+      },
+      {
+        "hand": [
+          "JC",
+          "QS",
+          "8C",
+          "QH",
+          "6H"
+        ],
+        "id": "vasyl",
+        "order": 1,
+        "state": []
+      },
+      {
+        "hand": [
+          "9S",
+          "QD",
+          "6S",
+          "6D",
+          "JS"
+        ],
+        "id": "igor",
+        "order": 2,
+        "state": []
+      },
+      {
+        "hand": [],
+        "id": "grusha",
+        "order": 3,
+        "state": []
+      }
     ],
     "seed": 0.4,
     "table": [],
@@ -111,8 +125,7 @@
     "winners": [
       "grusha"
     ],
-    "with_passing": true,
-    "yielded": []
+    "with_passing": true
   },
   "type": "yielded_attack",
   "user": "igor"
