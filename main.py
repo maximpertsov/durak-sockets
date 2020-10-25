@@ -1,28 +1,14 @@
-import json
-from copy import deepcopy
-from enum import Enum
 from os import environ
 
-import httpx
 from broadcaster import Broadcast
 from fastapi import FastAPI, WebSocket
 from fastapi.concurrency import run_until_first_complete
 from fastapi.middleware.cors import CORSMiddleware
-from lib.durak import (
-    attack,
-    attack_with_many,
-    defend,
-    give_up,
-    join_game,
-    noop,
-    organize_cards,
-    pass_card,
-    pass_with_many,
-    yield_attack,
-)
-from lib.durak.exceptions import IllegalAction
 
-BASE_API_URL = environ.get("BASE_API_URL", "http://localhost:8000/api")
+# from lib.durak import (attack, attack_with_many, defend, give_up, join_game, noop,
+#                        organize_cards, pass_card, pass_with_many, yield_attack)
+from lib import durak
+
 broadcast = Broadcast(environ.get("REDISCLOUD_URL", "redis://localhost:6379"))
 app = FastAPI(on_startup=[broadcast.connect], on_shutdown=[broadcast.disconnect])
 
@@ -67,72 +53,6 @@ async def channel_ws_sender(websocket: WebSocket, channel: str):
 
 async def handle_message(channel: str, message):
     if channel == "durak":
-        return await handle_durak_message(message)
+        return await durak.handle_message(message)
 
     return message
-
-
-actions = {
-    "joined_game": join_game,
-    "attacked": attack,
-    "attacked_with_many": attack_with_many,
-    "defended": defend,
-    "gave_up": give_up,
-    "organized": organize_cards,
-    "passed": pass_card,
-    "passed_with_many": pass_with_many,
-    "yielded_attack": yield_attack,
-}
-
-
-class ActionNotDefined(Exception):
-    pass
-
-
-class MessageEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, Enum):
-            return obj.value
-        if isinstance(obj, set):
-            return sorted(obj)
-        return json.JSONEncoder.default(self, obj)
-
-
-async def handle_durak_message(message):
-    data = json.loads(message)
-
-    try:
-        try:
-            action = actions[data["type"]]
-        except KeyError:
-            raise ActionNotDefined
-        data["to_state"] = action(
-            from_state=data["from_state"], user=data["user"], payload=data["payload"]
-        )
-        await persist(data)
-    except IllegalAction:
-        data["to_state"] = noop(from_state=data["from_state"])
-        data["no_display"] = True
-    except ActionNotDefined:
-        data["to_state"] = deepcopy(data["from_state"])
-        data["no_display"] = True
-
-    del data["from_state"]
-
-    # TODO: generalize non-displayable actions?
-    if data["type"] == "organized":
-        data["no_display"] = True
-
-    return json.dumps(data, cls=MessageEncoder)
-
-
-SCHEMA_VERSION = 2
-
-
-async def persist(data):
-    async with httpx.AsyncClient() as client:
-        await client.post(
-            "{}/game/{}/events".format(BASE_API_URL, data["game"]),
-            headers={"Content-Type": "application/json"},
-            data=json.dumps({"version": SCHEMA_VERSION, **data}, cls=MessageEncoder),
-        )
