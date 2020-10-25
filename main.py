@@ -126,7 +126,7 @@ async def handle_durak_message(message):
     return json.dumps(data, cls=MessageEncoder)
 
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 
 
 async def persist(data):
