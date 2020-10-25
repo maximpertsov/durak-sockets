@@ -4,9 +4,6 @@ from broadcaster import Broadcast
 from fastapi import FastAPI, WebSocket
 from fastapi.concurrency import run_until_first_complete
 from fastapi.middleware.cors import CORSMiddleware
-
-# from lib.durak import (attack, attack_with_many, defend, give_up, join_game, noop,
-#                        organize_cards, pass_card, pass_with_many, yield_attack)
 from lib import durak
 
 broadcast = Broadcast(environ.get("REDISCLOUD_URL", "redis://localhost:6379"))
