@@ -108,13 +108,11 @@ class Game:
         self._with_passing = state["with_passing"]
 
         # TODO: remove this helper helpers after player schema update is finished
-        durak = get_durak(state)
-        if durak:
+        if durak := get_durak(state):
             self._player(durak).add_status(Status.DURAK)
 
         # TODO: remove this helper helpers after player schema update is finished
-        collector = get_collector(state)
-        if collector:
+        if collector := get_collector(state):
             self._player(collector).add_status(Status.COLLECTING)
 
     def serialize(self):
