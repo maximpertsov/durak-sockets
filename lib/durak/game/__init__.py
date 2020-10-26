@@ -15,12 +15,12 @@ class Status(Enum):
     COLLECTING = "collecting"
 
 
-# TODO: remove this helper helpers after player schema update is finished
+# TODO: remove this helper after player schema update is finished
 def get_player_id(state, player):
     return player["id"] if isinstance(player, dict) else player
 
 
-# TODO: remove this helper helpers after player schema update is finished
+# TODO: remove this helper after player schema update is finished
 def get_hand(state, player):
     try:
         return player["hand"] if isinstance(player, dict) else state["hands"][player]
@@ -28,7 +28,7 @@ def get_hand(state, player):
         return state["hands"][player["id"]]
 
 
-# TODO: remove this helper helpers after player schema update is finished
+# TODO: remove this helper after player schema update is finished
 def is_yielded(state, player):
     try:
         return (
@@ -40,7 +40,7 @@ def is_yielded(state, player):
         return player["id"] in state["yielded"]
 
 
-# TODO: remove this helper helpers after player schema update is finished
+# TODO: remove this helper after player schema update is finished
 def get_collector(state):
     for player in state["players"]:
         try:
