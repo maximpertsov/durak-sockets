@@ -44,7 +44,6 @@ def test_serialize(game, static_parameters):
     assert game.serialize() == {
         "attackers": ["anna"],
         "cards_left": 3,
-        "collector": None,
         "drawn_cards": set(),
         "defender": None,
         "durak": "anna",
@@ -73,7 +72,6 @@ def test_attack(game, static_parameters):
     assert game.serialize() == {
         "attackers": ["anna"],
         "cards_left": 3,
-        "collector": None,
         "defender": None,
         "drawn_cards": set(),
         "durak": "anna",
@@ -107,7 +105,6 @@ def test_defend(game, static_parameters):
     assert game.serialize() == {
         "attackers": ["anna"],
         "cards_left": 3,
-        "collector": None,
         "defender": None,
         "drawn_cards": set(),
         "durak": "anna",
@@ -136,7 +133,6 @@ def test_durak(game, static_parameters):
     assert game.serialize() == {
         "attackers": ["anna"],
         "cards_left": 0,
-        "collector": None,
         "defender": None,
         "drawn_cards": set(["JC", "3S", "6C"]),
         "durak": "anna",
@@ -205,7 +201,6 @@ def test_draw(game_3p, static_parameters):
         "attackers": ["anna"],
         "cards_left": 1,
         "drawn_cards": set(["7D", "9C", "9D", "10C"]),
-        "collector": None,
         "defender": "vasyl",
         "durak": None,
         "last_card": "8D",
@@ -249,7 +244,6 @@ def test_draw_with_pass_count(game_3p, static_parameters):
     assert game_3p.serialize() == {
         "attackers": ["anna"],
         "cards_left": 1,
-        "collector": None,
         "defender": "vasyl",
         "drawn_cards": set(["7D", "9C", "9D", "10C"]),
         "durak": None,
@@ -293,7 +287,6 @@ def test_legal_defenses(game_3p, static_parameters):
     assert game_3p.serialize() == {
         "attackers": ["anna", "igor"],
         "cards_left": 5,
-        "collector": None,
         "defender": "vasyl",
         "drawn_cards": set(),
         "durak": None,
@@ -334,7 +327,6 @@ def test_legal_attacks(game_3p, static_parameters):
     assert game_3p.serialize() == {
         "attackers": ["anna", "igor"],
         "cards_left": 5,
-        "collector": None,
         "defender": "vasyl",
         "drawn_cards": set(),
         "durak": None,
@@ -375,7 +367,6 @@ def test_legal_passes(game_3p, static_parameters):
     assert game_3p.serialize() == {
         "attackers": ["anna", "igor"],
         "cards_left": 5,
-        "collector": None,
         "defender": "vasyl",
         "drawn_cards": set(),
         "durak": None,
@@ -419,7 +410,6 @@ def test_legal_attacks_and_passes_with_limits(game_3p, static_parameters):
         "attackers": ["anna", "igor"],
         "cards_left": 5,
         "attack_limit": 3,
-        "collector": None,
         "defender": "vasyl",
         "drawn_cards": set(),
         "durak": None,
@@ -464,7 +454,6 @@ def test_legal_passes_when_on_deck_defender_has_no_cards(game_3p, static_paramet
     assert game_3p.serialize() == {
         "attackers": ["anna"],
         "cards_left": 5,
-        "collector": None,
         "defender": "vasyl",
         "drawn_cards": set(),
         "durak": None,

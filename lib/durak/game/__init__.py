@@ -131,7 +131,6 @@ class Game:
             "lowest_rank": self._lowest_rank,
             "attack_limit": self._attack_limit,
             "with_passing": self._with_passing,
-            "collector": getattr(self._collector, "name", None),
             **self._draw_pile.serialize(),
         }
 
