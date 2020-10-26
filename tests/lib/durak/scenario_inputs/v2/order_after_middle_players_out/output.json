@@ -6,7 +6,6 @@
       "grusha"
     ],
     "cards_left": 0,
-    "collector": null,
     "defender": "anna",
     "drawn_cards": [
       "10C",
@@ -46,7 +45,6 @@
       "QH",
       "QS"
     ],
-    "durak": null,
     "last_card": "8H",
     "legal_attacks": {
       "cards": [

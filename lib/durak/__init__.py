@@ -4,7 +4,7 @@ from enum import Enum
 from os import environ
 
 import httpx
-from lib.durak.exceptions import IllegalAction, ActionNotDefined
+from lib.durak.exceptions import ActionNotDefined, IllegalAction
 from lib.durak.game import Game
 
 
@@ -58,18 +58,20 @@ def join_game(*, from_state, user, payload):
     state = deepcopy(from_state)
 
     joined = set(state.get("joined", [])) | set([user])
-    player_ids = [
-        player["id"] if isinstance(player, dict) else player
-        for player in state["players"]
+
+    # TODO: remove this helper after player schema update is finished
+    players = [
+        player_or_id if isinstance(player_or_id, dict) else {"id": player_or_id}
+        for player_or_id in state["players"]
     ]
-    if joined != set(player_ids):
-        state.update(joined=joined)
+
+    if joined != set(player["id"] for player in players):
+        state.update(players=players, joined=joined)
         return state
 
-    players = [
-        {"id": player["id"] if isinstance(player, dict) else player, "hand": []}
-        for player in state["players"]
-    ]
+    for index, player in enumerate(players):
+        player.setdefault("hand", [])
+        player.setdefault("order", index)
 
     state.update(
         players=players,
@@ -143,7 +145,7 @@ async def handle_message(message, config=None):
 
 
 BASE_API_URL = environ.get("BASE_API_URL", "http://localhost:8000/api")
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
 
 
 async def persist(data):

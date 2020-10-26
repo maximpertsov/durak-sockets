@@ -12,7 +12,6 @@
       "cyril"
     ],
     "cards_left": 0,
-    "collector": null,
     "defender": "kevin",
     "drawn_cards": [
       "10C",
@@ -68,7 +67,6 @@
       "QH",
       "QS"
     ],
-    "durak": null,
     "last_card": "10H",
     "legal_attacks": {
       "cards": [

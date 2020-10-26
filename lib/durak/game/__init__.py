@@ -11,15 +11,17 @@ from .queries import LegalAttacks, LegalDefenses, LegalPasses
 
 
 class Status(Enum):
+    COLLECTING = "collecting"
+    DURAK = "durak"
     YIELDED = "yielded"
 
 
-# TODO: remove this helper helpers after player schema update is finished
+# TODO: remove this helper after player schema update is finished
 def get_player_id(state, player):
     return player["id"] if isinstance(player, dict) else player
 
 
-# TODO: remove this helper helpers after player schema update is finished
+# TODO: remove this helper after player schema update is finished
 def get_hand(state, player):
     try:
         return player["hand"] if isinstance(player, dict) else state["hands"][player]
@@ -27,7 +29,7 @@ def get_hand(state, player):
         return state["hands"][player["id"]]
 
 
-# TODO: remove this helper helpers after player schema update is finished
+# TODO: remove this helper after player schema update is finished
 def is_yielded(state, player):
     try:
         return (
@@ -39,7 +41,34 @@ def is_yielded(state, player):
         return player["id"] in state["yielded"]
 
 
+# TODO: remove this helper after player schema update is finished
+def get_collector(state):
+    for player in state["players"]:
+        try:
+            if Status.COLLECTING.value in player["state"]:
+                return player["id"]
+        except KeyError:
+            return None
+        except TypeError:
+            return state["collector"]
+
+
+# TODO: remove this helper after player schema update is finished
+def get_durak(state):
+    for player in state["players"]:
+        try:
+            if Status.DURAK.value in player["state"]:
+                return player["id"]
+        except KeyError:
+            return None
+        except TypeError:
+            return state["durak"]
+
+
 class Game:
+    class MultipleCollectors(IllegalAction):
+        pass
+
     class DifferentRanks(IllegalAction):
         pass
 
@@ -77,40 +106,65 @@ class Game:
         self._lowest_rank = state["lowest_rank"]
         self._attack_limit = state["attack_limit"]
         self._with_passing = state["with_passing"]
-        self._durak = state["durak"]
-        self._collector = state["collector"]
+
+        # TODO: remove this helper helpers after player schema update is finished
+        if durak := get_durak(state):
+            self._player(durak).add_status(Status.DURAK)
+
+        # TODO: remove this helper helpers after player schema update is finished
+        if collector := get_collector(state):
+            self._player(collector).add_status(Status.COLLECTING)
 
     def serialize(self):
         return {
             "attackers": [player.name for player in self._attackers()],
             "defender": getattr(self._defender(), "name", None),
-            "durak": getattr(self.durak(), "name", None),
             "legal_attacks": LegalAttacks.result(game=self),
             "legal_defenses": LegalDefenses.result(game=self),
             "legal_passes": LegalPasses.result(game=self),
             "table": self._table.serialize(),
             "pass_count": self._pass_count,
-            "players": [player.serialize() for player in self._ordered_players()],
+            "players": self._serialize_players(),
             "trump_suit": self._trump_suit,
             "winners": set(player.name for player in self.winners()),
             "lowest_rank": self._lowest_rank,
             "attack_limit": self._attack_limit,
             "with_passing": self._with_passing,
-            "collector": self._collector,
             **self._draw_pile.serialize(),
         }
+
+    def _serialize_players(self):
+        result = []
+        for player in self._ordered_players():
+            if self._durak == player:
+                player.add_status(Status.DURAK)
+            result.append(player.serialize())
+        return result
 
     @property
     def _trump_suit(self):
         return self._draw_pile.trump_suit
 
+    # TODO: cache?
+    @property
+    def _collector(self):
+        result = None
+
+        for player in self._ordered_players():
+            if not player.has_status(Status.COLLECTING):
+                continue
+            if result is not None:
+                raise self.MultipleCollectors
+
+            result = player
+
+        return result
+
     def winners(self):
         return set(self._ordered_players()) - set(self._active_players())
 
-    def durak(self):
-        if self._durak:
-            return self._player(self._durak)
-
+    @property
+    def _durak(self):
         if len(self._active_players()) == 1:
             return self._active_players()[0]
 
@@ -143,10 +197,10 @@ class Game:
         self._successful_defense_cleanup()
 
     def collect(self):
-        self._player(self._collector).take_cards(cards=self._table.collect())
+        self._collector.take_cards(cards=self._table.collect())
         self.draw()
         self._rotate(skip=1)
-        self._collector = None
+        self._collector.remove_status(Status.COLLECTING)
         self._clear_yields()
         self._compact_hands()
 
@@ -178,7 +232,7 @@ class Game:
         self._rotate()
 
     def give_up(self, *, player):
-        self._collector = player
+        self._player(player).add_status(Status.COLLECTING)
         self._clear_yields()
 
     def organize_cards(self, *, player, strategy):

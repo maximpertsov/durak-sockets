@@ -16,16 +16,7 @@ def update(path):
 
         # Transform data
         # ===========================================
-        players = []
-        for player in d["to_state"]["players"]:
-            p = deepcopy(player)
-            p["state"] = []
-            if p["id"] in d["to_state"]["yielded"]:
-                p["state"].append("yielded")
-            players.append(p)
-
-        d["to_state"]["players"] = players
-        del d["to_state"]["yielded"]
+        del d["to_state"]["durak"]
         # ===========================================
 
         print(d)
@@ -38,6 +29,6 @@ def update(path):
 
 
 if __name__ == "__main__":
-    for path in chain(v1_outputs, v2_outputs):
     # for path in chain(v2_inputs):
+    for path in chain(v1_outputs, v2_outputs):
         update(path)

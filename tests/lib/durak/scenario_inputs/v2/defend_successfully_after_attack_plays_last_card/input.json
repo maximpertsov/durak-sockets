@@ -1,7 +1,6 @@
 {
   "from_state": {
     "attack_limit": 100,
-    "collector": null,
     "draw_pile": [],
     "drawn_cards": [
       "10C",
