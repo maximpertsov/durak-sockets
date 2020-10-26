@@ -145,7 +145,7 @@ async def handle_message(message, config=None):
 
 
 BASE_API_URL = environ.get("BASE_API_URL", "http://localhost:8000/api")
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
 
 
 async def persist(data):
