@@ -12,6 +12,7 @@ from .queries import LegalAttacks, LegalDefenses, LegalPasses
 
 class Status(Enum):
     YIELDED = "yielded"
+    COLLECTING = "collecting"
 
 
 # TODO: remove this helper helpers after player schema update is finished
@@ -39,7 +40,22 @@ def is_yielded(state, player):
         return player["id"] in state["yielded"]
 
 
+# TODO: remove this helper helpers after player schema update is finished
+def get_collector(state):
+    for player in state["players"]:
+        try:
+            if Status.COLLECTING.value in player["state"]:
+                return player["id"]
+        except KeyError:
+            return None
+        except TypeError:
+            return state["collector"]
+
+
 class Game:
+    class MultipleCollectors(IllegalAction):
+        pass
+
     class DifferentRanks(IllegalAction):
         pass
 
@@ -78,7 +94,11 @@ class Game:
         self._attack_limit = state["attack_limit"]
         self._with_passing = state["with_passing"]
         self._durak = state["durak"]
-        self._collector = state["collector"]
+
+        # TODO: remove this helper helpers after player schema update is finished
+        collector = get_collector(state)
+        if collector:
+            self._player(collector).add_status(Status.COLLECTING)
 
     def serialize(self):
         return {
@@ -96,13 +116,28 @@ class Game:
             "lowest_rank": self._lowest_rank,
             "attack_limit": self._attack_limit,
             "with_passing": self._with_passing,
-            "collector": self._collector,
+            "collector": getattr(self._collector, "name", None),
             **self._draw_pile.serialize(),
         }
 
     @property
     def _trump_suit(self):
         return self._draw_pile.trump_suit
+
+    # TODO: cache?
+    @property
+    def _collector(self):
+        result = None
+
+        for player in self._ordered_players():
+            if not player.has_status(Status.COLLECTING):
+                continue
+            if result is not None:
+                raise self.MultipleCollectors
+
+            result = player
+
+        return result
 
     def winners(self):
         return set(self._ordered_players()) - set(self._active_players())
@@ -143,10 +178,10 @@ class Game:
         self._successful_defense_cleanup()
 
     def collect(self):
-        self._player(self._collector).take_cards(cards=self._table.collect())
+        self._collector.take_cards(cards=self._table.collect())
         self.draw()
         self._rotate(skip=1)
-        self._collector = None
+        self._collector.remove_status(Status.COLLECTING)
         self._clear_yields()
         self._compact_hands()
 
@@ -178,7 +213,7 @@ class Game:
         self._rotate()
 
     def give_up(self, *, player):
-        self._collector = player
+        self._player(player).add_status(Status.COLLECTING)
         self._clear_yields()
 
     def organize_cards(self, *, player, strategy):
