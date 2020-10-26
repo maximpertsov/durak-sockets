@@ -1,6 +1,6 @@
 import pytest
 
-from lib.durak.game import Game
+from lib.durak.game import Game, Status
 
 
 @pytest.fixture
@@ -485,6 +485,8 @@ def test_legal_passes_when_on_deck_defender_has_no_cards(game_3p, static_paramet
 
 
 def test_durak_persists(game_3p, static_parameters):
-    game_3p._durak = "anna"
+    game_3p._player("anna").add_status(Status.DURAK)
     serialized = game_3p.serialize()
-    assert serialized["durak"] == "anna"
+    assert Status.DURAK in next(
+        player["state"] for player in serialized["players"] if player["id"] == "anna"
+    )
