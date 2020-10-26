@@ -1,7 +1,6 @@
 {
   "from_state": {
     "attack_limit": 100,
-    "collector": "vasyl",
     "draw_pile": [],
     "drawn_cards": [
       "10C",
@@ -76,7 +75,7 @@
         ],
         "id": "vasyl",
         "order": 1,
-        "state": []
+        "state": ["collecting"]
       },
       {
         "hand": [
