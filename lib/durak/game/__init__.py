@@ -11,8 +11,9 @@ from .queries import LegalAttacks, LegalDefenses, LegalPasses
 
 
 class Status(Enum):
-    YIELDED = "yielded"
     COLLECTING = "collecting"
+    DURAK = "durak"
+    YIELDED = "yielded"
 
 
 # TODO: remove this helper after player schema update is finished
@@ -50,6 +51,18 @@ def get_collector(state):
             return None
         except TypeError:
             return state["collector"]
+
+
+# TODO: remove this helper after player schema update is finished
+def get_durak(state):
+    for player in state["players"]:
+        try:
+            if Status.DURAK.value in player["state"]:
+                return player["id"]
+        except KeyError:
+            return None
+        except TypeError:
+            return state["durak"]
 
 
 class Game:
@@ -93,7 +106,11 @@ class Game:
         self._lowest_rank = state["lowest_rank"]
         self._attack_limit = state["attack_limit"]
         self._with_passing = state["with_passing"]
-        self._durak = state["durak"]
+
+        # TODO: remove this helper helpers after player schema update is finished
+        durak = get_durak(state)
+        if durak:
+            self._player(durak).add_status(Status.DURAK)
 
         # TODO: remove this helper helpers after player schema update is finished
         collector = get_collector(state)
@@ -143,8 +160,9 @@ class Game:
         return set(self._ordered_players()) - set(self._active_players())
 
     def durak(self):
-        if self._durak:
-            return self._player(self._durak)
+        for player in self._ordered_players():
+            if player.has_status(Status.DURAK):
+                return player
 
         if len(self._active_players()) == 1:
             return self._active_players()[0]
