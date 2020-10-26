@@ -16,7 +16,7 @@ def update(path):
 
         # Transform data
         # ===========================================
-        del d["to_state"]["collector"]
+        del d["to_state"]["durak"]
         # ===========================================
 
         print(d)

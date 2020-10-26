@@ -22,7 +22,6 @@ def mocked_draw_cards(get_draw_pile_cards):
 def game(mocked_draw_cards, static_parameters):
     return Game.deserialize(
         {
-            "durak": None,
             "drawn_cards": [],
             "pass_count": 0,
             "players": [
@@ -46,7 +45,6 @@ def test_serialize(game, static_parameters):
         "cards_left": 3,
         "drawn_cards": set(),
         "defender": None,
-        "durak": "anna",
         "last_card": "6C",
         "legal_attacks": {"cards": set([]), "limit": 0},
         "legal_defenses": {},
@@ -57,7 +55,7 @@ def test_serialize(game, static_parameters):
                 "order": 0,
                 "id": "anna",
                 "hand": ["10D", None, "10C", "2S", "5C", "8D", "2C"],
-                "state": set(),
+                "state": set([Status.DURAK]),
             }
         ],
         "table": [],
@@ -74,7 +72,6 @@ def test_attack(game, static_parameters):
         "cards_left": 3,
         "defender": None,
         "drawn_cards": set(),
-        "durak": "anna",
         "last_card": "6C",
         "legal_attacks": {"cards": set([]), "limit": 0},
         "legal_defenses": {},
@@ -85,7 +82,7 @@ def test_attack(game, static_parameters):
                 "order": 0,
                 "id": "anna",
                 "hand": [None, None, "10C", "2S", "5C", "8D", "2C"],
-                "state": set(),
+                "state": set([Status.DURAK]),
             }
         ],
         "table": [["10D"]],
@@ -107,7 +104,6 @@ def test_defend(game, static_parameters):
         "cards_left": 3,
         "defender": None,
         "drawn_cards": set(),
-        "durak": "anna",
         "last_card": "6C",
         "legal_attacks": {"cards": set([]), "limit": 0},
         "legal_defenses": {},
@@ -118,7 +114,7 @@ def test_defend(game, static_parameters):
                 "order": 0,
                 "id": "anna",
                 "hand": [None, None, "10C", "2S", "5C", "8D", "2C"],
-                "state": set(),
+                "state": set([Status.DURAK]),
             }
         ],
         "table": [["9D", "10D"]],
@@ -135,7 +131,6 @@ def test_durak(game, static_parameters):
         "cards_left": 0,
         "defender": None,
         "drawn_cards": set(["JC", "3S", "6C"]),
-        "durak": "anna",
         "last_card": "6C",
         "legal_attacks": {"cards": set([]), "limit": 0},
         "legal_defenses": {},
@@ -146,7 +141,7 @@ def test_durak(game, static_parameters):
                 "order": 0,
                 "id": "anna",
                 "hand": ["10D", None, "10C", "2S", "5C", "8D", "2C"],
-                "state": set(),
+                "state": set([Status.DURAK]),
             }
         ],
         "table": [],
@@ -166,7 +161,6 @@ def game_3p(mocked_draw_cards_3p, static_parameters):
     return Game.deserialize(
         {
             "drawn_cards": [],
-            "durak": None,
             "pass_count": 0,
             "players": [
                 {
@@ -202,7 +196,6 @@ def test_draw(game_3p, static_parameters):
         "cards_left": 1,
         "drawn_cards": set(["7D", "9C", "9D", "10C"]),
         "defender": "vasyl",
-        "durak": None,
         "last_card": "8D",
         "legal_attacks": {
             "cards": set(["9H", "3S", "KH", "4C", "4H", "7D"]),
@@ -246,7 +239,6 @@ def test_draw_with_pass_count(game_3p, static_parameters):
         "cards_left": 1,
         "defender": "vasyl",
         "drawn_cards": set(["7D", "9C", "9D", "10C"]),
-        "durak": None,
         "last_card": "8D",
         "legal_attacks": {
             "cards": set(["9H", "3S", "KH", "4C", "4H", "10C"]),
@@ -289,7 +281,6 @@ def test_legal_defenses(game_3p, static_parameters):
         "cards_left": 5,
         "defender": "vasyl",
         "drawn_cards": set(),
-        "durak": None,
         "pass_count": 0,
         "last_card": "8D",
         "legal_attacks": {"cards": set([]), "limit": 3},
@@ -329,7 +320,6 @@ def test_legal_attacks(game_3p, static_parameters):
         "cards_left": 5,
         "defender": "vasyl",
         "drawn_cards": set(),
-        "durak": None,
         "pass_count": 0,
         "last_card": "8D",
         "legal_attacks": {"cards": set(["4C", "4H"]), "limit": 3},
@@ -369,7 +359,6 @@ def test_legal_passes(game_3p, static_parameters):
         "cards_left": 5,
         "defender": "vasyl",
         "drawn_cards": set(),
-        "durak": None,
         "pass_count": 0,
         "last_card": "8D",
         "legal_attacks": {"cards": set([]), "limit": 3},
@@ -412,7 +401,6 @@ def test_legal_attacks_and_passes_with_limits(game_3p, static_parameters):
         "attack_limit": 3,
         "defender": "vasyl",
         "drawn_cards": set(),
-        "durak": None,
         "pass_count": 0,
         "last_card": "8D",
         "legal_attacks": {"cards": set([]), "limit": 2},
@@ -456,7 +444,6 @@ def test_legal_passes_when_on_deck_defender_has_no_cards(game_3p, static_paramet
         "cards_left": 5,
         "defender": "vasyl",
         "drawn_cards": set(),
-        "durak": None,
         "pass_count": 0,
         "last_card": "8D",
         "legal_attacks": {"cards": set([]), "limit": 3},

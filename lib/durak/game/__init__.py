@@ -119,13 +119,12 @@ class Game:
         return {
             "attackers": [player.name for player in self._attackers()],
             "defender": getattr(self._defender(), "name", None),
-            "durak": getattr(self.durak(), "name", None),
             "legal_attacks": LegalAttacks.result(game=self),
             "legal_defenses": LegalDefenses.result(game=self),
             "legal_passes": LegalPasses.result(game=self),
             "table": self._table.serialize(),
             "pass_count": self._pass_count,
-            "players": [player.serialize() for player in self._ordered_players()],
+            "players": self._serialize_players(),
             "trump_suit": self._trump_suit,
             "winners": set(player.name for player in self.winners()),
             "lowest_rank": self._lowest_rank,
@@ -133,6 +132,14 @@ class Game:
             "with_passing": self._with_passing,
             **self._draw_pile.serialize(),
         }
+
+    def _serialize_players(self):
+        result = []
+        for player in self._ordered_players():
+            if self._durak == player:
+                player.add_status(Status.DURAK)
+            result.append(player.serialize())
+        return result
 
     @property
     def _trump_suit(self):
@@ -156,11 +163,8 @@ class Game:
     def winners(self):
         return set(self._ordered_players()) - set(self._active_players())
 
-    def durak(self):
-        for player in self._ordered_players():
-            if player.has_status(Status.DURAK):
-                return player
-
+    @property
+    def _durak(self):
         if len(self._active_players()) == 1:
             return self._active_players()[0]
 
