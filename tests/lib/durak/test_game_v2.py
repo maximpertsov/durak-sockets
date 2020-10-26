@@ -22,7 +22,6 @@ def mocked_draw_cards(get_draw_pile_cards):
 def game(mocked_draw_cards, static_parameters):
     return Game.deserialize(
         {
-            "collector": None,
             "durak": None,
             "drawn_cards": [],
             "pass_count": 0,
@@ -170,7 +169,6 @@ def mocked_draw_cards_3p(get_draw_pile_cards):
 def game_3p(mocked_draw_cards_3p, static_parameters):
     return Game.deserialize(
         {
-            "collector": None,
             "drawn_cards": [],
             "durak": None,
             "pass_count": 0,
