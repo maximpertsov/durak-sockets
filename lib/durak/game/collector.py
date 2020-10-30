@@ -23,13 +23,8 @@ class Collector:
         if self:
             raise self.MultipleCollectors
 
-        self._player(player).add_status(Status.COLLECTING)
+        self._game.player(player).add_status(Status.COLLECTING)
 
     def clear(self):
         if (collector := self.get()) :
             collector.remove_status(Status.COLLECTING)
-
-    def _player(self, player_or_id):
-        if isinstance(player_or_id, (str, int)):
-            return self._game._player(player_or_id)
-        return player_or_id

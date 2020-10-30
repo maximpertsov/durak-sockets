@@ -437,7 +437,7 @@ def test_legal_passes_when_on_deck_defender_has_no_cards(game_3p, static_paramet
     game_3p._table.add_card(card="7S")
 
     for card in ["8H", "JD", "KS", "5H", "JC"]:
-        game_3p._player("igor").remove_card(card=card)
+        game_3p.player("igor").remove_card(card=card)
 
     assert game_3p.serialize() == {
         "attackers": ["anna"],
@@ -477,7 +477,7 @@ def test_legal_passes_when_on_deck_defender_has_no_cards(game_3p, static_paramet
 
 
 def test_durak_persists(game_3p, static_parameters):
-    game_3p._player("anna").add_status(Status.DURAK)
+    game_3p.player("anna").add_status(Status.DURAK)
     serialized = game_3p.serialize()
     assert Status.DURAK in next(
         player["state"] for player in serialized["players"] if player["id"] == "anna"

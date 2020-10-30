@@ -90,7 +90,7 @@ class Game:
             return self._active_players()[0]
 
     def _attack(self, *, player, card):
-        self._player(player).remove_card(card=card)
+        self.player(player).remove_card(card=card)
         self._table.add_card(card=card)
 
     def attack(self, *, player, cards):
@@ -102,12 +102,12 @@ class Game:
         self._clear_yields()
 
     def defend(self, *, player, base_card, card):
-        self._player(player).remove_card(card=card)
+        self.player(player).remove_card(card=card)
         self._table.stack_card(base_card=base_card, card=card)
         self._clear_yields()
 
     def yield_attack(self, *, player):
-        self._player(player).add_status(Status.YIELDED)
+        self.player(player).add_status(Status.YIELDED)
         if not self._no_more_attacks():
             return
 
@@ -142,7 +142,7 @@ class Game:
         self._pass_count = 0
 
     def _pass_card(self, *, player, card):
-        self._player(player).remove_card(card=card)
+        self.player(player).remove_card(card=card)
         self._table.add_card(card=card)
 
     def pass_cards(self, *, player, cards):
@@ -157,7 +157,7 @@ class Game:
         self._clear_yields()
 
     def organize_cards(self, *, player, strategy):
-        self._player(player).organize_cards(
+        self.player(player).organize_cards(
             strategy=strategy, trump_suit=self._trump_suit
         )
 
@@ -170,9 +170,6 @@ class Game:
     def _compact_hands(self):
         for player in self._ordered_players_with_cards_in_round():
             player.compact_hand()
-
-    def _player(self, player):
-        return self._players[player]
 
     def _defender(self):
         players = self._ordered_players_with_cards_in_round()
@@ -223,3 +220,7 @@ class Game:
 
     def _ordered_players(self):
         return sorted(self._players.values(), key=attrgetter("order"))
+
+    def player(self, player_or_id):
+        key = player_or_id.id if isinstance(player_or_id, Player) else player_or_id
+        return self._players[key]
