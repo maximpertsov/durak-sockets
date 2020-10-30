@@ -16,55 +16,6 @@ class Status(Enum):
     YIELDED = "yielded"
 
 
-# TODO: remove this helper after player schema update is finished
-def get_player_id(state, player):
-    return player["id"] if isinstance(player, dict) else player
-
-
-# TODO: remove this helper after player schema update is finished
-def get_hand(state, player):
-    try:
-        return player["hand"] if isinstance(player, dict) else state["hands"][player]
-    except KeyError:
-        return state["hands"][player["id"]]
-
-
-# TODO: remove this helper after player schema update is finished
-def is_yielded(state, player):
-    try:
-        return (
-            "yielded" in player["state"]
-            if isinstance(player, dict)
-            else player in state["yielded"]
-        )
-    except KeyError:
-        return player["id"] in state["yielded"]
-
-
-# TODO: remove this helper after player schema update is finished
-def get_collector(state):
-    for player in state["players"]:
-        try:
-            if Status.COLLECTING.value in player["state"]:
-                return player["id"]
-        except KeyError:
-            return None
-        except TypeError:
-            return state["collector"]
-
-
-# TODO: remove this helper after player schema update is finished
-def get_durak(state):
-    for player in state["players"]:
-        try:
-            if Status.DURAK.value in player["state"]:
-                return player["id"]
-        except KeyError:
-            return None
-        except TypeError:
-            return state["durak"]
-
-
 class Game:
     class MultipleCollectors(IllegalAction):
         pass
@@ -81,17 +32,13 @@ class Game:
                 lowest_rank=state["lowest_rank"],
             ),
             players={
-                get_player_id(state, player): Player(
-                    name=get_player_id(state, player),
-                    cards=get_hand(state, player),
-                    order=(
-                        (player.get("order") or order)
-                        if isinstance(player, dict)
-                        else order
-                    ),
-                    state=[Status.YIELDED] if is_yielded(state, player) else [],
+                player["id"]: Player(
+                    name=player["id"],
+                    cards=player["hand"],
+                    order=player["order"],
+                    state=[Status(status) for status in player["state"]],
                 )
-                for order, player in enumerate(state["players"])
+                for player in state["players"]
             },
             table=Table(table=state["table"]),
             state=state,
@@ -106,14 +53,6 @@ class Game:
         self._lowest_rank = state["lowest_rank"]
         self._attack_limit = state["attack_limit"]
         self._with_passing = state["with_passing"]
-
-        # TODO: remove this helper helpers after player schema update is finished
-        if durak := get_durak(state):
-            self._player(durak).add_status(Status.DURAK)
-
-        # TODO: remove this helper helpers after player schema update is finished
-        if collector := get_collector(state):
-            self._player(collector).add_status(Status.COLLECTING)
 
     def serialize(self):
         return {

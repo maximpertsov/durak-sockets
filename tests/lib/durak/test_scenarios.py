@@ -8,7 +8,7 @@ from lib.durak import handle_message
 
 SCENARIO_INPUT_FILES = glob.glob(
     os.path.join(
-        os.path.dirname(os.path.realpath(__file__)), "scenario_inputs/**/**/input.json"
+        os.path.dirname(os.path.realpath(__file__)), "scenario_inputs/**/input.json"
     )
 )
 SCENARIO_OUTPUT_FILENAME = "output.json"

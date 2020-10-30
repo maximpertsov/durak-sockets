@@ -58,26 +58,20 @@ def join_game(*, from_state, user, payload):
     state = deepcopy(from_state)
 
     joined = set(state.get("joined", [])) | set([user])
-
-    # TODO: remove this helper after player schema update is finished
-    players = [
-        player_or_id if isinstance(player_or_id, dict) else {"id": player_or_id}
-        for player_or_id in state["players"]
-    ]
+    players = state["players"]
 
     if joined != set(player["id"] for player in players):
-        state.update(players=players, joined=joined)
+        state.update(joined=joined)
         return state
 
     for index, player in enumerate(players):
         player.setdefault("hand", [])
         player.setdefault("order", index)
+        player.setdefault("state", [])
 
     state.update(
         players=players,
-        collector=None,
         drawn_cards=[],
-        durak=None,
         pass_count=0,
         table=[],
         yielded=[],
