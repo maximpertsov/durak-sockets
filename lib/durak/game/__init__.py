@@ -1,19 +1,13 @@
-from enum import Enum
 from operator import attrgetter
 
 from lib.durak.card import get_rank
 from lib.durak.draw_pile import DrawPile
 from lib.durak.exceptions import IllegalAction
 from lib.durak.player import Player
+from lib.durak.status import Status
 from lib.durak.table import Table
 
-from .queries import LegalAttacks, LegalDefenses, LegalPasses
-
-
-class Status(Enum):
-    COLLECTING = "collecting"
-    DURAK = "durak"
-    YIELDED = "yielded"
+from .queries import Collector, LegalAttacks, LegalDefenses, LegalPasses
 
 
 # TODO: remove this helper after player schema update is finished
@@ -66,10 +60,10 @@ def get_durak(state):
 
 
 class Game:
-    class MultipleCollectors(IllegalAction):
+    class DifferentRanks(IllegalAction):
         pass
 
-    class DifferentRanks(IllegalAction):
+    class MultipleCollectors(IllegalAction):
         pass
 
     @classmethod
@@ -145,20 +139,9 @@ class Game:
     def _trump_suit(self):
         return self._draw_pile.trump_suit
 
-    # TODO: cache?
     @property
     def _collector(self):
-        result = None
-
-        for player in self._ordered_players():
-            if not player.has_status(Status.COLLECTING):
-                continue
-            if result is not None:
-                raise self.MultipleCollectors
-
-            result = player
-
-        return result
+        return Collector.result(game=self)
 
     def winners(self):
         return set(self._ordered_players()) - set(self._active_players())
@@ -232,6 +215,9 @@ class Game:
         self._rotate()
 
     def give_up(self, *, player):
+        if self._collector:
+            raise self.MultipleCollectors
+
         self._player(player).add_status(Status.COLLECTING)
         self._clear_yields()
 
