@@ -7,8 +7,8 @@ from lib.durak.player import Player
 from lib.durak.status import Status
 from lib.durak.table import Table
 
-from .queries import LegalAttacks, LegalDefenses, LegalPasses
 from .collector import Collector
+from .queries import LegalAttacks, LegalDefenses, LegalPasses
 
 
 # TODO: remove this helper after player schema update is finished
