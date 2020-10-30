@@ -1,8 +1,5 @@
 from itertools import chain
 
-from lib.durak.exceptions import IllegalAction
-from lib.durak.status import Status
-
 
 class Base:
     @classmethod
@@ -110,13 +107,3 @@ class LegalPasses(Base):
         if not next_players_with_cards:
             return
         return next_players_with_cards[0]
-
-
-class Collector(Base):
-    @property
-    def _result(self):
-        for player in self._game._ordered_players():
-            if not player.has_status(Status.COLLECTING):
-                continue
-
-            return player

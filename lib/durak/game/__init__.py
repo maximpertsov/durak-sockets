@@ -7,7 +7,8 @@ from lib.durak.player import Player
 from lib.durak.status import Status
 from lib.durak.table import Table
 
-from .queries import Collector, LegalAttacks, LegalDefenses, LegalPasses
+from .queries import LegalAttacks, LegalDefenses, LegalPasses
+from .collector import Collector
 
 
 # TODO: remove this helper after player schema update is finished
@@ -101,13 +102,11 @@ class Game:
         self._attack_limit = state["attack_limit"]
         self._with_passing = state["with_passing"]
 
+        self._collector = Collector(game=self, player=get_collector(state))
+
         # TODO: remove this helper helpers after player schema update is finished
         if durak := get_durak(state):
             self._player(durak).add_status(Status.DURAK)
-
-        # TODO: remove this helper helpers after player schema update is finished
-        if collector := get_collector(state):
-            self._player(collector).add_status(Status.COLLECTING)
 
     def serialize(self):
         return {
@@ -138,10 +137,6 @@ class Game:
     @property
     def _trump_suit(self):
         return self._draw_pile.trump_suit
-
-    @property
-    def _collector(self):
-        return Collector.result(game=self)
 
     def winners(self):
         return set(self._ordered_players()) - set(self._active_players())
@@ -180,10 +175,10 @@ class Game:
         self._successful_defense_cleanup()
 
     def collect(self):
-        self._collector.take_cards(cards=self._table.collect())
+        self._collector.get().take_cards(cards=self._table.collect())
         self.draw()
         self._rotate(skip=1)
-        self._collector.remove_status(Status.COLLECTING)
+        self._collector.clear()
         self._clear_yields()
         self._compact_hands()
 
@@ -215,10 +210,7 @@ class Game:
         self._rotate()
 
     def give_up(self, *, player):
-        if self._collector:
-            raise self.MultipleCollectors
-
-        self._player(player).add_status(Status.COLLECTING)
+        self._collector.set(player=player)
         self._clear_yields()
 
     def organize_cards(self, *, player, strategy):
