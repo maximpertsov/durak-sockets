@@ -6,10 +6,8 @@ class Collector:
     class MultipleCollectors(IllegalAction):
         pass
 
-    def __init__(self, *, game, player=None):
+    def __init__(self, *, game):
         self._game = game
-        if player is not None:
-            self.set(player=player)
 
     def __bool__(self):
         return bool(self.get())
