@@ -8,22 +8,22 @@ class Player:
     @classmethod
     def deserialize(cls, player):
         return cls(
-            name=player["id"],
-            cards=player["hand"],
+            id=player["id"],
+            hand=player["hand"],
             order=player["order"],
             state=[Status(status) for status in player["state"]],
         )
 
-    def __init__(self, *, name, order, cards, state=None):
-        self.name = name
-        self._cards = cards
+    def __init__(self, *, id, order, hand, state=None):
+        self.id = id
+        self._hand = hand
         self.order = order
         self._state = set(state) if state else set()
 
     def serialize(self):
         return {
-            "id": self.name,
-            "hand": self._cards,
+            "id": self.id,
+            "hand": self._hand,
             "order": self.order,
             "state": self._state,
         }
@@ -44,19 +44,19 @@ class Player:
     # Assuming that's true, you can remove the (100, ...) tuples.
     def organize_cards(self, *, strategy, trump_suit):
         if strategy == "group_by_rank":
-            self._cards.sort(
+            self._hand.sort(
                 key=lambda card: (get_value(card), get_suit(card))
                 if card
                 else (100, 100)
             )
         elif strategy == "group_by_suit":
-            self._cards.sort(
+            self._hand.sort(
                 key=lambda card: (get_suit(card), get_value(card))
                 if card
                 else (100, 100)
             )
         elif strategy == "group_by_rank_and_trump":
-            self._cards.sort(
+            self._hand.sort(
                 key=lambda card: (
                     1 if get_suit(card) == trump_suit else 0,
                     get_value(card),
@@ -67,11 +67,11 @@ class Player:
             )
 
     def take_cards(self, *, cards):
-        self._cards += cards
+        self._hand += cards
 
     def remove_card(self, *, card):
-        self._cards = [
-            None if hand_card == card else hand_card for hand_card in self._cards
+        self._hand = [
+            None if hand_card == card else hand_card for hand_card in self._hand
         ]
 
     def draw(self, *, draw_pile):
@@ -81,10 +81,10 @@ class Player:
         return max(self.HAND_SIZE - self.card_count(), 0)
 
     def compact_hand(self):
-        self._cards = self.cards()
+        self._hand = self.cards()
 
     def had_cards_in_round(self):
-        return bool(self._cards)
+        return bool(self._hand)
 
     def cards(self):
-        return [card for card in self._cards if card]
+        return [card for card in self._hand if card]

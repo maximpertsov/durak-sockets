@@ -47,8 +47,8 @@ class Game:
 
     def serialize(self):
         return {
-            "attackers": [player.name for player in self._attackers()],
-            "defender": getattr(self._defender(), "name", None),
+            "attackers": [player.id for player in self._attackers()],
+            "defender": getattr(self._defender(), "id", None),
             "legal_attacks": LegalAttacks.result(game=self),
             "legal_defenses": LegalDefenses.result(game=self),
             "legal_passes": LegalPasses.result(game=self),
@@ -56,7 +56,7 @@ class Game:
             "pass_count": self._pass_count,
             "players": self._serialize_players(),
             "trump_suit": self._trump_suit,
-            "winners": set(player.name for player in self.winners()),
+            "winners": set(player.id for player in self.winners()),
             "lowest_rank": self._lowest_rank,
             "attack_limit": self._attack_limit,
             "with_passing": self._with_passing,
