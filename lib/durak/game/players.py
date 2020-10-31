@@ -11,6 +11,9 @@ class Players:
     def __init__(self, *, players):
         self._players_by_id = {player.id: player for player in players}
 
+    def serialize(self):
+        return [player.serialize() for player in self.ordered()]
+
     def ordered(self):
         return sorted(self._players_by_id.values(), key=attrgetter("order"))
 

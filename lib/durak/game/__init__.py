@@ -60,12 +60,10 @@ class Game:
         }
 
     def _serialize_players(self):
-        result = []
         for player in self.ordered_players():
             if self._durak == player:
                 player.add_status(Status.DURAK)
-            result.append(player.serialize())
-        return result
+        return self._players.serialize()
 
     @property
     def _trump_suit(self):
