@@ -1,13 +1,11 @@
-from operator import attrgetter
-
 from lib.durak.card import get_rank
 from lib.durak.draw_pile import DrawPile
 from lib.durak.exceptions import IllegalAction
-from lib.durak.player import Player
 from lib.durak.status import Status
 from lib.durak.table import Table
 
 from .collector import Collector
+from .players import Players
 from .queries import LegalAttacks, LegalDefenses, LegalPasses
 
 
@@ -26,9 +24,7 @@ class Game:
                 seed=state["seed"],
                 lowest_rank=state["lowest_rank"],
             ),
-            players={
-                player["id"]: Player.deserialize(player) for player in state["players"]
-            },
+            players=Players.deserialize(state["players"]),
             table=Table(table=state["table"]),
             state=state,
         )
@@ -65,7 +61,7 @@ class Game:
 
     def _serialize_players(self):
         result = []
-        for player in self._ordered_players():
+        for player in self.ordered_players():
             if self._durak == player:
                 player.add_status(Status.DURAK)
             result.append(player.serialize())
@@ -76,7 +72,7 @@ class Game:
         return self._draw_pile.trump_suit
 
     def winners(self):
-        return set(self._ordered_players()) - set(self._active_players())
+        return set(self.ordered_players()) - set(self._active_players())
 
     @property
     def _durak(self):
@@ -195,26 +191,25 @@ class Game:
         ]
 
     def _clear_yields(self):
-        for _player in self._ordered_players():
+        for _player in self.ordered_players():
             _player.remove_status(Status.YIELDED)
 
     def _active_players(self):
         return [
             player
-            for player in self._ordered_players()
+            for player in self.ordered_players()
             if self._draw_pile.size() or player.cards()
         ]
 
     def _ordered_players_with_cards_in_round(self):
         return [
             player
-            for player in self._ordered_players()
+            for player in self.ordered_players()
             if player.had_cards_in_round() or self._draw_pile.size()
         ]
 
-    def _ordered_players(self):
-        return sorted(self._players.values(), key=attrgetter("order"))
+    def ordered_players(self):
+        return self._players.ordered()
 
     def player(self, player_or_id):
-        key = player_or_id.id if isinstance(player_or_id, Player) else player_or_id
-        return self._players[key]
+        return self._players.player(player_or_id)

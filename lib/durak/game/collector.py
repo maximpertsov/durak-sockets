@@ -13,7 +13,7 @@ class Collector:
         return bool(self.get())
 
     def get(self):
-        for player in self._game._ordered_players():
+        for player in self._game.ordered_players():
             if not player.has_status(Status.COLLECTING):
                 continue
 
