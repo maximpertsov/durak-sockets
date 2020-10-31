@@ -1,8 +1,18 @@
 from lib.durak.card import get_suit, get_value
+from lib.durak.status import Status
 
 
 class Player:
     HAND_SIZE = 6
+
+    @classmethod
+    def deserialize(cls, player):
+        return cls(
+            name=player["id"],
+            cards=player["hand"],
+            order=player["order"],
+            state=[Status(status) for status in player["state"]],
+        )
 
     def __init__(self, *, name, order, cards, state=None):
         self.name = name

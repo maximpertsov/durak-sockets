@@ -27,13 +27,7 @@ class Game:
                 lowest_rank=state["lowest_rank"],
             ),
             players={
-                player["id"]: Player(
-                    name=player["id"],
-                    cards=player["hand"],
-                    order=player["order"],
-                    state=[Status(status) for status in player["state"]],
-                )
-                for player in state["players"]
+                player["id"]: Player.deserialize(player) for player in state["players"]
             },
             table=Table(table=state["table"]),
             state=state,
