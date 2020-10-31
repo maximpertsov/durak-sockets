@@ -6,14 +6,10 @@ from lib.durak.player import Player
 class Players:
     @classmethod
     def deserialize(cls, players):
-        return cls(
-            players_by_id={
-                player["id"]: Player.deserialize(player) for player in players
-            },
-        )
+        return cls(players=[Player.deserialize(player) for player in players])
 
-    def __init__(self, *, players_by_id):
-        self._players_by_id = players_by_id
+    def __init__(self, *, players):
+        self._players_by_id = {player.id: player for player in players}
 
     def ordered(self):
         return sorted(self._players_by_id.values(), key=attrgetter("order"))
