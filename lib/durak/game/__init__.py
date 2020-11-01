@@ -71,12 +71,11 @@ class Game:
         return self._draw_pile.trump_suit
 
     def winners(self):
-        return set(self.ordered_players()) - set(self._active_players())
+        return set(self._outcomes.get_winners())
 
     @property
     def _durak(self):
-        if len(self._active_players()) == 1:
-            return self._active_players()[0]
+        return self._outcomes.get_durak()
 
     def _attack(self, *, player, card):
         self.player(player).remove_card(card=card)
@@ -193,19 +192,9 @@ class Game:
     def _clear_yields(self):
         self._yielded.clear()
 
-    def _active_players(self):
-        return [
-            player
-            for player in self.ordered_players()
-            if self._draw_pile.size() or player.cards()
-        ]
-
     def _ordered_players_with_cards_in_round(self):
-        return [
-            player
-            for player in self.ordered_players()
-            if player.had_cards_in_round() or self._draw_pile.size()
-        ]
+        active_players = self._outcomes.get_active()
+        return [player for player in self.ordered_players() if player in active_players]
 
     def ordered_players(self):
         return self._players.ordered()
