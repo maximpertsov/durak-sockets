@@ -1,25 +1,16 @@
-from enum import Enum
-from operator import attrgetter
-
 from lib.durak.card import get_rank
 from lib.durak.draw_pile import DrawPile
 from lib.durak.exceptions import IllegalAction
-from lib.durak.player import Player
+from lib.durak.status import Status
 from lib.durak.table import Table
 
+from .collector import Collector
+from .yielded import Yielded
+from .players import Players
 from .queries import LegalAttacks, LegalDefenses, LegalPasses
 
 
-class Status(Enum):
-    COLLECTING = "collecting"
-    DURAK = "durak"
-    YIELDED = "yielded"
-
-
 class Game:
-    class MultipleCollectors(IllegalAction):
-        pass
-
     class DifferentRanks(IllegalAction):
         pass
 
@@ -31,15 +22,7 @@ class Game:
                 seed=state["seed"],
                 lowest_rank=state["lowest_rank"],
             ),
-            players={
-                player["id"]: Player(
-                    name=player["id"],
-                    cards=player["hand"],
-                    order=player["order"],
-                    state=[Status(status) for status in player["state"]],
-                )
-                for player in state["players"]
-            },
+            players=Players.deserialize(state["players"]),
             table=Table(table=state["table"]),
             state=state,
         )
@@ -54,10 +37,13 @@ class Game:
         self._attack_limit = state["attack_limit"]
         self._with_passing = state["with_passing"]
 
+        self._collector = Collector(game=self)
+        self._yielded = Yielded(game=self)
+
     def serialize(self):
         return {
-            "attackers": [player.name for player in self._attackers()],
-            "defender": getattr(self._defender(), "name", None),
+            "attackers": [player.id for player in self._attackers()],
+            "defender": getattr(self._defender(), "id", None),
             "legal_attacks": LegalAttacks.result(game=self),
             "legal_defenses": LegalDefenses.result(game=self),
             "legal_passes": LegalPasses.result(game=self),
@@ -65,7 +51,7 @@ class Game:
             "pass_count": self._pass_count,
             "players": self._serialize_players(),
             "trump_suit": self._trump_suit,
-            "winners": set(player.name for player in self.winners()),
+            "winners": set(player.id for player in self.winners()),
             "lowest_rank": self._lowest_rank,
             "attack_limit": self._attack_limit,
             "with_passing": self._with_passing,
@@ -73,34 +59,17 @@ class Game:
         }
 
     def _serialize_players(self):
-        result = []
-        for player in self._ordered_players():
+        for player in self.ordered_players():
             if self._durak == player:
                 player.add_status(Status.DURAK)
-            result.append(player.serialize())
-        return result
+        return self._players.serialize()
 
     @property
     def _trump_suit(self):
         return self._draw_pile.trump_suit
 
-    # TODO: cache?
-    @property
-    def _collector(self):
-        result = None
-
-        for player in self._ordered_players():
-            if not player.has_status(Status.COLLECTING):
-                continue
-            if result is not None:
-                raise self.MultipleCollectors
-
-            result = player
-
-        return result
-
     def winners(self):
-        return set(self._ordered_players()) - set(self._active_players())
+        return set(self.ordered_players()) - set(self._active_players())
 
     @property
     def _durak(self):
@@ -108,7 +77,7 @@ class Game:
             return self._active_players()[0]
 
     def _attack(self, *, player, card):
-        self._player(player).remove_card(card=card)
+        self.player(player).remove_card(card=card)
         self._table.add_card(card=card)
 
     def attack(self, *, player, cards):
@@ -120,12 +89,12 @@ class Game:
         self._clear_yields()
 
     def defend(self, *, player, base_card, card):
-        self._player(player).remove_card(card=card)
+        self.player(player).remove_card(card=card)
         self._table.stack_card(base_card=base_card, card=card)
         self._clear_yields()
 
     def yield_attack(self, *, player):
-        self._player(player).add_status(Status.YIELDED)
+        self._yielded.add(player=player)
         if not self._no_more_attacks():
             return
 
@@ -136,10 +105,10 @@ class Game:
         self._successful_defense_cleanup()
 
     def collect(self):
-        self._collector.take_cards(cards=self._table.collect())
+        self._collector.get().take_cards(cards=self._table.collect())
         self.draw()
         self._rotate(skip=1)
-        self._collector.remove_status(Status.COLLECTING)
+        self._collector.clear()
         self._clear_yields()
         self._compact_hands()
 
@@ -160,7 +129,7 @@ class Game:
         self._pass_count = 0
 
     def _pass_card(self, *, player, card):
-        self._player(player).remove_card(card=card)
+        self.player(player).remove_card(card=card)
         self._table.add_card(card=card)
 
     def pass_cards(self, *, player, cards):
@@ -171,11 +140,11 @@ class Game:
         self._rotate()
 
     def give_up(self, *, player):
-        self._player(player).add_status(Status.COLLECTING)
+        self._collector.set(player=player)
         self._clear_yields()
 
     def organize_cards(self, *, player, strategy):
-        self._player(player).organize_cards(
+        self.player(player).organize_cards(
             strategy=strategy, trump_suit=self._trump_suit
         )
 
@@ -188,9 +157,6 @@ class Game:
     def _compact_hands(self):
         for player in self._ordered_players_with_cards_in_round():
             player.compact_hand()
-
-    def _player(self, player):
-        return self._players[player]
 
     def _defender(self):
         players = self._ordered_players_with_cards_in_round()
@@ -212,32 +178,30 @@ class Game:
         return potential_attackers if self._table.cards() else potential_attackers[:1]
 
     def _no_more_attacks(self):
-        return set(self._attackers()).issubset(set(self._yielded_players()))
+        return set(self._attackers()).issubset(self._yielded_players())
 
     def _yielded_players(self):
-        return [
-            player
-            for player in self._active_players()
-            if player.has_status(Status.YIELDED)
-        ]
+        return self._yielded.get()
 
     def _clear_yields(self):
-        for _player in self._ordered_players():
-            _player.remove_status(Status.YIELDED)
+        self._yielded.clear()
 
     def _active_players(self):
         return [
             player
-            for player in self._ordered_players()
+            for player in self.ordered_players()
             if self._draw_pile.size() or player.cards()
         ]
 
     def _ordered_players_with_cards_in_round(self):
         return [
             player
-            for player in self._ordered_players()
+            for player in self.ordered_players()
             if player.had_cards_in_round() or self._draw_pile.size()
         ]
 
-    def _ordered_players(self):
-        return sorted(self._players.values(), key=attrgetter("order"))
+    def ordered_players(self):
+        return self._players.ordered()
+
+    def player(self, player_or_id):
+        return self._players.player(player_or_id)

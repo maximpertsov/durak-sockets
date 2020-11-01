@@ -7,8 +7,8 @@ from lib.durak.player import Player
 @pytest.fixture
 def player():
     return Player(
-        name="anna",
-        cards=["10D", None, "10C", "2S", "5C", "8D", "2C"],
+        id="anna",
+        hand=["10D", None, "10C", "2S", "5C", "8D", "2C"],
         order=0,
     )
 
@@ -47,17 +47,17 @@ def test_remove_card(player):
 
 
 def test_card_count_and_had_cards_in_round(player):
-    kwargs = {"name": "anna", "order": 0}
+    kwargs = {"id": "anna", "order": 0}
 
-    player = Player(cards=["10D"], **kwargs)
+    player = Player(hand=["10D"], **kwargs)
     assert player.card_count() == 1
     assert player.had_cards_in_round()
 
-    player = Player(cards=[None], **kwargs)
+    player = Player(hand=[None], **kwargs)
     assert player.card_count() == 0
     assert player.had_cards_in_round()
 
-    player = Player(cards=[], **kwargs)
+    player = Player(hand=[], **kwargs)
     assert player.card_count() == 0
     assert not player.had_cards_in_round()
 
@@ -68,7 +68,7 @@ def mocked_draw_cards(get_draw_pile_cards):
 
 
 def test_draw_from_pile(mocked_draw_cards):
-    player = Player(name="anna", cards=["10D", None, "10C"], order=0)
+    player = Player(id="anna", hand=["10D", None, "10C"], order=0)
     draw_pile = DrawPile(drawn_cards=[], lowest_rank="2", seed=0.4)
     player.draw(draw_pile=draw_pile)
     assert player.serialize() == {
