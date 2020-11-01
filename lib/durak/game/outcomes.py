@@ -30,12 +30,15 @@ class Outcomes:
         return result
 
     def update(self, *, player):
+        if self.get_durak():
+            return
         if self._game.player(player).cards():
             return
         if self._game._draw_pile.size():
             return
 
-        self._game.player(player).add_status(Status.WINNER)
+        if len(self.get_active()) > 1:
+            self._game.player(player).add_status(Status.WINNER)
 
         active_players = self.get_active()
         if len(active_players) == 1:
