@@ -55,7 +55,7 @@ def test_serialize(game, static_parameters):
                 "order": 0,
                 "id": "anna",
                 "hand": ["10D", None, "10C", "2S", "5C", "8D", "2C"],
-                "state": set([Status.DURAK]),
+                "state": set(),
             }
         ],
         "table": [],
@@ -82,7 +82,7 @@ def test_attack(game, static_parameters):
                 "order": 0,
                 "id": "anna",
                 "hand": [None, None, "10C", "2S", "5C", "8D", "2C"],
-                "state": set([Status.DURAK]),
+                "state": set(),
             }
         ],
         "table": [["10D"]],
@@ -114,7 +114,7 @@ def test_defend(game, static_parameters):
                 "order": 0,
                 "id": "anna",
                 "hand": [None, None, "10C", "2S", "5C", "8D", "2C"],
-                "state": set([Status.DURAK]),
+                "state": set(),
             }
         ],
         "table": [["9D", "10D"]],
@@ -141,7 +141,7 @@ def test_durak(game, static_parameters):
                 "order": 0,
                 "id": "anna",
                 "hand": ["10D", None, "10C", "2S", "5C", "8D", "2C"],
-                "state": set([Status.DURAK]),
+                "state": set(),
             }
         ],
         "table": [],
