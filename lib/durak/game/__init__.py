@@ -14,9 +14,6 @@ class Game:
     class DifferentRanks(IllegalAction):
         pass
 
-    class MultipleCollectors(IllegalAction):
-        pass
-
     @classmethod
     def deserialize(cls, state):
         return cls(
