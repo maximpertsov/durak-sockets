@@ -17,6 +17,14 @@ class Outcomes:
             ]
         )
 
+    def get_durak(self):
+        for player in self._game.ordered_players():
+            if player.has_status(Status.DURAK):
+                return player
+
+    def get_active(self):
+        return set(self._game.ordered_players()) - self.get_winners()
+
     def update(self, *, player):
         if self._game.player(player).cards():
             return
@@ -25,4 +33,6 @@ class Outcomes:
 
         self._game.player(player).add_status(Status.WINNER)
 
-        # TODO: check if durak
+        active_players = self.get_active()
+        if len(active_players) == 1:
+            self._game.player(active_players.pop()).add_status(Status.DURAK)
