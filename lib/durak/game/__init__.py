@@ -89,6 +89,10 @@ class Game:
 
         for card in cards:
             self._attack(player=player, card=card)
+
+        # TODO: declare player as the winner here if appropriate
+        # TODO: declare durak as well?
+
         self._clear_yields()
 
     def defend(self, *, player, base_card, card):
