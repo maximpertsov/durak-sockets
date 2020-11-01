@@ -74,7 +74,7 @@ class Game:
         return self._draw_pile.trump_suit
 
     def winners(self):
-        return set(self.ordered_players()) - set(self._active_players())
+        return self._outcomes.get_winners()
 
     @property
     def _durak(self):
@@ -92,6 +92,7 @@ class Game:
         for card in cards:
             self._attack(player=player, card=card)
 
+        self._outcomes.update(player=player)
         self._clear_yields()
 
     def defend(self, *, player, base_card, card):
@@ -101,7 +102,6 @@ class Game:
 
     def play_card(self, *, player, card):
         self.player(player).remove_card(card=card)
-        self._outcomes.update(player=player)
 
     def yield_attack(self, *, player):
         self._yielded.add(player=player)
@@ -122,12 +122,17 @@ class Game:
         self._clear_yields()
         self._compact_hands()
 
+        # TODO: check outcomes for other players?
+
     def _successful_defense_cleanup(self):
         self._table.clear()
         self.draw()
+        self._outcomes.update(player=self._defender())
         self._rotate()
         self._clear_yields()
         self._compact_hands()
+
+        # TODO: check outcomes for other players?
 
     def draw(self):
         players = self._ordered_players_with_cards_in_round()
@@ -148,6 +153,7 @@ class Game:
         self._pass_count += 1
         self._clear_yields()
         self._rotate()
+        self._outcomes.update(player=player)
 
     def give_up(self, *, player):
         self._collector.set(player=player)
