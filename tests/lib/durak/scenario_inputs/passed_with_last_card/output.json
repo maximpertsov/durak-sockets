@@ -94,7 +94,9 @@
         ],
         "id": "anna",
         "order": 0,
-        "state": []
+        "state": [
+          "winner"
+        ]
       },
       {
         "hand": [
