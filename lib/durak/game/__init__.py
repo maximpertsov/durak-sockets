@@ -5,9 +5,10 @@ from lib.durak.status import Status
 from lib.durak.table import Table
 
 from .collector import Collector
-from .yielded import Yielded
 from .players import Players
+from .outcomes import Outcomes
 from .queries import LegalAttacks, LegalDefenses, LegalPasses
+from .yielded import Yielded
 
 
 class Game:
@@ -41,6 +42,7 @@ class Game:
         self._with_passing = state["with_passing"]
 
         self._collector = Collector(game=self)
+        self._outcomes = Outcomes(game=self)
         self._yielded = Yielded(game=self)
 
     def serialize(self):
@@ -80,7 +82,7 @@ class Game:
             return self._active_players()[0]
 
     def _attack(self, *, player, card):
-        self.player(player).remove_card(card=card)
+        self.play_card(player=player, card=card)
         self._table.add_card(card=card)
 
     def attack(self, *, player, cards):
@@ -90,15 +92,16 @@ class Game:
         for card in cards:
             self._attack(player=player, card=card)
 
-        # TODO: declare player as the winner here if appropriate
-        # TODO: declare durak as well?
-
         self._clear_yields()
 
     def defend(self, *, player, base_card, card):
-        self.player(player).remove_card(card=card)
+        self.play_card(player=player, card=card)
         self._table.stack_card(base_card=base_card, card=card)
         self._clear_yields()
+
+    def play_card(self, *, player, card):
+        self.player(player).remove_card(card=card)
+        self._outcomes.update(player=player)
 
     def yield_attack(self, *, player):
         self._yielded.add(player=player)
@@ -136,7 +139,7 @@ class Game:
         self._pass_count = 0
 
     def _pass_card(self, *, player, card):
-        self.player(player).remove_card(card=card)
+        self.play_card(player=player, card=card)
         self._table.add_card(card=card)
 
     def pass_cards(self, *, player, cards):
