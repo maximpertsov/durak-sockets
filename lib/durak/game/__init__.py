@@ -5,6 +5,7 @@ from lib.durak.status import Status
 from lib.durak.table import Table
 
 from .collector import Collector
+from .yielded import Yielded
 from .players import Players
 from .queries import LegalAttacks, LegalDefenses, LegalPasses
 
@@ -40,6 +41,7 @@ class Game:
         self._with_passing = state["with_passing"]
 
         self._collector = Collector(game=self)
+        self._yielded = Yielded(game=self)
 
     def serialize(self):
         return {
@@ -95,7 +97,7 @@ class Game:
         self._clear_yields()
 
     def yield_attack(self, *, player):
-        self.player(player).add_status(Status.YIELDED)
+        self._yielded.add(player=player)
         if not self._no_more_attacks():
             return
 
@@ -179,18 +181,13 @@ class Game:
         return potential_attackers if self._table.cards() else potential_attackers[:1]
 
     def _no_more_attacks(self):
-        return set(self._attackers()).issubset(set(self._yielded_players()))
+        return set(self._attackers()).issubset(self._yielded_players())
 
     def _yielded_players(self):
-        return [
-            player
-            for player in self._active_players()
-            if player.has_status(Status.YIELDED)
-        ]
+        return self._yielded.get()
 
     def _clear_yields(self):
-        for _player in self.ordered_players():
-            _player.remove_status(Status.YIELDED)
+        self._yielded.clear()
 
     def _active_players(self):
         return [
