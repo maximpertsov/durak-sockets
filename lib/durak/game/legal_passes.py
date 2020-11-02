@@ -85,13 +85,12 @@ class LegalPasses:
 
         players = deque(self._game._ordered_players_with_cards_in_round())
         players.rotate(2)
-        next_players_with_cards = (
-            player
-            for player in players
-            if player.cards() and self._player(player) != self._defender
-        )
         try:
-            return next(next_players_with_cards)
+            return next(
+                player
+                for player in players
+                if player.cards() and self._player(player) != self._defender
+            )
         except StopIteration:
             return
 
