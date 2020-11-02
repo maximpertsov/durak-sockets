@@ -16,6 +16,9 @@ class Game:
     class DifferentRanks(IllegalAction):
         pass
 
+    class IllegalAttack(IllegalAction):
+        pass
+
     @classmethod
     def deserialize(cls, state):
         return cls(
@@ -83,8 +86,12 @@ class Game:
         self._table.add_card(card=card)
 
     def attack(self, *, player, cards):
-        if len(set(get_rank(card) for card in cards)) > 1:
-            raise self.DifferentRanks
+        # TODO: check full legality of attack server-side?
+        for group in LegalAttacks(game=self)._groups:
+            if set(cards).issubset(group):
+                break
+        else:
+            raise self.IllegalAttack
 
         for card in cards:
             self._attack(player=player, card=card)

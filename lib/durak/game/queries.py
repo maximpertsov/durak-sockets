@@ -25,7 +25,7 @@ class LegalAttacks(Base):
     def _result(self):
         return {
             "cards": self._cards,
-            "groups": self._groups,
+            # "groups": self._groups,
             "limit": self._limit,
         }
 
@@ -84,7 +84,7 @@ class LegalPasses(Base):
     def _result(self):
         return {
             "cards": self._cards,
-            "groups": self._groups,
+            # "groups": self._groups,
             "limit": self._limit,
         }
 
