@@ -126,11 +126,9 @@ class Game:
         self._compact_hands()
 
     def draw(self):
-        players = self._ordered_players_with_cards_in_round()
-        player_count = len(players)
-        for index in range(player_count):
-            index_with_passes = (index - self._pass_count) % player_count
-            player = players[index_with_passes]
+        players = deque(self._ordered_players_with_cards_in_round())
+        players.rotate(self._pass_count)
+        for index, player in enumerate(players):
             player.draw(draw_pile=self._draw_pile)
             self._outcomes.update(player=player)
         self._pass_count = 0
@@ -157,10 +155,10 @@ class Game:
         )
 
     def _rotate(self, *, skip=0):
-        rotation = deque(self._ordered_players_with_cards_in_round())
-        rotation.rotate(-1 - skip)
+        players = deque(self._ordered_players_with_cards_in_round())
+        players.rotate(-1 - skip)
 
-        for index, player in enumerate(rotation):
+        for index, player in enumerate(players):
             player.order = index
 
     def _compact_hands(self):
