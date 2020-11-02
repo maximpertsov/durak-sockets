@@ -6,8 +6,9 @@ from lib.durak.status import Status
 from lib.durak.table import Table
 
 from .collector import Collector
+from .legal_attacks import LegalAttacks
 from .players import Players
-from .queries import LegalAttacks, LegalDefenses, LegalPasses
+from .queries import LegalDefenses, LegalPasses
 from .yielded import Yielded
 
 
@@ -44,11 +45,13 @@ class Game:
         self._collector = Collector(game=self)
         self._yielded = Yielded(game=self)
 
+        self._legal_attacks = LegalAttacks(game=self)
+
     def serialize(self):
         return {
             "attackers": [player.id for player in self._attackers()],
             "defender": getattr(self._defender(), "id", None),
-            "legal_attacks": LegalAttacks.result(game=self),
+            "legal_attacks": self._legal_attacks.serialize(),
             "legal_defenses": LegalDefenses.result(game=self),
             "legal_passes": LegalPasses.result(game=self),
             "table": self._table.serialize(),
@@ -90,13 +93,7 @@ class Game:
         self._clear_yields()
 
     def legally_attack(self, *, player, cards):
-        # TODO: check full legality of attack server-side?
-        for group in LegalAttacks(game=self)._groups:
-            if set(cards).issubset(group):
-                break
-        else:
-            raise self.IllegalAttack
-
+        self._legal_attacks.validate(player=player, cards=cards)
         self.attack(player=player, cards=cards)
 
     def defend(self, *, player, base_card, card):

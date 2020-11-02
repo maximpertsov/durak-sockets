@@ -1,4 +1,4 @@
-from itertools import chain, groupby
+from itertools import groupby
 
 from lib.durak.card import get_value
 
@@ -18,45 +18,6 @@ class Base:
     @property
     def _defender(self):
         return self._game._defender()
-
-
-class LegalAttacks(Base):
-    @property
-    def _result(self):
-        return {
-            "cards": self._cards,
-            # "groups": self._groups,
-            "limit": self._limit,
-        }
-
-    @property
-    def _cards(self):
-        if self._defender is None:
-            return set()
-
-        attackers = self._game._attackers()
-        attacker_cards = chain.from_iterable(player.cards() for player in attackers)
-        return set(attacker_cards) & self._game._table.legal_attacks()
-
-    @property
-    def _groups(self):
-        if not self._cards:
-            return []
-
-        if self._game._table.cards():
-            return [set(self._cards)]
-
-        cards = sorted(self._cards, key=get_value)
-        return [set(group) for _, group in groupby(cards, get_value)]
-
-    @property
-    def _limit(self):
-        if self._defender is None:
-            return 0
-
-        attack_limit = min(len(self._defender.cards()), self._game._attack_limit)
-        undefended_cards = len(self._game._table.undefended_cards())
-        return max(0, attack_limit - undefended_cards)
 
 
 class LegalDefenses(Base):
