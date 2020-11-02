@@ -7,8 +7,9 @@ from lib.durak.table import Table
 
 from .collector import Collector
 from .legal_attacks import LegalAttacks
+from .legal_passes import LegalPasses
 from .players import Players
-from .queries import LegalDefenses, LegalPasses
+from .queries import LegalDefenses
 from .yielded import Yielded
 
 
@@ -46,6 +47,7 @@ class Game:
         self._yielded = Yielded(game=self)
 
         self._legal_attacks = LegalAttacks(game=self)
+        self._legal_passes = LegalPasses(game=self)
 
     def serialize(self):
         return {
@@ -53,7 +55,7 @@ class Game:
             "defender": getattr(self._defender(), "id", None),
             "legal_attacks": self._legal_attacks.serialize(),
             "legal_defenses": LegalDefenses.result(game=self),
-            "legal_passes": LegalPasses.result(game=self),
+            "legal_passes": self._legal_passes.serialize(),
             "table": self._table.serialize(),
             "pass_count": self._pass_count,
             "players": self._serialize_players(),
