@@ -1,3 +1,5 @@
+from collections import deque
+
 from lib.durak.card import get_rank
 from lib.durak.draw_pile import DrawPile
 from lib.durak.exceptions import IllegalAction
@@ -6,9 +8,9 @@ from lib.durak.table import Table
 
 from .collector import Collector
 from .outcomes import Outcomes
-from .yielded import Yielded
 from .players import Players
 from .queries import LegalAttacks, LegalDefenses, LegalPasses
+from .yielded import Yielded
 
 
 class Game:
@@ -155,10 +157,11 @@ class Game:
         )
 
     def _rotate(self, *, skip=0):
-        players = self._ordered_players_with_cards_in_round()
-        shift = skip + 1
-        for index, player in enumerate(players):
-            player.order = (index - shift) % len(players)
+        rotation = deque(self._ordered_players_with_cards_in_round())
+        rotation.rotate(-1 - skip)
+
+        for index, player in enumerate(rotation):
+            player.order = index
 
     def _compact_hands(self):
         for player in self._ordered_players_with_cards_in_round():
