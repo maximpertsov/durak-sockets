@@ -14,12 +14,6 @@ def noop(*, from_state):
 
 def attack(*, from_state, user, payload):
     game = Game.deserialize(from_state)
-    game.legally_attack(player=user, cards=[payload["card"]])
-    return game.serialize()
-
-
-def attack_with_many(*, from_state, user, payload):
-    game = Game.deserialize(from_state)
     game.legally_attack(player=user, **payload)
     return game.serialize()
 
@@ -91,7 +85,6 @@ def organize_cards(*, from_state, user, payload):
 actions = {
     "joined_game": join_game,
     "attacked": attack,
-    "attacked_with_many": attack_with_many,
     "defended": defend,
     "gave_up": give_up,
     "organized": organize_cards,
