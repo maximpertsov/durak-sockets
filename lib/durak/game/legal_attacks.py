@@ -5,6 +5,12 @@ from lib.durak.exceptions import IllegalAction
 
 
 class LegalAttacks:
+    class AttackingAsDurak(IllegalAction):
+        pass
+
+    class AttackingWithOutOfHandCard(IllegalAction):
+        pass
+
     class AttackingWithTooManyCards(IllegalAction):
         pass
 
@@ -28,11 +34,15 @@ class LegalAttacks:
         }
 
     def validate(self, player, cards):
+        if self._game._durak == self._player(player):
+            raise self.AttackingAsDurak
         if self._player(player) not in self._attackers:
             raise self.AttackingOutOfTurn
+        if not set(cards) <= set(self._player(player).cards()):
+            raise self.AttackingWithOutOfHandCard
         if len(cards) > self._limit:
             raise self.AttackingWithTooManyCards
-        # TODO: is this duplicated by the next check?
+        # TODO: is this duplicated the next check?
         self._validate_cards(cards)
         self._validate_group(cards)
 
