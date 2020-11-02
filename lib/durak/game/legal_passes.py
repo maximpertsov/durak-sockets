@@ -1,3 +1,4 @@
+from collections import deque
 from itertools import groupby
 
 from lib.durak.card import get_value
@@ -82,15 +83,21 @@ class LegalPasses:
         if not self._defender:
             return
 
-        players = self._game._ordered_players_with_cards_in_round()
-        players_from_defender = players[2:] + [players[0]]
-        next_players_with_cards = [
-            player for player in players_from_defender if player.cards()
-        ]
-        if not next_players_with_cards:
+        players = deque(self._game._ordered_players_with_cards_in_round())
+        players.rotate(2)
+        next_players_with_cards = (
+            player
+            for player in players
+            if player.cards() and self._player(player) != self._defender
+        )
+        try:
+            return next(next_players_with_cards)
+        except StopIteration:
             return
-        return next_players_with_cards[0]
 
     @property
     def _defender(self):
         return self._game._defender()
+
+    def _player(self, player):
+        return self._game.player(player)
