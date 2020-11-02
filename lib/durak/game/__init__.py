@@ -1,6 +1,5 @@
 from collections import deque
 
-from lib.durak.card import get_rank
 from lib.durak.draw_pile import DrawPile
 from lib.durak.exceptions import IllegalAction
 from lib.durak.status import Status
@@ -86,6 +85,11 @@ class Game:
         self._table.add_card(card=card)
 
     def attack(self, *, player, cards):
+        for card in cards:
+            self._attack(player=player, card=card)
+        self._clear_yields()
+
+    def legally_attack(self, *, player, cards):
         # TODO: check full legality of attack server-side?
         for group in LegalAttacks(game=self)._groups:
             if set(cards).issubset(group):
@@ -93,9 +97,7 @@ class Game:
         else:
             raise self.IllegalAttack
 
-        for card in cards:
-            self._attack(player=player, card=card)
-        self._clear_yields()
+        self.attack(player=player, cards=cards)
 
     def defend(self, *, player, base_card, card):
         self.player(player).remove_card(card=card)

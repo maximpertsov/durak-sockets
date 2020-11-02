@@ -14,13 +14,13 @@ def noop(*, from_state):
 
 def attack(*, from_state, user, payload):
     game = Game.deserialize(from_state)
-    game.attack(player=user, cards=[payload["card"]])
+    game.legally_attack(player=user, cards=[payload["card"]])
     return game.serialize()
 
 
 def attack_with_many(*, from_state, user, payload):
     game = Game.deserialize(from_state)
-    game.attack(player=user, **payload)
+    game.legally_attack(player=user, **payload)
     return game.serialize()
 
 
