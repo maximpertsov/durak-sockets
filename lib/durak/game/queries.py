@@ -1,4 +1,6 @@
-from itertools import chain
+from itertools import chain, groupby
+
+from lib.durak.card import get_value
 
 
 class Base:
@@ -23,6 +25,7 @@ class LegalAttacks(Base):
     def _result(self):
         return {
             "cards": self._cards,
+            "groups": self._groups,
             "limit": self._limit,
         }
 
@@ -34,6 +37,17 @@ class LegalAttacks(Base):
         attackers = self._game._attackers()
         attacker_cards = chain.from_iterable(player.cards() for player in attackers)
         return set(attacker_cards) & self._game._table.legal_attacks()
+
+    @property
+    def _groups(self):
+        if not self._cards:
+            return []
+
+        if self._game._table.cards():
+            return [set(self._cards)]
+
+        cards = sorted(self._cards, key=get_value)
+        return [set(group) for _, group in groupby(cards, get_value)]
 
     @property
     def _limit(self):
@@ -68,11 +82,9 @@ class LegalDefenses(Base):
 class LegalPasses(Base):
     @property
     def _result(self):
-        if self._pass_recipient is None:
-            return {"cards": set(), "limit": 0}
-
         return {
             "cards": self._cards,
+            "groups": self._groups,
             "limit": self._limit,
         }
 
@@ -82,6 +94,14 @@ class LegalPasses(Base):
             return set()
 
         return set(self._defender.cards()) & self._game._table.legal_passes()
+
+    @property
+    def _groups(self):
+        if not self._cards:
+            return []
+
+        cards = sorted(self._cards, key=get_value)
+        return [set(group) for _, group in groupby(cards, get_value)]
 
     @property
     def _limit(self):
