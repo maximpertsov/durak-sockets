@@ -17,6 +17,9 @@ class LegalAttacks:
     class AttackingOutOfTurn(IllegalAction):
         pass
 
+    class EmptyAttack(IllegalAction):
+        pass
+
     class IllegalCard(IllegalAction):
         pass
 
@@ -34,6 +37,8 @@ class LegalAttacks:
         }
 
     def validate(self, player, cards):
+        if not cards:
+            raise self.EmptyAttack
         if self._game._durak == self._player(player):
             raise self.AttackingAsDurak
         if self._player(player) not in self._attackers:
