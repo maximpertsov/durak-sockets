@@ -20,7 +20,7 @@ def attack(*, from_state, user, payload):
 
 def defend(*, from_state, user, payload):
     game = Game.deserialize(from_state)
-    game.defend(player=user, **payload)
+    game.legally_defend(player=user, **payload)
     return game.serialize()
 
 
