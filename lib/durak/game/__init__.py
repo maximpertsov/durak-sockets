@@ -147,6 +147,10 @@ class Game:
         self._clear_yields()
         self._rotate()
 
+    def legally_pass_cards(self, *, player, cards):
+        self._legal_passes.validate(player=player, cards=cards)
+        self.pass_cards(player=player, cards=cards)
+
     def give_up(self, *, player):
         self._collector.set(player=player)
         self._clear_yields()

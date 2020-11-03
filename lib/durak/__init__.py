@@ -44,7 +44,7 @@ def pass_card(*, from_state, user, payload):
 
 def pass_with_many(*, from_state, user, payload):
     game = Game.deserialize(from_state)
-    game.pass_cards(player=user, **payload)
+    game.legally_pass_cards(player=user, **payload)
     return game.serialize()
 
 

@@ -52,6 +52,19 @@ class LegalPasses:
         self._validate_cards(cards)
         self._validate_group(cards)
 
+    def _validate_cards(self, cards):
+        legal_cards = self._cards
+        for card in cards:
+            if card not in legal_cards:
+                raise self.IllegalCard(card)
+
+    def _validate_group(self, cards):
+        for group in self._groups:
+            if set(cards).issubset(group):
+                break
+        else:
+            raise self.IllegalGrouping
+
     @property
     def _cards(self):
         if self._pass_recipient is None:
