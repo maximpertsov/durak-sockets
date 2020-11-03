@@ -1,7 +1,6 @@
 from collections import deque
 
 from lib.durak.draw_pile import DrawPile
-from lib.durak.exceptions import IllegalAction
 from lib.durak.status import Status
 from lib.durak.table import Table
 
@@ -14,12 +13,6 @@ from .yielded import Yielded
 
 
 class Game:
-    class DifferentRanks(IllegalAction):
-        pass
-
-    class IllegalAttack(IllegalAction):
-        pass
-
     @classmethod
     def deserialize(cls, state):
         return cls(
