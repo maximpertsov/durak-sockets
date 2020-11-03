@@ -164,6 +164,6 @@
     "winners": [],
     "with_passing": true
   },
-  "type": "attacked_with_many",
+  "type": "attacked",
   "user": "cyril"
 }

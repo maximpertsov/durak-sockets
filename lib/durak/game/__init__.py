@@ -1,21 +1,18 @@
 from collections import deque
 
-from lib.durak.card import get_rank
 from lib.durak.draw_pile import DrawPile
-from lib.durak.exceptions import IllegalAction
 from lib.durak.status import Status
 from lib.durak.table import Table
 
 from .collector import Collector
+from .legal_attacks import LegalAttacks
+from .legal_defenses import LegalDefenses
+from .legal_passes import LegalPasses
 from .players import Players
-from .queries import LegalAttacks, LegalDefenses, LegalPasses
 from .yielded import Yielded
 
 
 class Game:
-    class DifferentRanks(IllegalAction):
-        pass
-
     @classmethod
     def deserialize(cls, state):
         return cls(
@@ -42,13 +39,17 @@ class Game:
         self._collector = Collector(game=self)
         self._yielded = Yielded(game=self)
 
+        self._legal_attacks = LegalAttacks(game=self)
+        self._legal_defenses = LegalDefenses(game=self)
+        self._legal_passes = LegalPasses(game=self)
+
     def serialize(self):
         return {
             "attackers": [player.id for player in self._attackers()],
             "defender": getattr(self._defender(), "id", None),
-            "legal_attacks": LegalAttacks.result(game=self),
-            "legal_defenses": LegalDefenses.result(game=self),
-            "legal_passes": LegalPasses.result(game=self),
+            "legal_attacks": self._legal_attacks.serialize(),
+            "legal_defenses": self._legal_defenses.serialize(),
+            "legal_passes": self._legal_passes.serialize(),
             "table": self._table.serialize(),
             "pass_count": self._pass_count,
             "players": self._serialize_players(),
@@ -83,17 +84,22 @@ class Game:
         self._table.add_card(card=card)
 
     def attack(self, *, player, cards):
-        if len(set(get_rank(card) for card in cards)) > 1:
-            raise self.DifferentRanks
-
         for card in cards:
             self._attack(player=player, card=card)
         self._clear_yields()
+
+    def legally_attack(self, *, player, cards):
+        self._legal_attacks.validate(player=player, cards=cards)
+        self.attack(player=player, cards=cards)
 
     def defend(self, *, player, base_card, card):
         self.player(player).remove_card(card=card)
         self._table.stack_card(base_card=base_card, card=card)
         self._clear_yields()
+
+    def legally_defend(self, *, player, base_card, card):
+        self._legal_defenses.validate(player=player, base_card=base_card, card=card)
+        self.defend(player=player, base_card=base_card, card=card)
 
     def yield_attack(self, *, player):
         self._yielded.add(player=player)
@@ -138,6 +144,10 @@ class Game:
         self._pass_count += 1
         self._clear_yields()
         self._rotate()
+
+    def legally_pass_cards(self, *, player, cards):
+        self._legal_passes.validate(player=player, cards=cards)
+        self.pass_cards(player=player, cards=cards)
 
     def give_up(self, *, player):
         self._collector.set(player=player)

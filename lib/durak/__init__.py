@@ -14,19 +14,13 @@ def noop(*, from_state):
 
 def attack(*, from_state, user, payload):
     game = Game.deserialize(from_state)
-    game.attack(player=user, cards=[payload["card"]])
-    return game.serialize()
-
-
-def attack_with_many(*, from_state, user, payload):
-    game = Game.deserialize(from_state)
-    game.attack(player=user, **payload)
+    game.legally_attack(player=user, **payload)
     return game.serialize()
 
 
 def defend(*, from_state, user, payload):
     game = Game.deserialize(from_state)
-    game.defend(player=user, **payload)
+    game.legally_defend(player=user, **payload)
     return game.serialize()
 
 
@@ -44,13 +38,7 @@ def give_up(*, from_state, user, payload):
 
 def pass_card(*, from_state, user, payload):
     game = Game.deserialize(from_state)
-    game.pass_cards(player=user, cards=[payload["card"]])
-    return game.serialize()
-
-
-def pass_with_many(*, from_state, user, payload):
-    game = Game.deserialize(from_state)
-    game.pass_cards(player=user, **payload)
+    game.legally_pass_cards(player=user, **payload)
     return game.serialize()
 
 
@@ -91,12 +79,10 @@ def organize_cards(*, from_state, user, payload):
 actions = {
     "joined_game": join_game,
     "attacked": attack,
-    "attacked_with_many": attack_with_many,
     "defended": defend,
     "gave_up": give_up,
     "organized": organize_cards,
     "passed": pass_card,
-    "passed_with_many": pass_with_many,
     "yielded_attack": yield_attack,
 }
 
