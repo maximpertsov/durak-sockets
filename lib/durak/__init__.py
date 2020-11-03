@@ -38,12 +38,6 @@ def give_up(*, from_state, user, payload):
 
 def pass_card(*, from_state, user, payload):
     game = Game.deserialize(from_state)
-    game.pass_cards(player=user, cards=[payload["card"]])
-    return game.serialize()
-
-
-def pass_with_many(*, from_state, user, payload):
-    game = Game.deserialize(from_state)
     game.legally_pass_cards(player=user, **payload)
     return game.serialize()
 
@@ -89,7 +83,6 @@ actions = {
     "gave_up": give_up,
     "organized": organize_cards,
     "passed": pass_card,
-    "passed_with_many": pass_with_many,
     "yielded_attack": yield_attack,
 }
 
