@@ -105,7 +105,7 @@ class Game:
         self._clear_yields()
 
     def legally_defend(self, *, player, base_card, card):
-        self._legal_defenses(player=player, base_card=base_card, card=card)
+        self._legal_defenses.validate(player=player, base_card=base_card, card=card)
         self.defend(player=player, base_card=base_card, card=card)
 
     def yield_attack(self, *, player):
