@@ -26,7 +26,7 @@ class Collector:
         if self:
             raise self.MultipleCollectors
 
-        if self._game._player(player) != self._game._defender():
+        if self._game.player(player) != self._game._defender():
             raise self.GiveUpOutOfTurn
 
         self._game.player(player).add_status(Status.COLLECTING)

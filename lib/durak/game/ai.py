@@ -1,3 +1,4 @@
+from itertools import chain
 from random import choice
 
 from lib.durak.exceptions import IllegalAction
@@ -12,22 +13,32 @@ class AI:
 
     def perform_action(self, *, player):
         """
-        Have the user perform a random action
+        Have the user perform a random action.
+
+        Do nothing if yielded.
         """
-        selected_action = choice(self._potential_actions())
-        selected_action(player=self._player(player))
+        _player = self._player(player)
+        if self._player(_player) in self._game._yielded.get():
+            raise self.CannotPerform("Already yielded")
 
-    def _potential_actions(self):
-        # TODO: filter out impossible actions?
+        selected_action = choice(self._potential_actions(player=_player))
+        selected_action(player=_player)
 
-        return [
-            self._attack,
-            # self._pass_card,
-            # self._defend,
-            # self._give_up,
-            # self._yield_attack,
-            # self._do_nothing,
-        ]
+    def _potential_actions(self, *, player):
+        # TODO: report action on event?
+
+        defending = player == self._game._defender()
+        not_defending = not defending
+
+        return list(
+            chain(
+                [self._attack] * 7 * not_defending,
+                # self._pass_card,
+                [self._defend] * 9 * defending,
+                [self._give_up] * 1 * defending,
+                [self._yield_attack] * 3 * not_defending,
+            )
+        )
 
     def _attack(self, *, player):
         """
@@ -55,13 +66,22 @@ class AI:
         Defend randomly
         """
         try:
-            base_card, card = choice(
-                [
-                    (base_card, choice(cards))
-                    for base_card, cards in self._game._legal_defenses._legal_defenses.items()
-                ]
+            base_card, potential_cards = choice(
+                list(self._game._legal_defenses._legal_defenses.items())
             )
+            if not potential_cards:
+                self._game.give_up(player=player)
+                return
+
+            card = choice(list(potential_cards))
+            self._game.defend(player=player, base_card=base_card, card=card)
         except (IllegalAction, IndexError):
+            raise self.CannotPerform
+
+    def _give_up(self, *, player):
+        try:
+            self._game.give_up(player=player)
+        except IllegalAction:
             raise self.CannotPerform
 
     def serialize(self):
