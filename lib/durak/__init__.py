@@ -76,8 +76,19 @@ def organize_cards(*, from_state, user, payload):
     return game.serialize()
 
 
+def auto_action(*, from_state, user, payload):
+    """
+    Game will select an action for the user to perform.
+    It is assumed that the "user" is a bot.
+    """
+    game = Game.deserialize(from_state)
+    game.auto_action(player=user, **payload)
+    return game.serialize()
+
+
 actions = {
     "joined_game": join_game,
+    "polled_for_action": auto_action,
     "attacked": attack,
     "defended": defend,
     "gave_up": give_up,
