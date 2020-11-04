@@ -48,7 +48,7 @@ class Game:
 
     def serialize(self):
         return {
-            "attackers": [player.id for player in self._attackers()],
+            "attackers": [player.id for player in self.attackers],
             "defender": getattr(self.defender, "id", None),
             "legal_attacks": self._legal_attacks.serialize(),
             "legal_defenses": self._legal_defenses.serialize(),
@@ -182,7 +182,8 @@ class Game:
             return
         return players[1]
 
-    def _attackers(self):
+    @property
+    def attackers(self):
         players = self._ordered_players_with_cards_in_round()
         if not players:
             return []
@@ -194,7 +195,7 @@ class Game:
         return potential_attackers if self._table.cards() else potential_attackers[:1]
 
     def _no_more_attacks(self):
-        return set(self._attackers()).issubset(self._yielded_players())
+        return set(self.attackers).issubset(self._yielded_players())
 
     def _yielded_players(self):
         return self._yielded.get()
