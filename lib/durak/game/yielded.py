@@ -17,11 +17,9 @@ class Yielded:
 
     def get(self):
         return set(
-            [
-                player
-                for player in self._game.ordered_players()
-                if player.has_status(Status.YIELDED)
-            ]
+            player
+            for player in self._game.ordered_players()
+            if player.has_status(Status.YIELDED)
         )
 
     def add(self, *, player):
