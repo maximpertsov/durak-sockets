@@ -4,6 +4,7 @@ from lib.durak.draw_pile import DrawPile
 from lib.durak.status import Status
 from lib.durak.table import Table
 
+from .ai import AI
 from .collector import Collector
 from .legal_attacks import LegalAttacks
 from .legal_defenses import LegalDefenses
@@ -42,6 +43,8 @@ class Game:
         self._legal_attacks = LegalAttacks(game=self)
         self._legal_defenses = LegalDefenses(game=self)
         self._legal_passes = LegalPasses(game=self)
+
+        self._ai = AI(game=self)
 
     def serialize(self):
         return {
@@ -157,6 +160,9 @@ class Game:
         self.player(player).organize_cards(
             strategy=strategy, trump_suit=self._trump_suit
         )
+
+    def auto_action(self, *, player):
+        self._ai.perform_action(player=player)
 
     def _rotate(self, *, skip=0):
         players = deque(self._ordered_players_with_cards_in_round())
