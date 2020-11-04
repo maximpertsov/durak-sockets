@@ -27,7 +27,7 @@ class AI:
     def _potential_actions(self, *, player):
         # TODO: report action on event?
 
-        defending = player == self._game._defender()
+        defending = player == self._game.defender
         not_defending = not defending
 
         return list(

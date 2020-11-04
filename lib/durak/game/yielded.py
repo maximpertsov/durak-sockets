@@ -26,7 +26,7 @@ class Yielded:
         if not self._game._table.cards():
             raise self.YieldedBeforeAttack
 
-        if self._game.player(player) == self._game._defender():
+        if self._game.player(player) == self._game.defender:
             raise self.YieldOutOfTurn
 
         self._game.player(player).add_status(Status.YIELDED)

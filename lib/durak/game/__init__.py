@@ -49,7 +49,7 @@ class Game:
     def serialize(self):
         return {
             "attackers": [player.id for player in self._attackers()],
-            "defender": getattr(self._defender(), "id", None),
+            "defender": getattr(self.defender, "id", None),
             "legal_attacks": self._legal_attacks.serialize(),
             "legal_defenses": self._legal_defenses.serialize(),
             "legal_passes": self._legal_passes.serialize(),
@@ -175,7 +175,8 @@ class Game:
         for player in self._ordered_players_with_cards_in_round():
             player.compact_hand()
 
-    def _defender(self):
+    @property
+    def defender(self):
         players = self._ordered_players_with_cards_in_round()
         if len(players) < 2:
             return
@@ -187,9 +188,7 @@ class Game:
             return []
 
         potential_attackers = [
-            player
-            for player in players
-            if player != self._defender() and player.cards()
+            player for player in players if player != self.defender and player.cards()
         ]
 
         return potential_attackers if self._table.cards() else potential_attackers[:1]

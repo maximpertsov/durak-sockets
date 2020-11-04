@@ -95,7 +95,7 @@ class LegalAttacks:
 
     @property
     def _defender(self):
-        return self._game._defender()
+        return self._game.defender
 
     @property
     def _attackers(self):

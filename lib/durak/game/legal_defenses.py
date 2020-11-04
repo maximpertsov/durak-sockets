@@ -64,7 +64,7 @@ class LegalDefenses:
 
     @property
     def _defender(self):
-        return self._game._defender()
+        return self._game.defender
 
     def _player(self, player):
         return self._game.player(player)
