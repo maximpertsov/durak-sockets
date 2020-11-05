@@ -106,11 +106,15 @@ class Game:
 
     def yield_attack(self, *, player):
         self._yielded.add(player=player)
-        if not self._no_more_attacks():
-            return
 
         if self._collector:
             self.collect()
+            return
+
+        if self._table.undefended_cards():
+            return
+
+        if not self._no_more_attacks():
             return
 
         self._successful_defense_cleanup()
