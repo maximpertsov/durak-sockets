@@ -32,11 +32,11 @@ class AI:
 
         return list(
             chain(
-                [self._attack] * 7 * not_defending,
+                [self._attack] * 3 * not_defending,
                 # self._pass_card,
                 [self._defend] * 9 * defending,
                 [self._give_up] * 1 * defending,
-                [self._yield_attack] * 3 * not_defending,
+                [self._yield_attack] * 7 * not_defending,
             )
         )
 
@@ -67,14 +67,14 @@ class AI:
         """
         try:
             base_card, potential_cards = choice(
-                list(self._game._legal_defenses._legal_defenses.items())
+                list(self._game.legal_defenses._legal_defenses.items())
             )
             if not potential_cards:
                 self._game.give_up(player=player)
                 return
 
             card = choice(list(potential_cards))
-            self._game.defend(player=player, base_card=base_card, card=card)
+            self._game.legally_defend(player=player, base_card=base_card, card=card)
         except (IllegalAction, IndexError):
             raise self.CannotPerform
 

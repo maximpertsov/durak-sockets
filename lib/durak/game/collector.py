@@ -9,6 +9,9 @@ class Collector:
     class MultipleCollectors(IllegalAction):
         pass
 
+    class NoAttackCards(IllegalAction):
+        pass
+
     def __init__(self, *, game):
         self._game = game
 
@@ -28,6 +31,9 @@ class Collector:
 
         if self._game.player(player) != self._game.defender:
             raise self.GiveUpOutOfTurn
+
+        if not self._game._table.cards():
+            raise self.NoAttackCards
 
         self._game.player(player).add_status(Status.COLLECTING)
 

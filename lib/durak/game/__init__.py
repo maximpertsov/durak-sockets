@@ -41,7 +41,7 @@ class Game:
         self._yielded = Yielded(game=self)
 
         self._legal_attacks = LegalAttacks(game=self)
-        self._legal_defenses = LegalDefenses(game=self)
+        self.legal_defenses = LegalDefenses(game=self)
         self._legal_passes = LegalPasses(game=self)
 
         self._ai = AI(game=self)
@@ -51,7 +51,7 @@ class Game:
             "attackers": [player.id for player in self.attackers],
             "defender": getattr(self.defender, "id", None),
             "legal_attacks": self._legal_attacks.serialize(),
-            "legal_defenses": self._legal_defenses.serialize(),
+            "legal_defenses": self.legal_defenses.serialize(),
             "legal_passes": self._legal_passes.serialize(),
             "table": self._table.serialize(),
             "pass_count": self._pass_count,
@@ -101,7 +101,7 @@ class Game:
         self._clear_yields()
 
     def legally_defend(self, *, player, base_card, card):
-        self._legal_defenses.validate(player=player, base_card=base_card, card=card)
+        self.legal_defenses.validate(player=player, base_card=base_card, card=card)
         self.defend(player=player, base_card=base_card, card=card)
 
     def yield_attack(self, *, player):
