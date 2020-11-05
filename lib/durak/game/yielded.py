@@ -1,8 +1,11 @@
-from lib.durak.status import Status
 from lib.durak.exceptions import IllegalAction
+from lib.durak.status import Status
 
 
 class Yielded:
+    class YieldedBeforeAttack(IllegalAction):
+        pass
+
     class YieldOutOfTurn(IllegalAction):
         pass
 
@@ -14,15 +17,16 @@ class Yielded:
 
     def get(self):
         return set(
-            [
-                player
-                for player in self._game.ordered_players()
-                if player.has_status(Status.YIELDED)
-            ]
+            player
+            for player in self._game.ordered_players()
+            if player.has_status(Status.YIELDED)
         )
 
     def add(self, *, player):
-        if self._game.player(player) == self._game._defender():
+        if not self._game._table.cards():
+            raise self.YieldedBeforeAttack
+
+        if self._game.player(player) == self._game.defender:
             raise self.YieldOutOfTurn
 
         self._game.player(player).add_status(Status.YIELDED)

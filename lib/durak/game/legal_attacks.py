@@ -69,8 +69,9 @@ class LegalAttacks:
         if self._defender is None:
             return set()
 
-        attackers = self._game._attackers()
-        attacker_cards = chain.from_iterable(player.cards() for player in attackers)
+        attacker_cards = chain.from_iterable(
+            player.cards() for player in self._attackers
+        )
         return set(attacker_cards) & self._game._table.legal_attacks()
 
     @property
@@ -94,12 +95,12 @@ class LegalAttacks:
         return max(0, attack_limit - undefended_cards)
 
     @property
-    def _defender(self):
-        return self._game._defender()
+    def _attackers(self):
+        return self._game.attackers
 
     @property
-    def _attackers(self):
-        return self._game._attackers()
+    def _defender(self):
+        return self._game.defender
 
     def _player(self, player):
         return self._game.player(player)

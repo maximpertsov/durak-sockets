@@ -35,7 +35,8 @@ class LegalDefenses:
     def validate(self, player, base_card, card):
         if self._player(player) == self._game._durak:
             raise self.DefendingAsDurak
-        if self._player(player) == self._game._collector:
+
+        if self._player(player) == self._game._collector.get():
             raise self.DefendingAfterGivingUp
         if self._player(player) != self._defender:
             raise self.DefendingOutOfTurn
@@ -64,7 +65,7 @@ class LegalDefenses:
 
     @property
     def _defender(self):
-        return self._game._defender()
+        return self._game.defender
 
     def _player(self, player):
         return self._game.player(player)

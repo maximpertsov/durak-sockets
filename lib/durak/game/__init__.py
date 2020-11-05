@@ -41,17 +41,17 @@ class Game:
         self._yielded = Yielded(game=self)
 
         self._legal_attacks = LegalAttacks(game=self)
-        self._legal_defenses = LegalDefenses(game=self)
+        self.legal_defenses = LegalDefenses(game=self)
         self._legal_passes = LegalPasses(game=self)
 
         self._ai = AI(game=self)
 
     def serialize(self):
         return {
-            "attackers": [player.id for player in self._attackers()],
-            "defender": getattr(self._defender(), "id", None),
+            "attackers": [player.id for player in self.attackers],
+            "defender": getattr(self.defender, "id", None),
             "legal_attacks": self._legal_attacks.serialize(),
-            "legal_defenses": self._legal_defenses.serialize(),
+            "legal_defenses": self.legal_defenses.serialize(),
             "legal_passes": self._legal_passes.serialize(),
             "table": self._table.serialize(),
             "pass_count": self._pass_count,
@@ -101,16 +101,20 @@ class Game:
         self._clear_yields()
 
     def legally_defend(self, *, player, base_card, card):
-        self._legal_defenses.validate(player=player, base_card=base_card, card=card)
+        self.legal_defenses.validate(player=player, base_card=base_card, card=card)
         self.defend(player=player, base_card=base_card, card=card)
 
     def yield_attack(self, *, player):
         self._yielded.add(player=player)
-        if not self._no_more_attacks():
-            return
 
         if self._collector:
             self.collect()
+            return
+
+        if self._table.undefended_cards():
+            return
+
+        if not self._no_more_attacks():
             return
 
         self._successful_defense_cleanup()
@@ -162,7 +166,7 @@ class Game:
         )
 
     def auto_action(self, *, player):
-        self._ai.perform_action(player=player)
+        return self._ai.perform_action(player=player)
 
     def _rotate(self, *, skip=0):
         players = deque(self._ordered_players_with_cards_in_round())
@@ -175,27 +179,27 @@ class Game:
         for player in self._ordered_players_with_cards_in_round():
             player.compact_hand()
 
-    def _defender(self):
+    @property
+    def defender(self):
         players = self._ordered_players_with_cards_in_round()
         if len(players) < 2:
             return
         return players[1]
 
-    def _attackers(self):
+    @property
+    def attackers(self):
         players = self._ordered_players_with_cards_in_round()
         if not players:
             return []
 
         potential_attackers = [
-            player
-            for player in players
-            if player != self._defender() and player.cards()
+            player for player in players if player != self.defender and player.cards()
         ]
 
         return potential_attackers if self._table.cards() else potential_attackers[:1]
 
     def _no_more_attacks(self):
-        return set(self._attackers()).issubset(self._yielded_players())
+        return set(self.attackers).issubset(self._yielded_players())
 
     def _yielded_players(self):
         return self._yielded.get()

@@ -5,7 +5,7 @@ from os import environ
 
 import httpx
 from lib.durak.exceptions import ActionNotDefined, IllegalAction
-from lib.durak.game import Game
+from lib.durak.game import AI, Game
 
 
 def noop(*, from_state):
@@ -81,9 +81,16 @@ def auto_action(*, from_state, user, payload):
     Game will select an action for the user to perform.
     It is assumed that the "user" is a bot.
     """
-    game = Game.deserialize(from_state)
-    game.auto_action(player=user, **payload)
-    return game.serialize()
+    for _ in range(100):
+        try:
+            game = Game.deserialize(from_state)
+            action_type = game.auto_action(player=user, **payload)
+            print(f"{user} {action_type}")
+            return game.serialize()
+        except AI.CannotPerform:
+            pass
+    else:
+        raise IllegalAction
 
 
 actions = {
