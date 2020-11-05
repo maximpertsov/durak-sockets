@@ -21,8 +21,9 @@ class AI:
         if self._player(_player) in self._game._yielded.get():
             raise self.CannotPerform("Already yielded")
 
-        selected_action = choice(self._potential_actions(player=_player))
+        action_type, selected_action = choice(self._potential_actions(player=_player))
         selected_action(player=_player)
+        return action_type
 
     def _potential_actions(self, *, player):
         # TODO: report action on event?
@@ -32,11 +33,11 @@ class AI:
 
         return list(
             chain(
-                [self._attack] * 3 * not_defending,
+                [("attacked", self._attack)] * 3 * not_defending,
                 # self._pass_card,
-                [self._defend] * 9 * defending,
-                [self._give_up] * 1 * defending,
-                [self._yield_attack] * 7 * not_defending,
+                [("defended", self._defend)] * 9 * defending,
+                [("gave_up", self._give_up)] * 1 * defending,
+                [("yielded_attack", self._yield_attack)] * 7 * not_defending,
             )
         )
 
@@ -51,8 +52,7 @@ class AI:
             )
             card = choice(potential_cards)
             self._game.legally_attack(player=player, cards=[card])
-        except (IllegalAction, IndexError) as error:
-            print("Cannot attack", {"player": player.id, "error": error})
+        except (IllegalAction, IndexError):
             raise self.CannotPerform
 
     def _yield_attack(self, *, player):

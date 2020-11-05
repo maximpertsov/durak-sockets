@@ -3,7 +3,10 @@ from lib.durak.status import Status
 
 
 class Collector:
-    class GiveUpOutOfTurn(IllegalAction):
+    class GivingUpAfterBeatingAttack(IllegalAction):
+        pass
+
+    class GivingUpOutOfTurn(IllegalAction):
         pass
 
     class MultipleCollectors(IllegalAction):
@@ -30,10 +33,13 @@ class Collector:
             raise self.MultipleCollectors
 
         if self._game.player(player) != self._game.defender:
-            raise self.GiveUpOutOfTurn
+            raise self.GivingUpOutOfTurn
 
         if not self._game._table.cards():
             raise self.NoAttackCards
+
+        if not self._game._table.undefended_cards():
+            raise self.GivingUpAfterBeatingAttack
 
         self._game.player(player).add_status(Status.COLLECTING)
 

@@ -84,7 +84,8 @@ def auto_action(*, from_state, user, payload):
     for _ in range(100):
         try:
             game = Game.deserialize(from_state)
-            game.auto_action(player=user, **payload)
+            action_type = game.auto_action(player=user, **payload)
+            print(f"{user} {action_type}")
             return game.serialize()
         except AI.CannotPerform:
             pass

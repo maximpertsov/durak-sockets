@@ -162,7 +162,7 @@ class Game:
         )
 
     def auto_action(self, *, player):
-        self._ai.perform_action(player=player)
+        return self._ai.perform_action(player=player)
 
     def _rotate(self, *, skip=0):
         players = deque(self._ordered_players_with_cards_in_round())
