@@ -137,7 +137,7 @@ class Game:
     def draw(self):
         players = deque(self._ordered_players_with_cards_in_round())
         players.rotate(self._pass_count)
-        for index, player in enumerate(players):
+        for player in players:
             player.draw(draw_pile=self._draw_pile)
         self._pass_count = 0
 
@@ -175,9 +175,12 @@ class Game:
         for index, player in enumerate(players):
             player.order = index
 
+    # TODO: change method name
     def _compact_hands(self):
         for player in self._ordered_players_with_cards_in_round():
             player.compact_hand()
+            if not player.cards():
+                player.remove_from_game()
 
     @property
     def defender(self):
@@ -218,7 +221,7 @@ class Game:
         return [
             player
             for player in self.ordered_players()
-            if player.had_cards_in_round() or self._draw_pile.size()
+            if not player.has_status(Status.OUT_OF_PLAY)
         ]
 
     def ordered_players(self):
