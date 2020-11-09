@@ -104,7 +104,9 @@
         "hand": [],
         "id": "anna",
         "order": 1,
-        "state": []
+        "state": [
+          "out_of_play"
+        ]
       },
       {
         "hand": [
@@ -120,7 +122,9 @@
         "hand": [],
         "id": "grusha",
         "order": 3,
-        "state": []
+        "state": [
+          "out_of_play"
+        ]
       }
     ],
     "seed": 0.4,

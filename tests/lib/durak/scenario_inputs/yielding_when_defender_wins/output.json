@@ -87,7 +87,9 @@
         "hand": [],
         "id": "anna",
         "order": 0,
-        "state": []
+        "state": [
+          "out_of_play"
+        ]
       },
       {
         "hand": [

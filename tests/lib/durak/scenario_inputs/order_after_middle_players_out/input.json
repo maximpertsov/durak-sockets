@@ -83,7 +83,7 @@
         "hand": [],
         "id": "igor",
         "order": 2,
-        "state": []
+        "state": ["out_of_play"]
       },
       {
         "hand": [
