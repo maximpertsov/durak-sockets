@@ -137,7 +137,7 @@ class Game:
     def draw(self):
         players = deque(self._ordered_players_with_cards_in_round())
         players.rotate(self._pass_count)
-        for index, player in enumerate(players):
+        for player in players:
             player.draw(draw_pile=self._draw_pile)
         self._pass_count = 0
 
