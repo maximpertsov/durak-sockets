@@ -126,6 +126,7 @@ class Game:
         self._collector.clear()
         self._clear_yields()
         self._compact_hands()
+        self._remove_from_game()
 
     def _successful_defense_cleanup(self):
         self._table.clear()
@@ -133,6 +134,7 @@ class Game:
         self._rotate()
         self._clear_yields()
         self._compact_hands()
+        self._remove_from_game()
 
     def draw(self):
         players = deque(self._ordered_players_with_cards_in_round())
@@ -178,6 +180,11 @@ class Game:
     def _compact_hands(self):
         for player in self._ordered_players_with_cards_in_round():
             player.compact_hand()
+
+    def _remove_from_game(self):
+        for player in self._ordered_players_with_cards_in_round():
+            if not player.cards():
+                player.remove_from_game()
 
     @property
     def defender(self):

@@ -89,3 +89,6 @@ class Player:
 
     def cards(self):
         return [card for card in self._hand if card]
+
+    def remove_from_game(self):
+        self.add_status(Status.OUT_OF_PLAY)
