@@ -47,8 +47,6 @@ class Player:
     def card_count(self):
         return len(self.cards())
 
-    # TODO: ensure that null cards are not required for game logic.
-    # Assuming that's true, you can remove the (100, "z", ...) tuples.
     def organize_cards(self, *, strategy, trump_suit):
         if strategy == "no_sort":
             pass
