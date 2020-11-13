@@ -1,8 +1,12 @@
 from lib.durak.card import get_suit, get_value
+from lib.durak.exceptions import IllegalAction
 from lib.durak.status import Status
 
 
 class Player:
+    class BadOrganizationStrategy(IllegalAction):
+        pass
+
     HAND_SIZE = 6
 
     @classmethod
@@ -12,13 +16,15 @@ class Player:
             hand=player["hand"],
             order=player["order"],
             state=[Status(status) for status in player["state"]],
+            organize_key=player.get("organize_strategy", "group_by_rank_and_trump"),
         )
 
-    def __init__(self, *, id, order, hand, state=None):
+    def __init__(self, *, id, order, hand, organize_key, state):
         self.id = id
         self._hand = hand
         self.order = order
-        self._state = set(state) if state else set()
+        self._state = set(state)
+        self._organize_key = organize_key
 
     def serialize(self):
         return {
@@ -26,6 +32,7 @@ class Player:
             "hand": self._hand,
             "order": self.order,
             "state": self._state,
+            "organize_strategy": self._organize_key,
         }
 
     def has_status(self, status):
@@ -55,6 +62,10 @@ class Player:
                     get_suit(card),
                 )
             )
+        else:
+            raise self.BadOrganizationStrategy
+
+        self._organize_key = strategy
 
     def take_cards(self, *, cards):
         self._hand += cards
