@@ -110,6 +110,7 @@
         ],
         "id": "cyril",
         "order": 0,
+        "organize_strategy": "no_sort",
         "state": []
       },
       {
@@ -123,6 +124,7 @@
         ],
         "id": "kevin",
         "order": 1,
+        "organize_strategy": "no_sort",
         "state": []
       },
       {
@@ -136,6 +138,7 @@
         ],
         "id": "john",
         "order": 2,
+        "organize_strategy": "no_sort",
         "state": []
       },
       {
@@ -155,6 +158,7 @@
         ],
         "id": "maxim",
         "order": 3,
+        "organize_strategy": "no_sort",
         "state": []
       }
     ],

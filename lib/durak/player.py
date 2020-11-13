@@ -16,7 +16,7 @@ class Player:
             hand=player["hand"],
             order=player["order"],
             state=[Status(status) for status in player["state"]],
-            organize_key=player.get("organize_strategy", "group_by_rank_and_trump"),
+            organize_key=player.get("organize_strategy", "no_sort"),
         )
 
     def __init__(self, *, id, order, hand, organize_key, state):

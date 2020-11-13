@@ -66,6 +66,7 @@
         "hand": [],
         "id": "vasyl",
         "order": 0,
+        "organize_strategy": "no_sort",
         "state": [
           "out_of_play"
         ]
@@ -78,6 +79,7 @@
         ],
         "id": "grusha",
         "order": 1,
+        "organize_strategy": "no_sort",
         "state": []
       },
       {
@@ -86,12 +88,14 @@
         ],
         "id": "anna",
         "order": 2,
+        "organize_strategy": "no_sort",
         "state": []
       },
       {
         "hand": [],
         "id": "igor",
         "order": 2,
+        "organize_strategy": "no_sort",
         "state": [
           "out_of_play"
         ]
