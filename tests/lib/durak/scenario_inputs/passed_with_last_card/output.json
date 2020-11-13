@@ -89,9 +89,7 @@
     "pass_count": 1,
     "players": [
       {
-        "hand": [
-          null
-        ],
+        "hand": [],
         "id": "anna",
         "order": 0,
         "state": []
@@ -117,7 +115,6 @@
       {
         "hand": [
           "QS",
-          null,
           "KH"
         ],
         "id": "grusha",

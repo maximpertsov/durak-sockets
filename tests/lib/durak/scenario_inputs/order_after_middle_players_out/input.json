@@ -61,7 +61,6 @@
     "players": [
       {
         "hand": [
-          null,
           "AH"
         ],
         "id": "anna",
@@ -69,12 +68,7 @@
         "state": []
       },
       {
-        "hand": [
-          null,
-          null,
-          null,
-          null
-        ],
+        "hand": [],
         "id": "vasyl",
         "order": 1,
         "state": []
@@ -87,9 +81,6 @@
       },
       {
         "hand": [
-          null,
-          null,
-          null,
           "KC",
           "KH",
           "KS"
