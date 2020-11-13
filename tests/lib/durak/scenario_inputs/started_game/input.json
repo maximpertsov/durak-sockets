@@ -1,6 +1,6 @@
 {
   "from_state": {
-    "attack_limit": 100,
+    "attack_limit": "hand",
     "joined": [
       "vasyl",
       "igor",

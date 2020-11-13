@@ -98,9 +98,6 @@ class LegalAttacks:
     def _attack_limit(self):
         if self._game._attack_limit == "six":
             return 6
-        # TODO: remove after migration is complete
-        if self._game._attack_limit == 6:
-            return 6
         return 100
 
     @property

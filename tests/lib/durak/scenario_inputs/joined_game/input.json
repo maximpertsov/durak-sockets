@@ -1,6 +1,6 @@
 {
   "from_state": {
-    "attack_limit": 100,
+    "attack_limit": "hand",
     "lowest_rank": "6",
     "players": [
       {

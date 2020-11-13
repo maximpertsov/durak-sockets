@@ -6,7 +6,7 @@ from lib.durak.game import Game, Status
 @pytest.fixture
 def static_parameters():
     return {
-        "attack_limit": 100,
+        "attack_limit": "hand",
         "lowest_rank": "2",
         "seed": 0.4,
         "with_passing": True,

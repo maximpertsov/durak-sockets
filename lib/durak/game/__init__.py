@@ -13,6 +13,15 @@ from .players import Players
 from .yielded import Yielded
 
 
+# TODO: remove after migrating
+def get_attack_limit(state):
+    if state["attack_limit"] == 6:
+        return "six"
+    if state["attack_limit"] == 100:
+        return "hand"
+    return state["attack_limit"]
+
+
 class Game:
     @classmethod
     def deserialize(cls, state):
@@ -34,7 +43,7 @@ class Game:
 
         self._pass_count = state["pass_count"]
         self._lowest_rank = state["lowest_rank"]
-        self._attack_limit = state["attack_limit"]
+        self._attack_limit = get_attack_limit(state)
         self._with_passing = state["with_passing"]
 
         self._collector = Collector(game=self)
