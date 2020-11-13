@@ -86,10 +86,16 @@ class LegalPasses:
             return 0
 
         recipient_card_count = len(self._pass_recipient.cards())
-        attack_limit = min(recipient_card_count, self._game._attack_limit)
+        attack_limit = min(recipient_card_count, self._attack_limit)
         undefended_card_count = len(self._game._table.undefended_cards())
 
         return max(0, attack_limit - undefended_card_count)
+
+    @property
+    def _attack_limit(self):
+        if self._game._attack_limit == "six":
+            return 6
+        return 100
 
     @property
     def _pass_recipient(self):

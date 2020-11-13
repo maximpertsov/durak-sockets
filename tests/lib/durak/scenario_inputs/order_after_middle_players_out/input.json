@@ -1,6 +1,6 @@
 {
   "from_state": {
-    "attack_limit": 6,
+    "attack_limit": "six",
     "attackers": [
       "anna",
       "grusha"

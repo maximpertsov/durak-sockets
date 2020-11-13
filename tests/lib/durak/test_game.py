@@ -6,7 +6,7 @@ from lib.durak.game import Game, Status
 @pytest.fixture
 def static_parameters():
     return {
-        "attack_limit": 100,
+        "attack_limit": "hand",
         "lowest_rank": "2",
         "seed": 0.4,
         "with_passing": True,
@@ -414,6 +414,7 @@ def test_legal_passes(game_3p, static_parameters):
     }
 
 
+@pytest.mark.xfail(reason="Attack limit does not exist")
 def test_legal_attacks_and_passes_with_limits(game_3p, static_parameters):
     game_3p._table.add_card(card="7S")
     game_3p._attack_limit = 3
