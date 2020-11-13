@@ -47,25 +47,29 @@ class Player:
     def card_count(self):
         return len(self.cards())
 
-    def organize_cards(self, *, strategy, trump_suit):
-        if strategy == "no_sort":
-            pass
-        elif strategy == "group_by_rank":
-            self._hand.sort(key=lambda card: (get_value(card), get_suit(card)))
-        elif strategy == "group_by_suit":
-            self._hand.sort(key=lambda card: (get_suit(card), get_value(card)))
-        elif strategy == "group_by_rank_and_trump":
-            self._hand.sort(
-                key=lambda card: (
-                    1 if get_suit(card) == trump_suit else 0,
-                    get_value(card),
-                    get_suit(card),
-                )
-            )
-        else:
-            raise self.BadOrganizationStrategy(strategy)
+    def update_organize_strategy(self, *, strategy, trump_suit):
+        if not self._organize_strategy_key(strategy, trump_suit):
+            raise self.BadOrganizationStrategy
 
         self._organize_key = strategy
+
+    def organize_cards(self, *, trump_suit):
+        key = self._organize_strategy_key(self._organize_key, trump_suit)
+        self._hand.sort(key=key)
+
+    def _organize_strategy_key(self, strategy, trump_suit):
+        if strategy == "no_sort":
+            return lambda card: 0
+        elif strategy == "group_by_rank":
+            return lambda card: (get_value(card), get_suit(card))
+        elif strategy == "group_by_suit":
+            return lambda card: (get_suit(card), get_value(card))
+        elif strategy == "group_by_rank_and_trump":
+            return lambda card: (
+                1 if get_suit(card) == trump_suit else 0,
+                get_value(card),
+                get_suit(card),
+            )
 
     def take_cards(self, *, cards):
         self._hand += cards

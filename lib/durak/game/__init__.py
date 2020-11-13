@@ -66,9 +66,7 @@ class Game:
 
     def _serialize_players(self):
         for player in self.ordered_players():
-            player.organize_cards(
-                strategy=player._organize_key, trump_suit=self._trump_suit
-            )
+            player.organize_cards(trump_suit=self._trump_suit)
             if self._durak == player:
                 player.add_status(Status.DURAK)
         return self._players.serialize()
@@ -169,7 +167,7 @@ class Game:
         self._clear_yields()
 
     def organize_cards(self, *, player, strategy):
-        self.player(player).organize_cards(
+        self.player(player).update_organize_strategy(
             strategy=strategy, trump_suit=self._trump_suit
         )
 
