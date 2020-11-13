@@ -1,47 +1,52 @@
 {
-  "payload": {},
-  "to_state": {
-    "attack_limit": 100,
+  "from_state": {
+    "attack_limit": 6,
     "attackers": [
       "anna"
     ],
-    "cards_left": 12,
+    "cards_left": 7,
     "defender": "vasyl",
     "drawn_cards": [
-      "10C",
+      "10D",
+      "10H",
+      "10S",
       "6C",
       "6D",
-      "6H",
+      "6S",
+      "7C",
+      "7D",
       "7H",
-      "7S",
+      "8C",
       "8D",
+      "8H",
       "8S",
-      "9C",
       "9D",
       "9H",
-      "9S",
-      "AC",
       "AD",
       "AH",
       "AS",
+      "JC",
+      "JD",
       "JH",
+      "JS",
       "KC",
       "KD",
       "KH",
+      "KS",
       "QC",
-      "QD",
       "QH",
       "QS"
     ],
-    "last_card": "10H",
+    "last_card": "9C",
     "legal_attacks": {
       "cards": [
-        "6D",
-        "6H",
-        "7H",
-        "KD",
-        "KH",
-        "QD"
+        "10D",
+        "10H",
+        "8S",
+        "JC",
+        "JS",
+        "KC",
+        "QC"
       ],
       "limit": 6
     },
@@ -55,67 +60,59 @@
     "players": [
       {
         "hand": [
-          "7H",
-          "6H",
-          "KH",
-          "QD",
-          "6D",
-          "KD"
+          "JC",
+          "QC",
+          "KC",
+          "10D",
+          "10H",
+          "8S",
+          "JS"
         ],
         "id": "anna",
         "order": 0,
-        "organize_strategy": "no_sort",
+        "organize_strategy": "group_by_suit",
         "state": []
       },
       {
         "hand": [
+          "8D",
           "9H",
-          "7S",
-          "AD",
-          "10C",
-          "KC",
-          "9S"
+          "10S",
+          "KD",
+          "KH",
+          "KS",
+          "AD"
         ],
         "id": "vasyl",
         "order": 1,
-        "organize_strategy": "no_sort",
+        "organize_strategy": "group_by_rank_and_trump",
         "state": []
       },
       {
         "hand": [
-          "JH",
-          "8S",
-          "6C",
-          "QH",
-          "QC",
-          "8D"
-        ],
-        "id": "igor",
-        "order": 2,
-        "organize_strategy": "no_sort",
-        "state": []
-      },
-      {
-        "hand": [
-          "QS",
-          "9C",
-          "AC",
+          "6D",
+          "6S",
+          "8H",
           "9D",
+          "QS",
           "AH",
           "AS"
         ],
         "id": "grusha",
-        "order": 3,
-        "organize_strategy": "no_sort",
+        "order": 2,
+        "organize_strategy": "group_by_rank_and_trump",
         "state": []
       }
     ],
-    "seed": 0.4,
+    "seed": 0.4067178258,
     "table": [],
-    "trump_suit": "hearts",
+    "trump_suit": "clubs",
     "winners": [],
     "with_passing": true
   },
-  "type": "joined_game",
+  "payload": {
+    "strategy": "group_by_rank_and_trump"
+  },
+  "type": "organized",
   "user": "anna"
 }

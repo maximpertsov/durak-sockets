@@ -1,8 +1,12 @@
 from lib.durak.card import get_suit, get_value
+from lib.durak.exceptions import IllegalAction
 from lib.durak.status import Status
 
 
 class Player:
+    class BadOrganizationStrategy(IllegalAction):
+        pass
+
     HAND_SIZE = 6
 
     @classmethod
@@ -12,13 +16,15 @@ class Player:
             hand=player["hand"],
             order=player["order"],
             state=[Status(status) for status in player["state"]],
+            organize_key=player.get("organize_strategy", "no_sort"),
         )
 
-    def __init__(self, *, id, order, hand, state=None):
+    def __init__(self, *, id, order, hand, organize_key, state):
         self.id = id
         self._hand = hand
         self.order = order
-        self._state = set(state) if state else set()
+        self._state = set(state)
+        self._organize_key = organize_key
 
     def serialize(self):
         return {
@@ -26,6 +32,7 @@ class Player:
             "hand": self._hand,
             "order": self.order,
             "state": self._state,
+            "organize_strategy": self._organize_key,
         }
 
     def has_status(self, status):
@@ -40,20 +47,28 @@ class Player:
     def card_count(self):
         return len(self.cards())
 
-    # TODO: ensure that null cards are not required for game logic.
-    # Assuming that's true, you can remove the (100, "z", ...) tuples.
-    def organize_cards(self, *, strategy, trump_suit):
-        if strategy == "group_by_rank":
-            self._hand.sort(key=lambda card: (get_value(card), get_suit(card)))
+    def update_organize_strategy(self, *, strategy, trump_suit):
+        if not self._organize_strategy_key(strategy, trump_suit):
+            raise self.BadOrganizationStrategy
+
+        self._organize_key = strategy
+
+    def organize_cards(self, *, trump_suit):
+        key = self._organize_strategy_key(self._organize_key, trump_suit)
+        self._hand.sort(key=key)
+
+    def _organize_strategy_key(self, strategy, trump_suit):
+        if strategy == "no_sort":
+            return lambda card: 0
+        elif strategy == "group_by_rank":
+            return lambda card: (get_value(card), get_suit(card))
         elif strategy == "group_by_suit":
-            self._hand.sort(key=lambda card: (get_suit(card), get_value(card)))
+            return lambda card: (get_suit(card), get_value(card))
         elif strategy == "group_by_rank_and_trump":
-            self._hand.sort(
-                key=lambda card: (
-                    1 if get_suit(card) == trump_suit else 0,
-                    get_value(card),
-                    get_suit(card),
-                )
+            return lambda card: (
+                1 if get_suit(card) == trump_suit else 0,
+                get_value(card),
+                get_suit(card),
             )
 
     def take_cards(self, *, cards):
@@ -67,9 +82,6 @@ class Player:
 
     def draw_count(self):
         return max(self.HAND_SIZE - self.card_count(), 0)
-
-    def had_cards_in_round(self):
-        return bool(self._hand)
 
     def cards(self):
         return [card for card in self._hand if card]

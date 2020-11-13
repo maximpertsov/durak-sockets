@@ -10,6 +10,8 @@ def player():
         id="anna",
         hand=["10D", "10C", "2S", "5C", "8D", "2C"],
         order=0,
+        state=[],
+        organize_key="no_sort",
     )
 
 
@@ -19,11 +21,8 @@ def test_serialize(player):
         "hand": ["10D", "10C", "2S", "5C", "8D", "2C"],
         "order": 0,
         "state": set(),
+        "organize_strategy": "no_sort",
     }
-
-
-def test_card_count(player):
-    assert player.card_count() == 6
 
 
 def test_take_cards(player):
@@ -33,6 +32,7 @@ def test_take_cards(player):
         "hand": ["10D", "10C", "2S", "5C", "8D", "2C", "3S", "4D"],
         "order": 0,
         "state": set(),
+        "organize_strategy": "no_sort",
     }
 
 
@@ -43,23 +43,21 @@ def test_remove_card(player):
         "hand": ["10D", "10C", "5C", "8D", "2C"],
         "order": 0,
         "state": set(),
+        "organize_strategy": "no_sort",
     }
 
 
-def test_card_count_and_had_cards_in_round(player):
-    kwargs = {"id": "anna", "order": 0}
+def test_card_count(player):
+    kwargs = {"id": "anna", "order": 0, "organize_key": "no_sort", "state": []}
 
     player = Player(hand=["10D"], **kwargs)
     assert player.card_count() == 1
-    assert player.had_cards_in_round()
 
     player = Player(hand=[None], **kwargs)
     assert player.card_count() == 0
-    assert player.had_cards_in_round()
 
     player = Player(hand=[], **kwargs)
     assert player.card_count() == 0
-    assert not player.had_cards_in_round()
 
 
 @pytest.fixture
@@ -68,7 +66,9 @@ def mocked_draw_cards(get_draw_pile_cards):
 
 
 def test_draw_from_pile(mocked_draw_cards):
-    player = Player(id="anna", hand=["10D", "10C"], order=0)
+    player = Player(
+        id="anna", hand=["10D", "10C"], order=0, organize_key="no_sort", state=[]
+    )
     draw_pile = DrawPile(drawn_cards=[], lowest_rank="2", seed=0.4)
     player.draw(draw_pile=draw_pile)
     assert player.serialize() == {
@@ -76,6 +76,7 @@ def test_draw_from_pile(mocked_draw_cards):
         "hand": ["10D", "10C", "2S", "5C", "8D", "2C"],
         "order": 0,
         "state": set(),
+        "organize_strategy": "no_sort",
     }
     assert draw_pile.serialize() == {
         "cards_left": 1,
