@@ -79,9 +79,6 @@ class Player:
     def draw_count(self):
         return max(self.HAND_SIZE - self.card_count(), 0)
 
-    def had_cards_in_round(self):
-        return bool(self._hand)
-
     def cards(self):
         return [card for card in self._hand if card]
 

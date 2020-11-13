@@ -25,10 +25,6 @@ def test_serialize(player):
     }
 
 
-def test_card_count(player):
-    assert player.card_count() == 6
-
-
 def test_take_cards(player):
     player.take_cards(cards=["3S", "4D"])
     assert player.serialize() == {
@@ -51,20 +47,17 @@ def test_remove_card(player):
     }
 
 
-def test_card_count_and_had_cards_in_round(player):
+def test_card_count(player):
     kwargs = {"id": "anna", "order": 0, "organize_key": "no_sort", "state": []}
 
     player = Player(hand=["10D"], **kwargs)
     assert player.card_count() == 1
-    assert player.had_cards_in_round()
 
     player = Player(hand=[None], **kwargs)
     assert player.card_count() == 0
-    assert player.had_cards_in_round()
 
     player = Player(hand=[], **kwargs)
     assert player.card_count() == 0
-    assert not player.had_cards_in_round()
 
 
 @pytest.fixture
