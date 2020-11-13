@@ -50,7 +50,9 @@ class Player:
     # TODO: ensure that null cards are not required for game logic.
     # Assuming that's true, you can remove the (100, "z", ...) tuples.
     def organize_cards(self, *, strategy, trump_suit):
-        if strategy == "group_by_rank":
+        if strategy == "no_sort":
+            pass
+        elif strategy == "group_by_rank":
             self._hand.sort(key=lambda card: (get_value(card), get_suit(card)))
         elif strategy == "group_by_suit":
             self._hand.sort(key=lambda card: (get_suit(card), get_value(card)))
@@ -63,7 +65,7 @@ class Player:
                 )
             )
         else:
-            raise self.BadOrganizationStrategy
+            raise self.BadOrganizationStrategy(strategy)
 
         self._organize_key = strategy
 
