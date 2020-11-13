@@ -1,0 +1,119 @@
+{
+  "no_display": true,
+  "payload": {
+    "strategy": "group_by_rank_and_trump"
+  },
+  "to_state": {
+    "attack_limit": 6,
+    "attackers": [
+      "anna"
+    ],
+    "cards_left": 7,
+    "defender": "vasyl",
+    "drawn_cards": [
+      "10D",
+      "10H",
+      "10S",
+      "6C",
+      "6D",
+      "6S",
+      "7C",
+      "7D",
+      "7H",
+      "8C",
+      "8D",
+      "8H",
+      "8S",
+      "9D",
+      "9H",
+      "AD",
+      "AH",
+      "AS",
+      "JC",
+      "JD",
+      "JH",
+      "JS",
+      "KC",
+      "KD",
+      "KH",
+      "KS",
+      "QC",
+      "QH",
+      "QS"
+    ],
+    "last_card": "9C",
+    "legal_attacks": {
+      "cards": [
+        "10D",
+        "10H",
+        "8S",
+        "JC",
+        "JS",
+        "KC",
+        "QC"
+      ],
+      "limit": 6
+    },
+    "legal_defenses": {},
+    "legal_passes": {
+      "cards": [],
+      "limit": 6
+    },
+    "lowest_rank": "6",
+    "pass_count": 0,
+    "players": [
+      {
+        "hand": [
+          "8S",
+          "10D",
+          "10H",
+          "JS",
+          "JC",
+          "QC",
+          "KC"
+        ],
+        "id": "anna",
+        "order": 0,
+        "organize_strategy": "group_by_rank_and_trump",
+        "state": []
+      },
+      {
+        "hand": [
+          "8D",
+          "9H",
+          "10S",
+          "KD",
+          "KH",
+          "KS",
+          "AD"
+        ],
+        "id": "vasyl",
+        "order": 1,
+        "organize_strategy": "group_by_rank_and_trump",
+        "state": []
+      },
+      {
+        "hand": [
+          "6D",
+          "6S",
+          "8H",
+          "9D",
+          "QS",
+          "AH",
+          "AS"
+        ],
+        "id": "grusha",
+        "order": 2,
+        "organize_strategy": "group_by_rank_and_trump",
+        "state": []
+      }
+    ],
+    "seed": 0.4067178258,
+    "table": [],
+    "trump_suit": "clubs",
+    "winners": [],
+    "with_passing": true
+  },
+  "type": "organized",
+  "user": "anna"
+}
