@@ -61,10 +61,7 @@
     "pass_count": 0,
     "players": [
       {
-        "hand": [
-          null,
-          null
-        ],
+        "hand": [],
         "id": "grusha",
         "order": 0,
         "state": []
@@ -72,11 +69,7 @@
       {
         "hand": [
           "KS",
-          null,
-          null,
-          null,
-          "JD",
-          null
+          "JD"
         ],
         "id": "anna",
         "order": 1,
@@ -88,7 +81,6 @@
           "QS",
           "8C",
           "QH",
-          null,
           "6H"
         ],
         "id": "vasyl",
@@ -101,7 +93,6 @@
         "hand": [
           "9S",
           "QD",
-          null,
           "6S",
           "6D",
           "JS"

@@ -125,14 +125,19 @@ class Game:
         self._rotate(skip=1)
         self._collector.clear()
         self._clear_yields()
-        self._compact_hands()
+        self._remove_players()
 
     def _successful_defense_cleanup(self):
         self._table.clear()
         self.draw()
         self._rotate()
         self._clear_yields()
-        self._compact_hands()
+        self._remove_players()
+
+    def _remove_players(self):
+        for player in self._ordered_players_with_cards_in_round():
+            if not player.cards():
+                player.remove_from_game()
 
     def draw(self):
         players = deque(self._ordered_players_with_cards_in_round())
@@ -174,13 +179,6 @@ class Game:
 
         for index, player in enumerate(players):
             player.order = index
-
-    # TODO: change method name
-    def _compact_hands(self):
-        for player in self._ordered_players_with_cards_in_round():
-            player.compact_hand()
-            if not player.cards():
-                player.remove_from_game()
 
     @property
     def defender(self):
