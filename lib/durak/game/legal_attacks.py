@@ -90,9 +90,18 @@ class LegalAttacks:
         if self._defender is None:
             return 0
 
-        attack_limit = min(len(self._defender.cards()), self._game._attack_limit)
+        attack_limit = min(len(self._defender.cards()), self._attack_limit)
         undefended_cards = len(self._game._table.undefended_cards())
         return max(0, attack_limit - undefended_cards)
+
+    @property
+    def _attack_limit(self):
+        if self._game._attack_limit == "six":
+            return 6
+        # TODO: remove after migration is complete
+        if self._game._attack_limit == 6:
+            return 6
+        return 100
 
     @property
     def _attackers(self):
