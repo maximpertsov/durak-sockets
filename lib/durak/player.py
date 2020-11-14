@@ -11,6 +11,13 @@ class Attack:
         self.attack = attack
         self.defense = defense
 
+    def serialize(self):
+        return {
+            "attack": self.attack,
+            "defense": self.defense,
+            "timestamp": self.timestamp,
+        }
+
 
 class Player:
     class BadOrganizationStrategy(IllegalAction):
