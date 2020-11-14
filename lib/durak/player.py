@@ -18,6 +18,10 @@ class Attack:
             "timestamp": self.timestamp,
         }
 
+    # TODO: temporary
+    def pair(self):
+        return list(filter(None, [self.attack, self.defense]))
+
 
 class Player:
     class BadOrganizationStrategy(IllegalAction):
@@ -51,6 +55,7 @@ class Player:
             "order": self.order,
             "state": self._state,
             "organize_strategy": self._organize_key,
+            "attacks": [attack.serialize() for attack in self.attacks],
         }
 
     def has_status(self, status):

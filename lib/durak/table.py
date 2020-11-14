@@ -1,4 +1,5 @@
 from itertools import chain
+from operator import attrgetter
 
 from lib.durak.card import get_all_cards, get_rank, is_legal_defense
 from lib.durak.exceptions import IllegalAction
@@ -11,11 +12,17 @@ class Table:
     class DuplicateCard(IllegalAction):
         pass
 
-    def __init__(self, table):
-        self._table = table
+    def __init__(self, *, game):
+        self._game = game
+
+    def get(self):
+        attacks = chain.from_iterable(
+            player.attacks for player in self._game.ordered_players()
+        )
+        return sorted(list(attacks), key=attrgetter("timestamp"))
 
     def serialize(self):
-        return self._table
+        return [attack.pair for attack in self.get()]
 
     def add_card(self, *, card):
         for table_card in self.cards():
@@ -61,8 +68,8 @@ class Table:
             if cards[-1] == base_card:
                 cards.append(card)
                 return
-        else:
-            raise self.BaseCardNotFound
+            else:
+                raise self.BaseCardNotFound
 
     def clear(self):
         self._table.clear()
@@ -73,4 +80,4 @@ class Table:
         return result
 
     def cards(self):
-        return list(chain.from_iterable(self._table))
+        return list(chain.from_iterable(self.get()))

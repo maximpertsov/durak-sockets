@@ -32,20 +32,19 @@ class Game:
                 lowest_rank=state["lowest_rank"],
             ),
             players=Players.deserialize(state["players"]),
-            table=Table(table=state["table"]),
             state=state,
         )
 
-    def __init__(self, *, draw_pile, players, table, state):
+    def __init__(self, *, draw_pile, players, state):
         self._draw_pile = draw_pile
         self._players = players
-        self._table = table
 
         self._pass_count = state["pass_count"]
         self._lowest_rank = state["lowest_rank"]
         self._attack_limit = get_attack_limit(state)
         self._with_passing = state["with_passing"]
 
+        self._table = Table(game=self)
         self._collector = Collector(game=self)
         self._yielded = Yielded(game=self)
 
