@@ -105,8 +105,9 @@ class Game:
 
     def defend(self, *, player, base_card, card):
         self._table.defend(
+            player=self.player(player),
             attack_card=base_card,
-            defense_card=self.player(player).remove_card(card=card),
+            defense_card=card,
         )
         self._clear_yields()
 

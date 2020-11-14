@@ -25,12 +25,12 @@ class Table:
 
         player.attack(card=card)
 
-    def defend(self, *, attack_card, defense_card):
+    def defend(self, *, player, attack_card, defense_card):
         for attack in self._sorted_attacks():
             if attack.attack != attack_card:
                 continue
 
-            attack.defend_with(card=defense_card)
+            attack.defend_with(card=player.remove_card(card=defense_card))
             return
         else:
             raise self.TargetCardNotFound
