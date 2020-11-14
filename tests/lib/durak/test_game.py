@@ -102,39 +102,41 @@ def test_attack(game, static_parameters):
     }
 
 
-# def test_defend(game, static_parameters):
-#     game._table.add_card(card="9D")
-#     game.defend(
-#         base_card="9D",
-#         player="anna",
-#         card="10D",
-#     )
-#     assert game.serialize() == {
-#         "attackers": ["anna"],
-#         "cards_left": 3,
-#         "defender": None,
-#         "drawn_cards": set(),
-#         "last_card": "6C",
-#         "legal_attacks": {"cards": set([]), "limit": 0},
-#         "legal_defenses": {},
-#         "legal_passes": {"cards": set([]), "limit": 0},
-#         "pass_count": 0,
-#         "players": [
-#             {
-#                 "order": 0,
-#                 "id": "anna",
-#                 "hand": ["10C", "2S", "5C", "8D", "2C"],
-#                 "state": set([Status.DURAK]),
-#                 "organize_strategy": "no_sort",
-#             }
-#         ],
-#         "table": [["9D", "10D"]],
-#         "trump_suit": "clubs",
-#         "winners": set(),
-#         **static_parameters,
-#     }
-#
-#
+@freeze_time(datetime.utcfromtimestamp(0), auto_tick_seconds=1)
+def test_defend(game, static_parameters):
+    game.attack(player=game.player("anna"), cards=["8D"])
+    game.defend(
+        base_card="8D",
+        player="anna",
+        card="10D",
+    )
+    assert game.serialize() == {
+        "attackers": ["anna"],
+        "cards_left": 3,
+        "defender": None,
+        "drawn_cards": set(),
+        "last_card": "6C",
+        "legal_attacks": {"cards": set([]), "limit": 0},
+        "legal_defenses": {},
+        "legal_passes": {"cards": set([]), "limit": 0},
+        "pass_count": 0,
+        "players": [
+            {
+                "order": 0,
+                "id": "anna",
+                "hand": ["10C", "2S", "5C", "2C"],
+                "state": set([Status.DURAK]),
+                "organize_strategy": "no_sort",
+                "attacks": [{"attack": "8D", "defense": "10D", "timestamp": 0}],
+            }
+        ],
+        "table": [["8D", "10D"]],
+        "trump_suit": "clubs",
+        "winners": set(),
+        **static_parameters,
+    }
+
+
 # def test_durak(game, static_parameters):
 #     game._draw_pile.draw(3)
 #     assert game.serialize() == {

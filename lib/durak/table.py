@@ -6,7 +6,7 @@ from lib.durak.exceptions import IllegalAction
 
 
 class Table:
-    class BaseCardNotFound(IllegalAction):
+    class TargetCardNotFound(IllegalAction):
         pass
 
     class DuplicateCard(IllegalAction):
@@ -24,6 +24,16 @@ class Table:
                 raise self.DuplicateCard
 
         player.attack(card=card)
+
+    def defend(self, *, attack_card, defense_card):
+        for attack in self._sorted_attacks():
+            if attack.attack != attack_card:
+                continue
+
+            attack.defend_with(card=defense_card)
+            return
+        else:
+            raise self.TargetCardNotFound
 
     def legal_defenses(self, *, trump_suit):
         return {
@@ -56,14 +66,6 @@ class Table:
 
     def undefended_cards(self):
         return [stack[0] for stack in self._table if len(stack) == 1]
-
-    def stack_card(self, *, base_card, card):
-        for cards in self._table:
-            if cards[-1] == base_card:
-                cards.append(card)
-                return
-            else:
-                raise self.BaseCardNotFound
 
     def clear(self):
         self._table.clear()

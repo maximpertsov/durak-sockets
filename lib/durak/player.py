@@ -18,7 +18,10 @@ class Attack:
             "timestamp": self.timestamp,
         }
 
-    # TODO: temporary
+    def defend_with(self, *, card):
+        self.defense = card
+
+    # TODO: temporary?
     def pair(self):
         return list(filter(None, [self.attack, self.defense]))
 

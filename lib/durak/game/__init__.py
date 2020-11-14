@@ -104,8 +104,10 @@ class Game:
         self.attack(player=player, cards=cards)
 
     def defend(self, *, player, base_card, card):
-        self.player(player).remove_card(card=card)
-        self._table.stack_card(base_card=base_card, card=card)
+        self._table.defend(
+            attack_card=base_card,
+            defense_card=self.player(player).remove_card(card=card),
+        )
         self._clear_yields()
 
     def legally_defend(self, *, player, base_card, card):
