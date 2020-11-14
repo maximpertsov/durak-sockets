@@ -21,6 +21,9 @@ class Attack:
     def defend_with(self, *, card):
         self.defense = card
 
+    def defended(self, *, card):
+        return bool(self.defense)
+
     # TODO: temporary?
     def pair(self):
         return list(filter(None, [self.attack, self.defense]))

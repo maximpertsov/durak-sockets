@@ -35,6 +35,13 @@ class Table:
         else:
             raise self.TargetCardNotFound
 
+    def legal_attacks(self):
+        if not self._sorted_attacks():
+            return set(get_all_cards())
+
+        ranks_on_table = set(get_rank(card) for card in self.cards())
+        return set(card for card in get_all_cards() if get_rank(card) in ranks_on_table)
+
     def legal_defenses(self, *, trump_suit):
         return {
             base_card: set(
@@ -45,17 +52,11 @@ class Table:
             for base_card in self.undefended_cards()
         }
 
-    def legal_attacks(self):
-        if not self._table:
-            return set(get_all_cards())
-
-        ranks_on_table = set(get_rank(card) for card in self.cards())
-        return set(card for card in get_all_cards() if get_rank(card) in ranks_on_table)
-
     def legal_passes(self):
-        if not self._table:
+        if not self._sorted_attacks():
             return set([])
-        if any(len(stack) > 1 for stack in self._table):
+        # TODO: add a test for this clause
+        if any(attack.defended() for attack in self._sorted_attacks()):
             return set([])
 
         ranks_on_table = set(get_rank(card) for card in self.cards())
@@ -65,7 +66,9 @@ class Table:
         return set(card for card in get_all_cards() if get_rank(card) in ranks_on_table)
 
     def undefended_cards(self):
-        return [stack[0] for stack in self._table if len(stack) == 1]
+        return [
+            attack.attack for attack in self._sorted_attacks() if not attack.defended()
+        ]
 
     def clear(self):
         self._table.clear()
