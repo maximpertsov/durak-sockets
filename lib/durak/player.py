@@ -1,6 +1,15 @@
+import datetime
+
 from lib.durak.card import get_suit, get_value
 from lib.durak.exceptions import IllegalAction
 from lib.durak.status import Status
+
+
+class Attack:
+    def __init__(self, *, attack, defense=None, timestamp=None):
+        self.timestamp = timestamp or datetime.datetime.utcnow().timestamp()
+        self.attack = attack
+        self.defense = defense
 
 
 class Player:
@@ -17,14 +26,16 @@ class Player:
             order=player["order"],
             state=[Status(status) for status in player["state"]],
             organize_key=player.get("organize_strategy", "no_sort"),
+            attacks=[Attack(**attack) for attack in player.get("attacks", [])],
         )
 
-    def __init__(self, *, id, order, hand, organize_key, state):
+    def __init__(self, *, id, order, hand, organize_key, state, attacks):
         self.id = id
         self._hand = hand
         self.order = order
         self._state = set(state)
         self._organize_key = organize_key
+        self.attacks = attacks
 
     def serialize(self):
         return {

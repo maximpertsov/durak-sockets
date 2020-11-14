@@ -12,6 +12,7 @@ def player():
         order=0,
         state=[],
         organize_key="no_sort",
+        attacks=[{"attack": "4S"}],
     )
 
 
@@ -48,7 +49,13 @@ def test_remove_card(player):
 
 
 def test_card_count(player):
-    kwargs = {"id": "anna", "order": 0, "organize_key": "no_sort", "state": []}
+    kwargs = {
+        "id": "anna",
+        "order": 0,
+        "organize_key": "no_sort",
+        "state": [],
+        "attacks": [],
+    }
 
     player = Player(hand=["10D"], **kwargs)
     assert player.card_count() == 1
@@ -67,7 +74,12 @@ def mocked_draw_cards(get_draw_pile_cards):
 
 def test_draw_from_pile(mocked_draw_cards):
     player = Player(
-        id="anna", hand=["10D", "10C"], order=0, organize_key="no_sort", state=[]
+        id="anna",
+        hand=["10D", "10C"],
+        order=0,
+        organize_key="no_sort",
+        state=[],
+        attacks=[],
     )
     draw_pile = DrawPile(drawn_cards=[], lowest_rank="2", seed=0.4)
     player.draw(draw_pile=draw_pile)
