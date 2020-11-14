@@ -35,6 +35,14 @@ class Table:
         else:
             raise self.TargetCardNotFound
 
+    def collect(self, *, player):
+        player.take_cards(cards=self.cards())
+        self._clear()
+
+    def _clear(self):
+        for player in self._game.ordered_players():
+            player.attacks.clear()
+
     def legal_attacks(self):
         if not self._sorted_attacks():
             return set(get_all_cards())
@@ -69,14 +77,6 @@ class Table:
         return [
             attack.attack for attack in self._sorted_attacks() if not attack.defended()
         ]
-
-    def clear(self):
-        self._table.clear()
-
-    def collect(self):
-        result = self.cards()
-        self.clear()
-        return result
 
     def cards(self):
         return list(

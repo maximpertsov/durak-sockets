@@ -130,7 +130,7 @@ class Game:
         self._successful_defense_cleanup()
 
     def collect(self):
-        self._collector.get().take_cards(cards=self._table.collect())
+        self._table.collect(player=self._collector.get())
         self.draw()
         self._rotate(skip=1)
         self._collector.clear()

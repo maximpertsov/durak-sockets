@@ -61,12 +61,14 @@
     "pass_count": 0,
     "players": [
       {
+	"attacks": [{"attack": "KS", "defense": null, "timestamp": 0}],
         "hand": [],
         "id": "anna",
         "order": 0,
         "state": []
       },
       {
+        "attacks": [],
         "hand": [
           "8C",
           "6H"
@@ -76,6 +78,7 @@
         "state": ["collecting"]
       },
       {
+        "attacks": [],
         "hand": [
           "9S",
           "6S",
@@ -94,6 +97,7 @@
         ]
       },
       {
+        "attacks": [],
         "hand": [],
         "id": "grusha",
         "order": 3,
