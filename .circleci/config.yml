@@ -4,6 +4,16 @@ orbs:
   heroku: circleci/heroku@1.2.2
   python: circleci/python@1.2.0
 
+jobs:
+  deploy:
+    docker:
+      - image: buildpack-deps:trusty
+    steps:
+      - checkout
+      - run:
+          name: Deploy to Heroku
+          command: git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git main
+
 workflows:
   main:
     jobs:
@@ -12,8 +22,7 @@ workflows:
           pkg-manager: poetry
           test-tool: pytest
           version: 3.8.5
-      - heroku/deploy-via-git:
-          name: deploy
+      - deploy:
           requires:
             - test
           filters:
