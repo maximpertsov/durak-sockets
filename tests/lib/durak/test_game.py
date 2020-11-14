@@ -1,4 +1,7 @@
+from datetime import datetime
+
 import pytest
+from freezegun import freeze_time
 
 from lib.durak.game import Game, Status
 
@@ -69,6 +72,7 @@ def test_serialize(game, static_parameters):
     }
 
 
+@freeze_time(datetime.utcfromtimestamp(0), auto_tick_seconds=1)
 def test_attack(game, static_parameters):
     game.attack(player="anna", cards=["10D"])
     assert game.serialize() == {
@@ -88,6 +92,7 @@ def test_attack(game, static_parameters):
                 "hand": ["10C", "2S", "5C", "8D", "2C"],
                 "state": set([Status.DURAK]),
                 "organize_strategy": "no_sort",
+                "attacks": [{"attack": "10D", "defense": None, "timestamp": 0}],
             }
         ],
         "table": [["10D"]],
