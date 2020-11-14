@@ -262,94 +262,102 @@ def test_draw(game_3p, static_parameters):
     }
 
 
-# def test_draw_with_pass_count(game_3p, static_parameters):
-#     game_3p._pass_count = 2
-#     game_3p.draw()
-#     assert game_3p.serialize() == {
-#         "attackers": ["anna"],
-#         "cards_left": 1,
-#         "defender": "vasyl",
-#         "drawn_cards": set(["7D", "9C", "9D", "10C"]),
-#         "last_card": "8D",
-#         "legal_attacks": {
-#             "cards": set(["9H", "3S", "KH", "4C", "4H", "10C"]),
-#             "limit": 6,
-#         },
-#         "legal_defenses": {},
-#         "legal_passes": {"cards": set([]), "limit": 6},
-#         "pass_count": 0,
-#         "players": [
-#             {
-#                 "order": 0,
-#                 "id": "anna",
-#                 "hand": ["9H", "3S", "KH", "4C", "4H", "10C"],
-#                 "state": set(),
-#                 "organize_strategy": "no_sort",
-#             },
-#             {
-#                 "order": 1,
-#                 "id": "vasyl",
-#                 "hand": ["7C", "6D", "JS", "7H", "7D", "9C"],
-#                 "state": set(),
-#                 "organize_strategy": "no_sort",
-#             },
-#             {
-#                 "order": 2,
-#                 "id": "igor",
-#                 "hand": ["8H", "JD", "KS", "5H", "JC", "9D"],
-#                 "state": set(),
-#                 "organize_strategy": "no_sort",
-#             },
-#         ],
-#         "table": [],
-#         "trump_suit": "diamonds",
-#         "winners": set(),
-#         **static_parameters,
-#     }
-#
-#
-# def test_legal_defenses(game_3p, static_parameters):
-#     game_3p._table.add_card(card="10S")
-#     assert game_3p.serialize() == {
-#         "attackers": ["anna", "igor"],
-#         "cards_left": 5,
-#         "defender": "vasyl",
-#         "drawn_cards": set(),
-#         "pass_count": 0,
-#         "last_card": "8D",
-#         "legal_attacks": {"cards": set([]), "limit": 3},
-#         "legal_defenses": {"10S": set(["JS", "6D"])},
-#         "legal_passes": {"cards": set([]), "limit": 4},
-#         "players": [
-#             {
-#                 "order": 0,
-#                 "id": "anna",
-#                 "hand": ["9H", "3S", "KH", "4C", "4H"],
-#                 "state": set(),
-#                 "organize_strategy": "no_sort",
-#             },
-#             {
-#                 "order": 1,
-#                 "id": "vasyl",
-#                 "hand": ["7C", "6D", "JS", "7H"],
-#                 "state": set(),
-#                 "organize_strategy": "no_sort",
-#             },
-#             {
-#                 "order": 2,
-#                 "id": "igor",
-#                 "hand": ["8H", "JD", "KS", "5H", "JC"],
-#                 "state": set(),
-#                 "organize_strategy": "no_sort",
-#             },
-#         ],
-#         "table": [["10S"]],
-#         "trump_suit": "diamonds",
-#         "winners": set(),
-#         **static_parameters,
-#     }
-#
-#
+def test_draw_with_pass_count(game_3p, static_parameters):
+    game_3p._pass_count = 2
+    game_3p.draw()
+    assert game_3p.serialize() == {
+        "attackers": ["anna"],
+        "cards_left": 1,
+        "defender": "vasyl",
+        "drawn_cards": set(["7D", "9C", "9D", "10C"]),
+        "last_card": "8D",
+        "legal_attacks": {
+            "cards": set(["9H", "3S", "KH", "4C", "4H", "10C"]),
+            "limit": 6,
+        },
+        "legal_defenses": {},
+        "legal_passes": {"cards": set([]), "limit": 6},
+        "pass_count": 0,
+        "players": [
+            {
+                "order": 0,
+                "id": "anna",
+                "hand": ["9H", "3S", "KH", "4C", "4H", "10C"],
+                "state": set(),
+                "organize_strategy": "no_sort",
+                "attacks": [],
+            },
+            {
+                "order": 1,
+                "id": "vasyl",
+                "hand": ["7C", "6D", "JS", "7H", "7D", "9C"],
+                "state": set(),
+                "organize_strategy": "no_sort",
+                "attacks": [],
+            },
+            {
+                "order": 2,
+                "id": "igor",
+                "hand": ["8H", "JD", "KS", "5H", "JC", "9D"],
+                "state": set(),
+                "organize_strategy": "no_sort",
+                "attacks": [],
+            },
+        ],
+        "table": [],
+        "trump_suit": "diamonds",
+        "winners": set(),
+        **static_parameters,
+    }
+
+
+def test_legal_defenses(from_epoch, game_3p, static_parameters):
+    anna = game_3p.player("anna")
+    anna.take_cards(cards=["10S"])
+    game_3p.attack(player=anna, cards=["10S"])
+    assert game_3p.serialize() == {
+        "attackers": ["anna", "igor"],
+        "cards_left": 5,
+        "defender": "vasyl",
+        "drawn_cards": set(),
+        "pass_count": 0,
+        "last_card": "8D",
+        "legal_attacks": {"cards": set([]), "limit": 3},
+        "legal_defenses": {"10S": set(["JS", "6D"])},
+        "legal_passes": {"cards": set([]), "limit": 4},
+        "players": [
+            {
+                "order": 0,
+                "id": "anna",
+                "hand": ["9H", "3S", "KH", "4C", "4H"],
+                "state": set(),
+                "organize_strategy": "no_sort",
+                "attacks": [{"attack": "10S", "defense": None, "timestamp": 0}],
+            },
+            {
+                "order": 1,
+                "id": "vasyl",
+                "hand": ["7C", "6D", "JS", "7H"],
+                "state": set(),
+                "organize_strategy": "no_sort",
+                "attacks": [],
+            },
+            {
+                "order": 2,
+                "id": "igor",
+                "hand": ["8H", "JD", "KS", "5H", "JC"],
+                "state": set(),
+                "organize_strategy": "no_sort",
+                "attacks": [],
+            },
+        ],
+        "table": [["10S"]],
+        "trump_suit": "diamonds",
+        "winners": set(),
+        **static_parameters,
+    }
+
+
 # def test_legal_attacks(game_3p, static_parameters):
 #     game_3p._table.add_card(card="4S")
 #     assert game_3p.serialize() == {

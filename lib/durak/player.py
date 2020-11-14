@@ -21,7 +21,7 @@ class Attack:
     def defend_with(self, *, card):
         self.defense = card
 
-    def defended(self, *, card):
+    def defended(self):
         return bool(self.defense)
 
     # TODO: temporary?
