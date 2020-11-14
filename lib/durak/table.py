@@ -1,7 +1,29 @@
 from itertools import chain
+from typing import Optional
 
 from lib.durak.card import get_all_cards, get_rank, is_legal_defense
 from lib.durak.exceptions import IllegalAction
+from lib.durak.player import Player
+
+
+class TableItem:
+    def __init__(
+        self,
+        *,
+        player: Optional[Player] = None,
+        attack: str,
+        defense: Optional[str] = None
+    ) -> None:
+        self._player = player
+        self._attack = attack
+        self._defense = defense
+
+    def serialize(self):
+        return {
+            "player": self._player.id,
+            "attack": self._attack,
+            "defense": self._defense,
+        }
 
 
 class Table:
@@ -15,14 +37,14 @@ class Table:
         self._table = table
 
     def serialize(self):
-        return self._table
+        return [item.serialize() for item in self._table]
 
-    def add_card(self, *, card):
+    def add_card(self, *, card: str) -> None:
         for table_card in self.cards():
             if table_card == card:
                 raise self.DuplicateCard
 
-        self._table.append([card])
+        self._table.append(TableItem(player=None, attack=card, defense=None))
 
     def legal_defenses(self, *, trump_suit):
         return {
