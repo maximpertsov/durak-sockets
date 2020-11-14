@@ -452,101 +452,108 @@ def test_legal_passes(from_epoch, game_3p, static_parameters):
     }
 
 
-# @pytest.mark.xfail(reason="Attack limit does not exist")
-# def test_legal_attacks_and_passes_with_limits(game_3p, static_parameters):
-#     game_3p._table.add_card(card="7S")
-#     game_3p._attack_limit = 3
-#     assert game_3p.serialize() == {
-#         **static_parameters,
-#         "attackers": ["anna", "igor"],
-#         "cards_left": 5,
-#         "attack_limit": 3,
-#         "defender": "vasyl",
-#         "drawn_cards": set(),
-#         "pass_count": 0,
-#         "last_card": "8D",
-#         "legal_attacks": {"cards": set([]), "limit": 2},
-#         "legal_defenses": {"7S": set(["JS", "6D"])},
-#         "legal_passes": {"cards": set(["7C", "7H"]), "limit": 2},
-#         "players": [
-#             {
-#                 "order": 0,
-#                 "id": "anna",
-#                 "hand": ["9H", "3S", "KH", "4C", "4H"],
-#                 "state": set(),
-#                 "organize_strategy": "no_sort",
-#             },
-#             {
-#                 "order": 1,
-#                 "id": "vasyl",
-#                 "hand": ["7C", "6D", "JS", "7H"],
-#                 "state": set(),
-#                 "organize_strategy": "no_sort",
-#             },
-#             {
-#                 "order": 2,
-#                 "id": "igor",
-#                 "hand": ["8H", "JD", "KS", "5H", "JC"],
-#                 "state": set(),
-#                 "organize_strategy": "no_sort",
-#             },
-#         ],
-#         "seed": 0.4,
-#         "table": [["7S"]],
-#         "trump_suit": "diamonds",
-#         "winners": set(),
-#     }
-#
-#
-# def test_legal_passes_when_on_deck_defender_has_no_cards(game_3p, static_parameters):
-#     game_3p._table.add_card(card="7S")
-#
-#     for card in ["8H", "JD", "KS", "5H", "JC"]:
-#         game_3p.player("igor").remove_card(card=card)
-#
-#     assert game_3p.serialize() == {
-#         "attackers": ["anna"],
-#         "cards_left": 5,
-#         "defender": "vasyl",
-#         "drawn_cards": set(),
-#         "pass_count": 0,
-#         "last_card": "8D",
-#         "legal_attacks": {"cards": set([]), "limit": 3},
-#         "legal_defenses": {"7S": set(["JS", "6D"])},
-#         "legal_passes": {"cards": set(["7C", "7H"]), "limit": 4},
-#         "players": [
-#             {
-#                 "order": 0,
-#                 "id": "anna",
-#                 "hand": ["9H", "3S", "KH", "4C", "4H"],
-#                 "state": set(),
-#                 "organize_strategy": "no_sort",
-#             },
-#             {
-#                 "order": 1,
-#                 "id": "vasyl",
-#                 "hand": ["7C", "6D", "JS", "7H"],
-#                 "state": set(),
-#                 "organize_strategy": "no_sort",
-#             },
-#             {
-#                 "order": 2,
-#                 "id": "igor",
-#                 "hand": [],
-#                 "state": set(),
-#                 "organize_strategy": "no_sort",
-#             },
-#         ],
-#         "table": [["7S"]],
-#         "trump_suit": "diamonds",
-#         "winners": set(),
-#         **static_parameters,
-#     }
-#
-#
-# def test_durak_persists(game_3p, static_parameters):
-#     game_3p.player("anna").add_status(Status.DURAK)
-#     serialized = game_3p.serialize()
-#     assert Status.DURAK in next(
-#         player["state"] for player in serialized["players"] if player["id"] == "anna"
-#     )
+@pytest.mark.xfail(reason="Attack limit does not exist")
+def test_legal_attacks_and_passes_with_limits(game_3p, static_parameters):
+    game_3p._table.add_card(card="7S")
+    game_3p._attack_limit = 3
+    assert game_3p.serialize() == {
+        **static_parameters,
+        "attackers": ["anna", "igor"],
+        "cards_left": 5,
+        "attack_limit": 3,
+        "defender": "vasyl",
+        "drawn_cards": set(),
+        "pass_count": 0,
+        "last_card": "8D",
+        "legal_attacks": {"cards": set([]), "limit": 2},
+        "legal_defenses": {"7S": set(["JS", "6D"])},
+        "legal_passes": {"cards": set(["7C", "7H"]), "limit": 2},
+        "players": [
+            {
+                "order": 0,
+                "id": "anna",
+                "hand": ["9H", "3S", "KH", "4C", "4H"],
+                "state": set(),
+                "organize_strategy": "no_sort",
+            },
+            {
+                "order": 1,
+                "id": "vasyl",
+                "hand": ["7C", "6D", "JS", "7H"],
+                "state": set(),
+                "organize_strategy": "no_sort",
+            },
+            {
+                "order": 2,
+                "id": "igor",
+                "hand": ["8H", "JD", "KS", "5H", "JC"],
+                "state": set(),
+                "organize_strategy": "no_sort",
+            },
+        ],
+        "seed": 0.4,
+        "table": [["7S"]],
+        "trump_suit": "diamonds",
+        "winners": set(),
+    }
+
+
+def test_legal_passes_when_on_deck_defender_has_no_cards(
+    from_epoch, game_3p, static_parameters
+):
+    anna = game_3p.player("anna")
+    anna.take_cards(cards=["7S"])
+    game_3p.attack(player=anna, cards=["7S"])
+
+    for card in ["8H", "JD", "KS", "5H", "JC"]:
+        game_3p.player("igor").remove_card(card=card)
+
+    assert game_3p.serialize() == {
+        "attackers": ["anna"],
+        "cards_left": 5,
+        "defender": "vasyl",
+        "drawn_cards": set(),
+        "pass_count": 0,
+        "last_card": "8D",
+        "legal_attacks": {"cards": set([]), "limit": 3},
+        "legal_defenses": {"7S": set(["JS", "6D"])},
+        "legal_passes": {"cards": set(["7C", "7H"]), "limit": 4},
+        "players": [
+            {
+                "order": 0,
+                "id": "anna",
+                "hand": ["9H", "3S", "KH", "4C", "4H"],
+                "state": set(),
+                "organize_strategy": "no_sort",
+                "attacks": [{"attack": "7S", "defense": None, "timestamp": 0}],
+            },
+            {
+                "order": 1,
+                "id": "vasyl",
+                "hand": ["7C", "6D", "JS", "7H"],
+                "state": set(),
+                "organize_strategy": "no_sort",
+                "attacks": [],
+            },
+            {
+                "order": 2,
+                "id": "igor",
+                "hand": [],
+                "state": set(),
+                "organize_strategy": "no_sort",
+                "attacks": [],
+            },
+        ],
+        "table": [["7S"]],
+        "trump_suit": "diamonds",
+        "winners": set(),
+        **static_parameters,
+    }
+
+
+def test_durak_persists(game_3p, static_parameters):
+    game_3p.player("anna").add_status(Status.DURAK)
+    serialized = game_3p.serialize()
+    assert Status.DURAK in next(
+        player["state"] for player in serialized["players"] if player["id"] == "anna"
+    )
