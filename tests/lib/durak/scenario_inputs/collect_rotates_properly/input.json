@@ -108,11 +108,6 @@
       }
     ],
     "seed": 0.4,
-    "table": [
-      [
-        "KS"
-      ]
-    ],
     "trump_suit": "spades",
     "with_passing": true
   },
