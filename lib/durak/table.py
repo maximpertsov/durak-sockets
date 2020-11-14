@@ -1,5 +1,5 @@
 from itertools import chain
-from typing import Optional
+from typing import List, Optional
 
 from lib.durak.card import get_all_cards, get_rank, is_legal_defense
 from lib.durak.exceptions import IllegalAction
@@ -14,16 +14,25 @@ class TableItem:
         attack: str,
         defense: Optional[str] = None
     ) -> None:
-        self._player = player
-        self._attack = attack
-        self._defense = defense
+        self.player = player
+        self.attack = attack
+        self.defense = defense
 
     def serialize(self):
-        return {
-            "player": self._player.id,
-            "attack": self._attack,
-            "defense": self._defense,
-        }
+        # TODO: temporary signature
+        return self.cards()
+
+        # return {
+        #     "player": self.player.id if self.player else None,
+        #     "attack": self.attack,
+        #     "defense": self.defense,
+        # }
+
+    def defended(self):
+        return self.defense is None
+
+    def cards(self):
+        return list(filter(None, [self.attack, self.defense]))
 
 
 class Table:
@@ -32,6 +41,18 @@ class Table:
 
     class DuplicateCard(IllegalAction):
         pass
+
+    @classmethod
+    def deserialize(cls, table):
+        # TODO: temporary signature
+        return cls(
+            [
+                TableItem(
+                    player=None, attack=attack, defense=cards[0] if cards else None
+                )
+                for attack, *cards in table
+            ]
+        )
 
     def __init__(self, table):
         self._table = table
@@ -75,8 +96,8 @@ class Table:
 
         return set(card for card in get_all_cards() if get_rank(card) in ranks_on_table)
 
-    def undefended_cards(self):
-        return [stack[0] for stack in self._table if len(stack) == 1]
+    def undefended_cards(self) -> List[TableItem]:
+        return [item.attack for item in self._table if not item.defended()]
 
     def stack_card(self, *, base_card, card):
         for cards in self._table:
@@ -95,4 +116,4 @@ class Table:
         return result
 
     def cards(self):
-        return list(chain.from_iterable(self._table))
+        return list(chain.from_iterable(item.cards() for item in self._table))
