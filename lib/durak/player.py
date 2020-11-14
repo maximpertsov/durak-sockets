@@ -75,7 +75,7 @@ class Player:
         self._hand += cards
 
     def remove_card(self, *, card):
-        self._hand = [hand_card for hand_card in self._hand if hand_card != card]
+        return self._hand.pop(self._hand.index(card))
 
     def draw(self, *, draw_pile):
         self.take_cards(cards=draw_pile.draw(count=self.draw_count()))
