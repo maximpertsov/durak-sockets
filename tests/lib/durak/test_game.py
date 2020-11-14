@@ -7,6 +7,12 @@ from lib.durak.game import Game, Status
 
 
 @pytest.fixture
+def from_epoch():
+    with freeze_time(datetime.utcfromtimestamp(0)):
+        yield
+
+
+@pytest.fixture
 def static_parameters():
     return {
         "attack_limit": "hand",
@@ -72,8 +78,7 @@ def test_serialize(game, static_parameters):
     }
 
 
-@freeze_time(datetime.utcfromtimestamp(0), auto_tick_seconds=1)
-def test_attack(game, static_parameters):
+def test_attack(from_epoch, game, static_parameters):
     game.attack(player="anna", cards=["10D"])
     assert game.serialize() == {
         "attackers": ["anna"],
@@ -102,8 +107,7 @@ def test_attack(game, static_parameters):
     }
 
 
-@freeze_time(datetime.utcfromtimestamp(0), auto_tick_seconds=1)
-def test_defend(game, static_parameters):
+def test_defend(from_epoch, game, static_parameters):
     game.attack(player=game.player("anna"), cards=["8D"])
     game.defend(
         base_card="8D",
@@ -137,34 +141,35 @@ def test_defend(game, static_parameters):
     }
 
 
-# def test_durak(game, static_parameters):
-#     game._draw_pile.draw(3)
-#     assert game.serialize() == {
-#         "attackers": ["anna"],
-#         "cards_left": 0,
-#         "defender": None,
-#         "drawn_cards": set(["JC", "3S", "6C"]),
-#         "last_card": "6C",
-#         "legal_attacks": {"cards": set([]), "limit": 0},
-#         "legal_defenses": {},
-#         "legal_passes": {"cards": set([]), "limit": 0},
-#         "pass_count": 0,
-#         "players": [
-#             {
-#                 "order": 0,
-#                 "id": "anna",
-#                 "hand": ["10D", "10C", "2S", "5C", "8D", "2C"],
-#                 "state": set([Status.DURAK]),
-#                 "organize_strategy": "no_sort",
-#             }
-#         ],
-#         "table": [],
-#         "trump_suit": "clubs",
-#         "winners": set(),
-#         **static_parameters,
-#     }
-#
-#
+def test_durak(game, static_parameters):
+    game._draw_pile.draw(3)
+    assert game.serialize() == {
+        "attackers": ["anna"],
+        "cards_left": 0,
+        "defender": None,
+        "drawn_cards": set(["JC", "3S", "6C"]),
+        "last_card": "6C",
+        "legal_attacks": {"cards": set([]), "limit": 0},
+        "legal_defenses": {},
+        "legal_passes": {"cards": set([]), "limit": 0},
+        "pass_count": 0,
+        "players": [
+            {
+                "order": 0,
+                "id": "anna",
+                "hand": ["10D", "10C", "2S", "5C", "8D", "2C"],
+                "state": set([Status.DURAK]),
+                "organize_strategy": "no_sort",
+                "attacks": [],
+            }
+        ],
+        "table": [],
+        "trump_suit": "clubs",
+        "winners": set(),
+        **static_parameters,
+    }
+
+
 # @pytest.fixture
 # def mocked_draw_cards_3p(get_draw_pile_cards):
 #     return get_draw_pile_cards(["7D", "9C", "9D", "10C", "8D"])
