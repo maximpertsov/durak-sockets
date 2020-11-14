@@ -97,8 +97,12 @@ class Player:
     def take_cards(self, *, cards):
         self._hand += cards
 
+    def attack(self, *, card):
+        attack = Attack(attack=self.remove_card(card=card))
+        self.attacks.append(attack)
+
     def remove_card(self, *, card):
-        self._hand = [hand_card for hand_card in self._hand if hand_card != card]
+        return self._hand.pop(self._hand.index(card))
 
     def draw(self, *, draw_pile):
         self.take_cards(cards=draw_pile.draw(count=self.draw_count()))

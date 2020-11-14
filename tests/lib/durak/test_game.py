@@ -69,34 +69,34 @@ def test_serialize(game, static_parameters):
     }
 
 
-# def test_attack(game, static_parameters):
-#     game.attack(player="anna", cards=["10D"])
-#     assert game.serialize() == {
-#         "attackers": ["anna"],
-#         "cards_left": 3,
-#         "defender": None,
-#         "drawn_cards": set(),
-#         "last_card": "6C",
-#         "legal_attacks": {"cards": set([]), "limit": 0},
-#         "legal_defenses": {},
-#         "legal_passes": {"cards": set([]), "limit": 0},
-#         "pass_count": 0,
-#         "players": [
-#             {
-#                 "order": 0,
-#                 "id": "anna",
-#                 "hand": ["10C", "2S", "5C", "8D", "2C"],
-#                 "state": set([Status.DURAK]),
-#                 "organize_strategy": "no_sort",
-#             }
-#         ],
-#         "table": [["10D"]],
-#         "trump_suit": "clubs",
-#         "winners": set(),
-#         **static_parameters,
-#     }
-#
-#
+def test_attack(game, static_parameters):
+    game.attack(player="anna", cards=["10D"])
+    assert game.serialize() == {
+        "attackers": ["anna"],
+        "cards_left": 3,
+        "defender": None,
+        "drawn_cards": set(),
+        "last_card": "6C",
+        "legal_attacks": {"cards": set([]), "limit": 0},
+        "legal_defenses": {},
+        "legal_passes": {"cards": set([]), "limit": 0},
+        "pass_count": 0,
+        "players": [
+            {
+                "order": 0,
+                "id": "anna",
+                "hand": ["10C", "2S", "5C", "8D", "2C"],
+                "state": set([Status.DURAK]),
+                "organize_strategy": "no_sort",
+            }
+        ],
+        "table": [["10D"]],
+        "trump_suit": "clubs",
+        "winners": set(),
+        **static_parameters,
+    }
+
+
 # def test_defend(game, static_parameters):
 #     game._table.add_card(card="9D")
 #     game.defend(

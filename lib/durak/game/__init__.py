@@ -92,8 +92,7 @@ class Game:
             return self._active_players()[0]
 
     def _attack(self, *, player, card):
-        self.player(player).remove_card(card=card)
-        self._table.add_card(card=card)
+        self._table.attack(player=self.player(player), card=card)
 
     def attack(self, *, player, cards):
         for card in cards:

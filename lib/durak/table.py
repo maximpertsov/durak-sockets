@@ -15,21 +15,15 @@ class Table:
     def __init__(self, *, game):
         self._game = game
 
-    def get(self):
-        attacks = chain.from_iterable(
-            player.attacks for player in self._game.ordered_players()
-        )
-        return sorted(list(attacks), key=attrgetter("timestamp"))
-
     def serialize(self):
-        return [attack.pair for attack in self.get()]
+        return [attack.pair() for attack in self._sorted_attacks()]
 
-    def add_card(self, *, card):
+    def attack(self, *, player, card):
         for table_card in self.cards():
             if table_card == card:
                 raise self.DuplicateCard
 
-        self._table.append([card])
+        player.attack(card=card)
 
     def legal_defenses(self, *, trump_suit):
         return {
@@ -80,4 +74,12 @@ class Table:
         return result
 
     def cards(self):
-        return list(chain.from_iterable(self.get()))
+        return list(
+            chain.from_iterable(attack.pair() for attack in self._sorted_attacks())
+        )
+
+    def _sorted_attacks(self):
+        attacks = chain.from_iterable(
+            player.attacks for player in self._game.ordered_players()
+        )
+        return sorted(list(attacks), key=attrgetter("timestamp"))
