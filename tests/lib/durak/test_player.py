@@ -6,12 +6,15 @@ from lib.durak.player import Player
 
 @pytest.fixture
 def player():
-    return Player(
-        id="anna",
-        hand=["10D", "10C", "2S", "5C", "8D", "2C"],
-        order=0,
-        state=[],
-        organize_key="no_sort",
+    return Player.deserialize(
+        {
+            "id": "anna",
+            "hand": ["10D", "10C", "2S", "5C", "8D", "2C"],
+            "order": 0,
+            "state": [],
+            "organize_strategy": "no_sort",
+            "attacks": [{"attack": "4S", "timestamp": 0}],
+        }
     )
 
 
@@ -22,6 +25,7 @@ def test_serialize(player):
         "order": 0,
         "state": set(),
         "organize_strategy": "no_sort",
+        "attacks": [{"attack": "4S", "defense": None, "timestamp": 0}],
     }
 
 
@@ -33,6 +37,7 @@ def test_take_cards(player):
         "order": 0,
         "state": set(),
         "organize_strategy": "no_sort",
+        "attacks": [{"attack": "4S", "defense": None, "timestamp": 0}],
     }
 
 
@@ -44,11 +49,18 @@ def test_remove_card(player):
         "order": 0,
         "state": set(),
         "organize_strategy": "no_sort",
+        "attacks": [{"attack": "4S", "defense": None, "timestamp": 0}],
     }
 
 
 def test_card_count(player):
-    kwargs = {"id": "anna", "order": 0, "organize_key": "no_sort", "state": []}
+    kwargs = {
+        "id": "anna",
+        "order": 0,
+        "organize_key": "no_sort",
+        "state": [],
+        "attacks": [],
+    }
 
     player = Player(hand=["10D"], **kwargs)
     assert player.card_count() == 1
@@ -67,7 +79,12 @@ def mocked_draw_cards(get_draw_pile_cards):
 
 def test_draw_from_pile(mocked_draw_cards):
     player = Player(
-        id="anna", hand=["10D", "10C"], order=0, organize_key="no_sort", state=[]
+        id="anna",
+        hand=["10D", "10C"],
+        order=0,
+        organize_key="no_sort",
+        state=[],
+        attacks=[],
     )
     draw_pile = DrawPile(drawn_cards=[], lowest_rank="2", seed=0.4)
     player.draw(draw_pile=draw_pile)
@@ -77,6 +94,7 @@ def test_draw_from_pile(mocked_draw_cards):
         "order": 0,
         "state": set(),
         "organize_strategy": "no_sort",
+        "attacks": [],
     }
     assert draw_pile.serialize() == {
         "cards_left": 1,

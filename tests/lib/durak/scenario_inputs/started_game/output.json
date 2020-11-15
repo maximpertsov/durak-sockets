@@ -54,6 +54,7 @@
     "pass_count": 0,
     "players": [
       {
+        "attacks": [],
         "hand": [
           "7H",
           "6H",
@@ -68,6 +69,7 @@
         "state": []
       },
       {
+        "attacks": [],
         "hand": [
           "9H",
           "7S",
@@ -82,6 +84,7 @@
         "state": []
       },
       {
+        "attacks": [],
         "hand": [
           "JH",
           "8S",
@@ -96,6 +99,7 @@
         "state": []
       },
       {
+        "attacks": [],
         "hand": [
           "QS",
           "9C",
@@ -111,7 +115,6 @@
       }
     ],
     "seed": 0.4,
-    "table": [],
     "trump_suit": "hearts",
     "winners": [],
     "with_passing": true

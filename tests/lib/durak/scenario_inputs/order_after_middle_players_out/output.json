@@ -63,6 +63,7 @@
     "pass_count": 0,
     "players": [
       {
+        "attacks": [],
         "hand": [],
         "id": "vasyl",
         "order": 0,
@@ -72,6 +73,7 @@
         ]
       },
       {
+        "attacks": [],
         "hand": [
           "KC",
           "KH",
@@ -83,6 +85,7 @@
         "state": []
       },
       {
+        "attacks": [],
         "hand": [
           "AH"
         ],
@@ -92,6 +95,7 @@
         "state": []
       },
       {
+        "attacks": [],
         "hand": [],
         "id": "igor",
         "order": 2,
@@ -102,7 +106,6 @@
       }
     ],
     "seed": 0.227907402,
-    "table": [],
     "trump_suit": "hearts",
     "winners": [
       "igor",

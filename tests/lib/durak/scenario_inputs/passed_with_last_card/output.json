@@ -89,6 +89,13 @@
     "pass_count": 1,
     "players": [
       {
+        "attacks": [
+          {
+            "attack": "10H",
+            "defense": null,
+            "timestamp": 0.0
+          }
+        ],
         "hand": [],
         "id": "anna",
         "order": 0,
@@ -96,6 +103,7 @@
         "state": []
       },
       {
+        "attacks": [],
         "hand": [
           "AH",
           "10C"
@@ -106,6 +114,7 @@
         "state": []
       },
       {
+        "attacks": [],
         "hand": [
           "9S",
           "QC"
@@ -116,6 +125,13 @@
         "state": []
       },
       {
+        "attacks": [
+          {
+            "attack": "10D",
+            "defense": null,
+            "timestamp": -1
+          }
+        ],
         "hand": [
           "QS",
           "KH"
@@ -127,14 +143,6 @@
       }
     ],
     "seed": 0.4,
-    "table": [
-      [
-        "10D"
-      ],
-      [
-        "10H"
-      ]
-    ],
     "trump_suit": "hearts",
     "winners": [
       "anna"

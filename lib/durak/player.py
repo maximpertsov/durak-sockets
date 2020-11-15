@@ -1,6 +1,34 @@
+import datetime
+
 from lib.durak.card import get_suit, get_value
 from lib.durak.exceptions import IllegalAction
 from lib.durak.status import Status
+
+
+class Attack:
+    def __init__(self, *, attack, defense=None, timestamp=None):
+        self.timestamp = (
+            datetime.datetime.utcnow().timestamp() if timestamp is None else timestamp
+        )
+        self.attack = attack
+        self.defense = defense
+
+    def serialize(self):
+        return {
+            "attack": self.attack,
+            "defense": self.defense,
+            "timestamp": self.timestamp,
+        }
+
+    def defend_with(self, *, card):
+        self.defense = card
+
+    def defended(self):
+        return bool(self.defense)
+
+    # TODO: temporary?
+    def pair(self):
+        return list(filter(None, [self.attack, self.defense]))
 
 
 class Player:
@@ -17,14 +45,16 @@ class Player:
             order=player["order"],
             state=[Status(status) for status in player["state"]],
             organize_key=player.get("organize_strategy", "no_sort"),
+            attacks=[Attack(**attack) for attack in player.get("attacks", [])],
         )
 
-    def __init__(self, *, id, order, hand, organize_key, state):
+    def __init__(self, *, id, order, hand, organize_key, state, attacks):
         self.id = id
         self._hand = hand
         self.order = order
         self._state = set(state)
         self._organize_key = organize_key
+        self.attacks = attacks
 
     def serialize(self):
         return {
@@ -33,6 +63,7 @@ class Player:
             "order": self.order,
             "state": self._state,
             "organize_strategy": self._organize_key,
+            "attacks": [attack.serialize() for attack in self.attacks],
         }
 
     def has_status(self, status):
@@ -74,8 +105,12 @@ class Player:
     def take_cards(self, *, cards):
         self._hand += cards
 
+    def attack(self, *, card):
+        attack = Attack(attack=self.remove_card(card=card))
+        self.attacks.append(attack)
+
     def remove_card(self, *, card):
-        self._hand = [hand_card for hand_card in self._hand if hand_card != card]
+        return self._hand.pop(self._hand.index(card))
 
     def draw(self, *, draw_pile):
         self.take_cards(cards=draw_pile.draw(count=self.draw_count()))

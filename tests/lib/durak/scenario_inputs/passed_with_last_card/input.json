@@ -61,6 +61,13 @@
     "pass_count": 0,
     "players": [
       {
+        "attacks": [
+          {
+            "attack": "10D",
+            "defense": null,
+            "timestamp": -1
+          }
+        ],
         "hand": [
           "QS",
           "KH"
@@ -70,6 +77,7 @@
         "state": []
       },
       {
+        "attacks": [],
         "hand": [
           "10H"
         ],
@@ -78,6 +86,7 @@
         "state": []
       },
       {
+        "attacks": [],
         "hand": [
           "AH",
           "10C"
@@ -87,6 +96,7 @@
         "state": []
       },
       {
+        "attacks": [],
         "hand": [
           "9S",
           "QC"
@@ -97,11 +107,6 @@
       }
     ],
     "seed": 0.4,
-    "table": [
-      [
-        "10D"
-      ]
-    ],
     "trump_suit": "hearts",
     "with_passing": true
   },

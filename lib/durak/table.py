@@ -1,28 +1,54 @@
 from itertools import chain
+from operator import attrgetter
 
 from lib.durak.card import get_all_cards, get_rank, is_legal_defense
 from lib.durak.exceptions import IllegalAction
 
 
 class Table:
-    class BaseCardNotFound(IllegalAction):
+    class TargetCardNotFound(IllegalAction):
         pass
 
     class DuplicateCard(IllegalAction):
         pass
 
-    def __init__(self, table):
-        self._table = table
+    def __init__(self, *, game):
+        self._game = game
 
     def serialize(self):
-        return self._table
+        return [attack.pair() for attack in self._sorted_attacks()]
 
-    def add_card(self, *, card):
+    def attack(self, *, player, card):
         for table_card in self.cards():
             if table_card == card:
                 raise self.DuplicateCard
 
-        self._table.append([card])
+        player.attack(card=card)
+
+    def defend(self, *, player, attack_card, defense_card):
+        for attack in self._sorted_attacks():
+            if attack.attack != attack_card:
+                continue
+
+            attack.defend_with(card=player.remove_card(card=defense_card))
+            return
+        else:
+            raise self.TargetCardNotFound
+
+    def collect(self, *, player):
+        player.take_cards(cards=self.cards())
+        self.clear()
+
+    def clear(self):
+        for player in self._game.ordered_players():
+            player.attacks.clear()
+
+    def legal_attacks(self):
+        if not self._sorted_attacks():
+            return set(get_all_cards())
+
+        ranks_on_table = set(get_rank(card) for card in self.cards())
+        return set(card for card in get_all_cards() if get_rank(card) in ranks_on_table)
 
     def legal_defenses(self, *, trump_suit):
         return {
@@ -34,17 +60,11 @@ class Table:
             for base_card in self.undefended_cards()
         }
 
-    def legal_attacks(self):
-        if not self._table:
-            return set(get_all_cards())
-
-        ranks_on_table = set(get_rank(card) for card in self.cards())
-        return set(card for card in get_all_cards() if get_rank(card) in ranks_on_table)
-
     def legal_passes(self):
-        if not self._table:
+        if not self._sorted_attacks():
             return set([])
-        if any(len(stack) > 1 for stack in self._table):
+        # TODO: add a test for this clause
+        if any(attack.defended() for attack in self._sorted_attacks()):
             return set([])
 
         ranks_on_table = set(get_rank(card) for card in self.cards())
@@ -54,23 +74,17 @@ class Table:
         return set(card for card in get_all_cards() if get_rank(card) in ranks_on_table)
 
     def undefended_cards(self):
-        return [stack[0] for stack in self._table if len(stack) == 1]
-
-    def stack_card(self, *, base_card, card):
-        for cards in self._table:
-            if cards[-1] == base_card:
-                cards.append(card)
-                return
-        else:
-            raise self.BaseCardNotFound
-
-    def clear(self):
-        self._table.clear()
-
-    def collect(self):
-        result = self.cards()
-        self.clear()
-        return result
+        return [
+            attack.attack for attack in self._sorted_attacks() if not attack.defended()
+        ]
 
     def cards(self):
-        return list(chain.from_iterable(self._table))
+        return list(
+            chain.from_iterable(attack.pair() for attack in self._sorted_attacks())
+        )
+
+    def _sorted_attacks(self):
+        attacks = chain.from_iterable(
+            player.attacks for player in self._game.ordered_players()
+        )
+        return sorted(list(attacks), key=attrgetter("timestamp"))

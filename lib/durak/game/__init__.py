@@ -13,15 +13,6 @@ from .players import Players
 from .yielded import Yielded
 
 
-# TODO: remove after migrating
-def get_attack_limit(state):
-    if state["attack_limit"] == 6:
-        return "six"
-    if state["attack_limit"] == 100:
-        return "hand"
-    return state["attack_limit"]
-
-
 class Game:
     @classmethod
     def deserialize(cls, state):
@@ -32,20 +23,19 @@ class Game:
                 lowest_rank=state["lowest_rank"],
             ),
             players=Players.deserialize(state["players"]),
-            table=Table(table=state["table"]),
             state=state,
         )
 
-    def __init__(self, *, draw_pile, players, table, state):
+    def __init__(self, *, draw_pile, players, state):
         self._draw_pile = draw_pile
         self._players = players
-        self._table = table
 
         self._pass_count = state["pass_count"]
         self._lowest_rank = state["lowest_rank"]
-        self._attack_limit = get_attack_limit(state)
+        self._attack_limit = state["attack_limit"]
         self._with_passing = state["with_passing"]
 
+        self._table = Table(game=self)
         self._collector = Collector(game=self)
         self._yielded = Yielded(game=self)
 
@@ -62,7 +52,6 @@ class Game:
             "legal_attacks": self._legal_attacks.serialize(),
             "legal_defenses": self.legal_defenses.serialize(),
             "legal_passes": self._legal_passes.serialize(),
-            "table": self._table.serialize(),
             "pass_count": self._pass_count,
             "players": self._serialize_players(),
             "trump_suit": self._trump_suit,
@@ -93,8 +82,7 @@ class Game:
             return self._active_players()[0]
 
     def _attack(self, *, player, card):
-        self.player(player).remove_card(card=card)
-        self._table.add_card(card=card)
+        self._table.attack(player=self.player(player), card=card)
 
     def attack(self, *, player, cards):
         for card in cards:
@@ -106,8 +94,11 @@ class Game:
         self.attack(player=player, cards=cards)
 
     def defend(self, *, player, base_card, card):
-        self.player(player).remove_card(card=card)
-        self._table.stack_card(base_card=base_card, card=card)
+        self._table.defend(
+            player=self.player(player),
+            attack_card=base_card,
+            defense_card=card,
+        )
         self._clear_yields()
 
     def legally_defend(self, *, player, base_card, card):
@@ -130,7 +121,7 @@ class Game:
         self._successful_defense_cleanup()
 
     def collect(self):
-        self._collector.get().take_cards(cards=self._table.collect())
+        self._table.collect(player=self._collector.get())
         self.draw()
         self._rotate(skip=1)
         self._collector.clear()
@@ -157,8 +148,7 @@ class Game:
         self._pass_count = 0
 
     def _pass_card(self, *, player, card):
-        self.player(player).remove_card(card=card)
-        self._table.add_card(card=card)
+        self._table.attack(player=self.player(player), card=card)
 
     def pass_cards(self, *, player, cards):
         for card in cards:

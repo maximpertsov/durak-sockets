@@ -60,6 +60,28 @@
     "pass_count": 0,
     "players": [
       {
+	"attacks": [
+	  {
+	    "attack": "7H",
+	    "defense": "QH",
+	    "timestamp": 0
+	  },
+	  {
+	    "attack": "7C",
+	    "defense": "QC",
+	    "timestamp": 0
+	  },
+	  {
+	    "attack": "7D",
+	    "defense": "QD",
+	    "timestamp": 0
+	  },
+	  {
+	    "attack": "7S",
+	    "defense": "QS",
+	    "timestamp": 0
+	  }
+	],
         "hand": [
           "AH"
         ],
@@ -68,18 +90,21 @@
         "state": []
       },
       {
+        "attacks": [],
         "hand": [],
         "id": "vasyl",
         "order": 1,
         "state": []
       },
       {
+        "attacks": [],
         "hand": [],
         "id": "igor",
         "order": 2,
         "state": ["out_of_play"]
       },
       {
+        "attacks": [],
         "hand": [
           "KC",
           "KH",
@@ -93,24 +118,6 @@
       }
     ],
     "seed": 0.227907402,
-    "table": [
-      [
-        "7H",
-        "QH"
-      ],
-      [
-        "7C",
-        "QC"
-      ],
-      [
-        "7D",
-        "QD"
-      ],
-      [
-        "7S",
-        "QS"
-      ]
-    ],
     "trump_suit": "hearts",
     "winners": [
       "igor",
