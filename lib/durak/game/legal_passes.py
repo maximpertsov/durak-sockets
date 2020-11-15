@@ -27,6 +27,9 @@ class LegalPasses:
     class IllegalGrouping(IllegalAction):
         pass
 
+    class InvalidAttackLimit(IllegalAction):
+        pass
+
     def __init__(self, *, game):
         self._game = game
 
@@ -85,17 +88,19 @@ class LegalPasses:
         if self._pass_recipient is None:
             return 0
 
-        recipient_card_count = len(self._pass_recipient.cards())
-        attack_limit = min(recipient_card_count, self._attack_limit)
         undefended_card_count = len(self._game._table.undefended_cards())
-
-        return max(0, attack_limit - undefended_card_count)
+        return max(0, self._attack_limit - undefended_card_count)
 
     @property
     def _attack_limit(self):
         if self._game._attack_limit == "six":
-            return 6
-        return 100
+            return min(6, self._pass_recipient.card_count())
+        if self._game._attack_limit == "hand":
+            return self._pass_recipient.card_count()
+        if self._game._attack_limit == "unlimited":
+            return 100
+
+        raise self.InvalidAttackLimit
 
     @property
     def _pass_recipient(self):
