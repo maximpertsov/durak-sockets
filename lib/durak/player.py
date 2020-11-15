@@ -7,7 +7,9 @@ from lib.durak.status import Status
 
 class Attack:
     def __init__(self, *, attack, defense=None, timestamp=None):
-        self.timestamp = timestamp or datetime.datetime.utcnow().timestamp()
+        self.timestamp = (
+            datetime.datetime.utcnow().timestamp() if timestamp is None else timestamp
+        )
         self.attack = attack
         self.defense = defense
 

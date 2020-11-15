@@ -6,13 +6,15 @@ from lib.durak.player import Player
 
 @pytest.fixture
 def player():
-    return Player(
-        id="anna",
-        hand=["10D", "10C", "2S", "5C", "8D", "2C"],
-        order=0,
-        state=[],
-        organize_key="no_sort",
-        attacks=[{"attack": "4S"}],
+    return Player.deserialize(
+        {
+            "id": "anna",
+            "hand": ["10D", "10C", "2S", "5C", "8D", "2C"],
+            "order": 0,
+            "state": [],
+            "organize_strategy": "no_sort",
+            "attacks": [{"attack": "4S", "timestamp": 0}],
+        }
     )
 
 
@@ -23,6 +25,7 @@ def test_serialize(player):
         "order": 0,
         "state": set(),
         "organize_strategy": "no_sort",
+        "attacks": [{"attack": "4S", "defense": None, "timestamp": 0}],
     }
 
 
@@ -34,6 +37,7 @@ def test_take_cards(player):
         "order": 0,
         "state": set(),
         "organize_strategy": "no_sort",
+        "attacks": [{"attack": "4S", "defense": None, "timestamp": 0}],
     }
 
 
@@ -45,6 +49,7 @@ def test_remove_card(player):
         "order": 0,
         "state": set(),
         "organize_strategy": "no_sort",
+        "attacks": [{"attack": "4S", "defense": None, "timestamp": 0}],
     }
 
 
@@ -89,6 +94,7 @@ def test_draw_from_pile(mocked_draw_cards):
         "order": 0,
         "state": set(),
         "organize_strategy": "no_sort",
+        "attacks": [],
     }
     assert draw_pile.serialize() == {
         "cards_left": 1,
