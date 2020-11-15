@@ -61,6 +61,28 @@
     "pass_count": 1,
     "players": [
       {
+        "attacks": [
+          {
+            "attack": "QH",
+            "defense": "8D",
+            "timestamp": 0
+          },
+          {
+            "attack": "QS",
+            "defense": "KS",
+            "timestamp": 0
+          },
+          {
+            "attack": "8C",
+            "defense": "9D",
+            "timestamp": 0
+          },
+          {
+            "attack": "8S",
+            "defense": "JD",
+            "timestamp": 0
+          }
+        ],
         "hand": [
           "KH",
           "AD",
@@ -72,12 +94,14 @@
         "state": []
       },
       {
+        "attacks": [],
         "hand": [],
         "id": "anna",
         "order": 1,
         "state": []
       },
       {
+        "attacks": [],
         "hand": [
           "AC",
           "8H",
@@ -95,6 +119,7 @@
         ]
       },
       {
+        "attacks": [],
         "hand": [
           "KC",
           "6D"
@@ -107,24 +132,6 @@
       }
     ],
     "seed": 0.4,
-    "table": [
-      [
-        "QH",
-        "8D"
-      ],
-      [
-        "QS",
-        "KS"
-      ],
-      [
-        "8C",
-        "9D"
-      ],
-      [
-        "8S",
-        "JD"
-      ]
-    ],
     "trump_suit": "diamonds",
     "with_passing": true
   },

@@ -84,6 +84,7 @@
     "pass_count": 0,
     "players": [
       {
+        "attacks": [],
         "hand": [],
         "id": "anna",
         "order": 0,
@@ -93,6 +94,7 @@
         ]
       },
       {
+        "attacks": [],
         "hand": [
           "AC",
           "8H",
@@ -109,6 +111,7 @@
         "state": []
       },
       {
+        "attacks": [],
         "hand": [
           "KC",
           "6D"
@@ -119,6 +122,7 @@
         "state": []
       },
       {
+        "attacks": [],
         "hand": [
           "KH",
           "AD",
