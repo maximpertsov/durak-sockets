@@ -52,7 +52,6 @@ class Game:
             "legal_attacks": self._legal_attacks.serialize(),
             "legal_defenses": self.legal_defenses.serialize(),
             "legal_passes": self._legal_passes.serialize(),
-            "table": self._table.serialize(),
             "pass_count": self._pass_count,
             "players": self._serialize_players(),
             "trump_suit": self._trump_suit,
