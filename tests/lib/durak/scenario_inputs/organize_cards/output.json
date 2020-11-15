@@ -63,6 +63,7 @@
     "pass_count": 0,
     "players": [
       {
+        "attacks": [],
         "hand": [
           "8S",
           "10D",
@@ -78,6 +79,7 @@
         "state": []
       },
       {
+        "attacks": [],
         "hand": [
           "8D",
           "9H",
@@ -93,6 +95,7 @@
         "state": []
       },
       {
+        "attacks": [],
         "hand": [
           "6D",
           "6S",
