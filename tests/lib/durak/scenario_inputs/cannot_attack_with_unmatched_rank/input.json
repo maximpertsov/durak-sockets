@@ -87,6 +87,7 @@
     "pass_count": 0,
     "players": [
       {
+        "attacks": [],
         "hand": [
           "QH",
           "6C",
@@ -106,6 +107,7 @@
         "state": []
       },
       {
+        "attacks": [],
         "hand": [
           "AC",
           "AD",
@@ -119,6 +121,7 @@
         "state": []
       },
       {
+        "attacks": [],
         "hand": [
           "KC",
           "KH",
@@ -132,6 +135,7 @@
         "state": []
       },
       {
+        "attacks": [],
         "hand": [
           "10H",
           "8S",
@@ -152,7 +156,6 @@
       }
     ],
     "seed": 0.4,
-    "table": [],
     "trump_suit": "clubs",
     "winners": [],
     "with_passing": true
