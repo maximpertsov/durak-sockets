@@ -78,6 +78,7 @@
     "pass_count": 0,
     "players": [
       {
+        "attacks": [],
         "hand": [
           "KS",
           "JD"
@@ -88,6 +89,7 @@
         "state": []
       },
       {
+        "attacks": [],
         "hand": [
           "JC",
           "QS",
@@ -101,6 +103,7 @@
         "state": []
       },
       {
+        "attacks": [],
         "hand": [
           "9S",
           "QD",
@@ -114,6 +117,7 @@
         "state": []
       },
       {
+        "attacks": [],
         "hand": [],
         "id": "grusha",
         "order": 3,

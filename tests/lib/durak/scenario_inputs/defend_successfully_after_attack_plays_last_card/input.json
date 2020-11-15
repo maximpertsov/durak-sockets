@@ -61,12 +61,35 @@
     "pass_count": 0,
     "players": [
       {
+        "attacks": [
+          {
+            "attack": "8H",
+            "defense": "AH",
+            "timestamp": 0
+          },
+          {
+            "attack": "8D",
+            "defense": "AD",
+            "timestamp": 0
+          },
+          {
+            "attack": "AC",
+            "defense": "7S",
+            "timestamp": 0
+          },
+          {
+            "attack": "8S",
+            "defense": "AS",
+            "timestamp": 0
+          }
+        ],
         "hand": [],
         "id": "grusha",
         "order": 0,
         "state": []
       },
       {
+        "attacks": [],
         "hand": [
           "KS",
           "JD"
@@ -76,6 +99,7 @@
         "state": []
       },
       {
+        "attacks": [],
         "hand": [
           "JC",
           "QS",
@@ -90,6 +114,7 @@
         ]
       },
       {
+        "attacks": [],
         "hand": [
           "9S",
           "QD",
@@ -103,24 +128,6 @@
       }
     ],
     "seed": 0.4,
-    "table": [
-      [
-        "8H",
-        "AH"
-      ],
-      [
-        "8D",
-        "AD"
-      ],
-      [
-        "AC",
-        "7S"
-      ],
-      [
-        "8S",
-        "AS"
-      ]
-    ],
     "trump_suit": "spades",
     "with_passing": true
   },
