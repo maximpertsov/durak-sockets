@@ -1,15 +1,6 @@
-from datetime import datetime
-
 import pytest
-from freezegun import freeze_time
 
 from lib.durak.game import Game, Status
-
-
-@pytest.fixture
-def from_epoch():
-    with freeze_time(datetime.utcfromtimestamp(0)):
-        yield
 
 
 @pytest.fixture

@@ -24,7 +24,7 @@ def format_json(json_text):
 
 
 @pytest.fixture
-def assert_snapshot_matches(mocker, snapshot):
+def assert_snapshot_matches(from_epoch, mocker, snapshot):
     mocker.patch("lib.durak.persist")
 
     async def wrapped(input_path):

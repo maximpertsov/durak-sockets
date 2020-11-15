@@ -158,8 +158,7 @@ class Game:
         self._pass_count = 0
 
     def _pass_card(self, *, player, card):
-        self.player(player).remove_card(card=card)
-        self._table.add_card(card=card)
+        self._table.attack(player=self.player(player), card=card)
 
     def pass_cards(self, *, player, cards):
         for card in cards:

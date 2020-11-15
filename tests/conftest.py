@@ -1,6 +1,9 @@
-import pytest
 import os
 import sys
+from datetime import datetime
+
+import pytest
+from freezegun import freeze_time
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -16,3 +19,9 @@ def get_draw_pile_cards(mocker):
         )
 
     return wrapped
+
+
+@pytest.fixture
+def from_epoch():
+    with freeze_time(datetime.utcfromtimestamp(0)):
+        yield
