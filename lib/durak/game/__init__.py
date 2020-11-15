@@ -129,7 +129,7 @@ class Game:
         self._remove_players()
 
     def _successful_defense_cleanup(self):
-        self._table.clear()
+        self._table.return_undefended()
         self.draw()
         self._rotate()
         self._clear_yields()

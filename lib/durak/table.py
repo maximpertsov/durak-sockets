@@ -37,9 +37,14 @@ class Table:
 
     def collect(self, *, player):
         player.take_cards(cards=self.cards())
-        self.clear()
+        self._clear()
 
-    def clear(self):
+    def return_undefended(self):
+        for player in self._game.ordered_players():
+            player.take_cards(cards=self.undefended_cards())
+            self._clear()
+
+    def _clear(self):
         for player in self._game.ordered_players():
             player.attacks.clear()
 
