@@ -40,9 +40,16 @@ class Table:
         self._clear()
 
     def return_undefended(self):
+        """
+        Each player takes back all of their attack cards that were not defended
+        """
         for player in self._game.ordered_players():
-            player.take_cards(cards=self.undefended_cards())
-            self._clear()
+            undefended_cards = [
+                attack.attack for attack in player.attacks if not attack.defended()
+            ]
+            player.take_cards(cards=undefended_cards)
+
+        self._clear()
 
     def _clear(self):
         for player in self._game.ordered_players():
