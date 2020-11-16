@@ -136,12 +136,12 @@ class Game:
         self._remove_players()
 
     def _remove_players(self):
-        for player in self._ordered_players_with_cards_in_round():
+        for player in self.ordered_players_in_play():
             if not player.cards():
                 player.remove_from_game()
 
     def draw(self):
-        players = deque(self._ordered_players_with_cards_in_round())
+        players = deque(self.ordered_players_in_play())
         players.rotate(self._pass_count)
         for player in players:
             player.draw(draw_pile=self._draw_pile)
@@ -174,7 +174,7 @@ class Game:
         return self._ai.perform_action(player=player)
 
     def _rotate(self, *, skip=0):
-        players = deque(self._ordered_players_with_cards_in_round())
+        players = deque(self.ordered_players_in_play())
         players.rotate(-1 - skip)
 
         for index, player in enumerate(players):
@@ -182,14 +182,14 @@ class Game:
 
     @property
     def defender(self):
-        players = self._ordered_players_with_cards_in_round()
+        players = self.ordered_players_in_play()
         if len(players) < 2:
             return
         return players[1]
 
     @property
     def attackers(self):
-        players = self._ordered_players_with_cards_in_round()
+        players = self.ordered_players_in_play()
         if not players:
             return []
 
@@ -217,12 +217,8 @@ class Game:
             if self._draw_pile.size() or player.cards()
         ]
 
-    def _ordered_players_with_cards_in_round(self):
-        return [
-            player
-            for player in self.ordered_players()
-            if not player.has_status(Status.OUT_OF_PLAY)
-        ]
+    def ordered_players_in_play(self):
+        return self._players.ordered_in_play()
 
     def ordered_players(self):
         return self._players.ordered()

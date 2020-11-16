@@ -107,7 +107,7 @@ class LegalPasses:
         if not self._defender:
             return
 
-        players = deque(self._game._ordered_players_with_cards_in_round())
+        players = deque(self._game.ordered_players_in_play())
         players.rotate(2)
         try:
             return next(

@@ -1,6 +1,7 @@
 from operator import attrgetter
 
 from lib.durak.player import Player
+from lib.durak.status import Status
 
 
 class Players:
@@ -13,6 +14,13 @@ class Players:
 
     def serialize(self):
         return [player.serialize() for player in self.ordered()]
+
+    def ordered_in_play(self):
+        return [
+            player
+            for player in self.ordered()
+            if not player.has_status(Status.OUT_OF_PLAY)
+        ]
 
     def ordered(self):
         return sorted(self._players_by_id.values(), key=attrgetter("order"))
