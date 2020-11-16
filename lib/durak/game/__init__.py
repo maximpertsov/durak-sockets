@@ -115,7 +115,7 @@ class Game:
             self.collect()
             return
 
-        if self._table.undefended_cards():
+        if self._table.undefended_cards() and self.defender.cards():
             return
 
         self._successful_defense_cleanup()
