@@ -181,23 +181,15 @@ class Game:
             player.order = index
 
     @property
-    def defender(self):
-        players = self.ordered_players_in_play()
-        if len(players) < 2:
-            return
-        return players[1]
+    def attackers(self):
+        potential_attackers = self._players.potential_attackers()
+        if self._table.cards():
+            return potential_attackers
+        return potential_attackers[:1]
 
     @property
-    def attackers(self):
-        players = self.ordered_players_in_play()
-        if not players:
-            return []
-
-        potential_attackers = [
-            player for player in players if player != self.defender and player.cards()
-        ]
-
-        return potential_attackers if self._table.cards() else potential_attackers[:1]
+    def defender(self):
+        return self._players.defender()
 
     def _no_more_attacks(self):
         return set(self.attackers).issubset(self._yielded_players())

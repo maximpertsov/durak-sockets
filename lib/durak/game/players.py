@@ -15,6 +15,19 @@ class Players:
     def serialize(self):
         return [player.serialize() for player in self.ordered()]
 
+    def potential_attackers(self):
+        return [
+            player
+            for player in self.ordered_in_play()
+            if player != self.defender() and player.cards()
+        ]
+
+    def defender(self):
+        players = self.ordered_in_play()
+        if len(players) < 2:
+            return
+        return players[1]
+
     def ordered_in_play(self):
         return [
             player
