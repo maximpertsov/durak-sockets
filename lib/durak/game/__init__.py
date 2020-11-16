@@ -212,6 +212,8 @@ class Game:
         return [
             player
             for player in self.ordered_players()
+            # TODO: confirm that there are no undefended cards to take back in undefended
+            # mode
             if self._draw_pile.size() or player.cards()
         ]
 
