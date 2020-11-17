@@ -1,6 +1,7 @@
 from collections import deque
 
 from lib.durak.draw_pile import DrawPile
+from lib.durak.exceptions import IllegalAction
 from lib.durak.status import Status
 from lib.durak.table import Table
 
@@ -14,6 +15,9 @@ from .yielded import Yielded
 
 
 class Game:
+    class GiveUpWithoutCards(IllegalAction):
+        pass
+
     @classmethod
     def deserialize(cls, state):
         return cls(
@@ -95,9 +99,7 @@ class Game:
 
     def defend(self, *, player, base_card, card):
         self._table.defend(
-            player=self.player(player),
-            attack_card=base_card,
-            defense_card=card,
+            player=self.player(player), attack_card=base_card, defense_card=card,
         )
         self._clear_yields()
 
@@ -162,6 +164,9 @@ class Game:
         self.pass_cards(player=player, cards=cards)
 
     def give_up(self, *, player):
+        if not player.cards():
+            raise self.GiveUpWithoutCards
+
         self._collector.set(player=player)
         self._clear_yields()
 
