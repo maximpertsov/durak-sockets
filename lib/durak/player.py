@@ -123,3 +123,6 @@ class Player:
 
     def remove_from_game(self):
         self.add_status(Status.OUT_OF_PLAY)
+
+    def undefended_cards(self):
+        return [attack.attack for attack in self.attacks if not attack.defended()]

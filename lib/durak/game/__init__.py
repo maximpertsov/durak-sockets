@@ -208,8 +208,7 @@ class Game:
             return [
                 player
                 for player in self.ordered_players_in_play()
-                if player.cards()
-                or any(attack for attack in player.attacks if not attack.defended())
+                if player.cards() or player.undefended_cards()
             ]
         return [player for player in self.ordered_players_in_play() if player.cards()]
 
