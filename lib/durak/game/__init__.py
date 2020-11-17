@@ -201,13 +201,17 @@ class Game:
         self._yielded.clear()
 
     def _active_players(self):
-        return [
-            player
-            for player in self.ordered_players()
-            # TODO: confirm that there are no undefended cards to take back in undefended
-            # mode
-            if self._draw_pile.size() or player.cards()
-        ]
+        if self._draw_pile.size():
+            return self.ordered_players_in_play()
+
+        if self._attack_limit == "unlimited" and self._table.undefended_cards():
+            return [
+                player
+                for player in self.ordered_players_in_play()
+                if player.cards()
+                or any(attack for attack in player.attacks if not attack.defended())
+            ]
+        return [player for player in self.ordered_players_in_play() if player.cards()]
 
     def ordered_players_in_play(self):
         return self._players.ordered_in_play()
