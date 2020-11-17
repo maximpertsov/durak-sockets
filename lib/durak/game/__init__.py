@@ -67,10 +67,16 @@ class Game:
         }
 
     def _serialize_players(self):
+        # HACK: define a pre-serialize hook
+        # # if not self.defender.cards():
+            # TODO: successful defense if defender has no cards?
+            # # self._successful_defense_cleanup()
+
         for player in self.ordered_players():
             player.organize_cards(trump_suit=self._trump_suit)
             if self._durak == player:
                 player.add_status(Status.DURAK)
+
         return self._players.serialize()
 
     @property
