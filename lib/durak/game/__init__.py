@@ -168,7 +168,7 @@ class Game:
 
         # TODO: add a message to returning payload?
         if self.defender and not self.defender.cards():
-            self._successful_defense_cleanup()
+            self._remove_players()
 
     def legally_pass_cards(self, *, player, cards):
         self._legal_passes.validate(player=player, cards=cards)
