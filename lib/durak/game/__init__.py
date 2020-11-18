@@ -146,8 +146,11 @@ class Game:
 
     def _remove_players(self):
         for player in self.ordered_players_in_play():
-            if not player.cards():
-                player.remove_from_game()
+            if player.cards():
+                continue
+            if player.undefended_cards():
+                continue
+            player.remove_from_game()
 
     def draw(self):
         players = deque(self.ordered_players_in_play())
