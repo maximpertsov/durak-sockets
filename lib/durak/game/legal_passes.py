@@ -107,13 +107,11 @@ class LegalPasses:
         if not self._defender:
             return
 
-        current_defender = self._defender
-
         players = deque(self._game.ordered_players_in_play())
         players.rotate(2)
 
         for player in players:
-            if player == current_defender:
+            if player == self._defender:
                 continue
             if not player.cards():
                 if self._game._attack_limit != "unlimited":
