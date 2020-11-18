@@ -67,11 +67,6 @@ class Game:
         }
 
     def _serialize_players(self):
-        # HACK: define a pre-serialize hook
-        # # if not self.defender.cards():
-            # TODO: successful defense if defender has no cards?
-            # # self._successful_defense_cleanup()
-
         for player in self.ordered_players():
             player.organize_cards(trump_suit=self._trump_suit)
             if self._durak == player:
@@ -105,9 +100,15 @@ class Game:
 
     def defend(self, *, player, base_card, card):
         self._table.defend(
-            player=self.player(player), attack_card=base_card, defense_card=card,
+            player=self.player(player),
+            attack_card=base_card,
+            defense_card=card,
         )
         self._clear_yields()
+
+        # TODO: add a message to returning payload?
+        if self.defender and not self.defender.cards():
+            self._successful_defense_cleanup()
 
     def legally_defend(self, *, player, base_card, card):
         self.legal_defenses.validate(player=player, base_card=base_card, card=card)

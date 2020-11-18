@@ -109,14 +109,16 @@ class LegalPasses:
 
         players = deque(self._game.ordered_players_in_play())
         players.rotate(2)
-        try:
-            return next(
-                player
-                for player in players
-                if player.cards() and self._player(player) != self._defender
-            )
-        except StopIteration:
-            return
+
+        for player in players:
+            if player == self._defender:
+                continue
+            if not player.cards():
+                if self._game._attack_limit != "unlimited":
+                    continue
+                if not player.undefended_cards():
+                    continue
+            return player
 
     @property
     def _defender(self):
