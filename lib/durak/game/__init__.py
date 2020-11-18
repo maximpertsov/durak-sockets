@@ -175,10 +175,12 @@ class Game:
         self.pass_cards(player=player, cards=cards)
 
     def give_up(self, *, player):
-        if not player.cards():
+        _player = self.player(player)
+
+        if not _player.cards():
             raise self.GiveUpWithoutCards
 
-        self._collector.set(player=player)
+        self._collector.set(player=_player)
         self._clear_yields()
 
     def organize_cards(self, *, player, strategy):
