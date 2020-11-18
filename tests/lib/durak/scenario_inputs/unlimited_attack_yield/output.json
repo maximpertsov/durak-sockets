@@ -56,7 +56,7 @@
     "legal_defenses": {},
     "legal_passes": {
       "cards": [],
-      "limit": 100
+      "limit": 8
     },
     "lowest_rank": "6",
     "pass_count": 0,

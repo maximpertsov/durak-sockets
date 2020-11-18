@@ -98,7 +98,7 @@ class LegalPasses:
         if self._game._attack_limit == "hand":
             return self._pass_recipient.card_count()
         if self._game._attack_limit == "unlimited":
-            return 100
+            return self._pass_recipient.card_count()
 
         raise self.InvalidAttackLimit
 
