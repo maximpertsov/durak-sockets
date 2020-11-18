@@ -18,6 +18,18 @@ class Table:
     def serialize(self):
         return [attack.pair() for attack in self._sorted_attacks()]
 
+    def pass_card(self, *, player, card):
+        """
+        Pass cards on the table by taking ownership of all existing attack cards
+        """
+        self.attack(player=player, card=card)
+
+        for other_player in self._game.ordered_players():
+            if other_player == player:
+                continue
+            player.attacks.extend(other_player.attacks)
+            other_player.attacks.clear()
+
     def attack(self, *, player, card):
         for table_card in self.cards():
             if table_card == card:

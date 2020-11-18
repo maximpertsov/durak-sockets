@@ -94,6 +94,11 @@
             "attack": "10H",
             "defense": null,
             "timestamp": 0.0
+          },
+          {
+            "attack": "10D",
+            "defense": null,
+            "timestamp": -1
           }
         ],
         "hand": [],
@@ -125,13 +130,7 @@
         "state": []
       },
       {
-        "attacks": [
-          {
-            "attack": "10D",
-            "defense": null,
-            "timestamp": -1
-          }
-        ],
+        "attacks": [],
         "hand": [
           "QS",
           "KH"

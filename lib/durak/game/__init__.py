@@ -157,7 +157,7 @@ class Game:
         self._pass_count = 0
 
     def _pass_card(self, *, player, card):
-        self._table.attack(player=self.player(player), card=card)
+        self._table.pass_card(player=self.player(player), card=card)
 
     def pass_cards(self, *, player, cards):
         for card in cards:
@@ -165,6 +165,10 @@ class Game:
         self._pass_count += 1
         self._clear_yields()
         self._rotate()
+
+        # TODO: add a message to returning payload?
+        if self.defender and not self.defender.cards():
+            self._successful_defense_cleanup()
 
     def legally_pass_cards(self, *, player, cards):
         self._legal_passes.validate(player=player, cards=cards)
