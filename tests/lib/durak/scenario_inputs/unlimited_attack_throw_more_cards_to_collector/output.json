@@ -1,0 +1,152 @@
+{
+  "no_display": true,
+  "payload": {
+    "cards": [
+      "9C"
+    ]
+  },
+  "to_state": {
+    "attack_limit": "unlimited",
+    "attackers": [
+      "igor",
+      "vasyl",
+      "grusha"
+    ],
+    "cards_left": 12,
+    "defender": "anna",
+    "drawn_cards": [
+      "10C",
+      "10D",
+      "10H",
+      "10S",
+      "6C",
+      "6H",
+      "6S",
+      "7C",
+      "7H",
+      "7S",
+      "8D",
+      "8S",
+      "9C",
+      "9D",
+      "9H",
+      "AC",
+      "AH",
+      "JH",
+      "JS",
+      "KC",
+      "KH",
+      "KS",
+      "QH",
+      "QS"
+    ],
+    "last_card": "JC",
+    "legal_attacks": {
+      "cards": [
+        "9C",
+        "AC"
+      ],
+      "limit": 0
+    },
+    "legal_defenses": {},
+    "legal_passes": {
+      "cards": [],
+      "limit": 97
+    },
+    "lowest_rank": "6",
+    "pass_count": 0,
+    "players": [
+      {
+        "attacks": [
+          {
+            "attack": "8S",
+            "defense": "10S",
+            "timestamp": 1605777375.885455
+          },
+          {
+            "attack": "9H",
+            "defense": null,
+            "timestamp": 1605777503.284679
+          }
+        ],
+        "hand": [
+          "QS",
+          "KS",
+          "KH",
+          "QH"
+        ],
+        "id": "igor",
+        "order": 0,
+        "organize_strategy": "no_sort",
+        "state": []
+      },
+      {
+        "attacks": [],
+        "hand": [
+          "7C",
+          "6C",
+          "7S"
+        ],
+        "id": "anna",
+        "order": 1,
+        "organize_strategy": "no_sort",
+        "state": [
+          "collecting"
+        ]
+      },
+      {
+        "attacks": [
+          {
+            "attack": "10H",
+            "defense": "AH",
+            "timestamp": 1605777467.274
+          },
+          {
+            "attack": "8D",
+            "defense": "9D",
+            "timestamp": 1605777475.371461
+          },
+          {
+            "attack": "10D",
+            "defense": null,
+            "timestamp": 1605777510.925125
+          },
+          {
+            "attack": "10C",
+            "defense": null,
+            "timestamp": 1605777522.103493
+          }
+        ],
+        "hand": [
+          "KC",
+          "JS"
+        ],
+        "id": "vasyl",
+        "order": 2,
+        "organize_strategy": "no_sort",
+        "state": []
+      },
+      {
+        "attacks": [],
+        "hand": [
+          "JH",
+          "6S",
+          "6H",
+          "9C",
+          "7H",
+          "AC"
+        ],
+        "id": "grusha",
+        "order": 3,
+        "organize_strategy": "no_sort",
+        "state": []
+      }
+    ],
+    "seed": 0.6431703307,
+    "trump_suit": "clubs",
+    "winners": [],
+    "with_passing": true
+  },
+  "type": "attacked",
+  "user": "grusha"
+}
