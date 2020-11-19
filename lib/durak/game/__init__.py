@@ -146,8 +146,11 @@ class Game:
 
     def _remove_players(self):
         for player in self.ordered_players_in_play():
-            if not player.cards():
-                player.remove_from_game()
+            if player.cards():
+                continue
+            if player.undefended_cards():
+                continue
+            player.remove_from_game()
 
     def draw(self):
         players = deque(self.ordered_players_in_play())
@@ -157,7 +160,7 @@ class Game:
         self._pass_count = 0
 
     def _pass_card(self, *, player, card):
-        self._table.attack(player=self.player(player), card=card)
+        self._table.pass_card(player=self.player(player), card=card)
 
     def pass_cards(self, *, player, cards):
         for card in cards:
@@ -166,15 +169,21 @@ class Game:
         self._clear_yields()
         self._rotate()
 
+        # TODO: add a message to returning payload?
+        if self.defender and not self.defender.cards():
+            self._remove_players()
+
     def legally_pass_cards(self, *, player, cards):
         self._legal_passes.validate(player=player, cards=cards)
         self.pass_cards(player=player, cards=cards)
 
     def give_up(self, *, player):
-        if not player.cards():
+        _player = self.player(player)
+
+        if not _player.cards():
             raise self.GiveUpWithoutCards
 
-        self._collector.set(player=player)
+        self._collector.set(player=_player)
         self._clear_yields()
 
     def organize_cards(self, *, player, strategy):
@@ -202,6 +211,10 @@ class Game:
     @property
     def defender(self):
         return self._players.defender()
+
+    @property
+    def collector(self):
+        return self._collector.get()
 
     def _no_more_attacks(self):
         return set(self.attackers).issubset(self._yielded_players())

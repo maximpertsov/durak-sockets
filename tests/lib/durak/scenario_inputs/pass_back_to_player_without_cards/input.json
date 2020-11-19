@@ -84,7 +84,12 @@
           {
             "attack": "9C",
             "defense": null,
-            "timestamp": 1605589789.700739
+            "timestamp": -1
+          },
+          {
+            "attack": "9S",
+            "defense": null,
+            "timestamp": -1
           }
         ],
         "hand": [
@@ -114,13 +119,7 @@
         "state": []
       },
       {
-        "attacks": [
-          {
-            "attack": "9S",
-            "defense": null,
-            "timestamp": 1605589787.362462
-          }
-        ],
+        "attacks": [],
         "hand": [],
         "id": "grusha",
         "order": 2,
@@ -131,7 +130,8 @@
     "seed": 0.9671038645,
     "trump_suit": "hearts",
     "winners": [
-      "anna"
+      "anna",
+      "grusha"
     ],
     "with_passing": true
   },
