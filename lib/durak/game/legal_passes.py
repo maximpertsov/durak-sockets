@@ -27,6 +27,9 @@ class LegalPasses:
     class IllegalGrouping(IllegalAction):
         pass
 
+    class InvalidAttackLimit(IllegalAction):
+        pass
+
     def __init__(self, *, game):
         self._game = game
 
@@ -85,33 +88,37 @@ class LegalPasses:
         if self._pass_recipient is None:
             return 0
 
-        recipient_card_count = len(self._pass_recipient.cards())
-        attack_limit = min(recipient_card_count, self._attack_limit)
         undefended_card_count = len(self._game._table.undefended_cards())
-
-        return max(0, attack_limit - undefended_card_count)
+        return max(0, self._attack_limit - undefended_card_count)
 
     @property
     def _attack_limit(self):
         if self._game._attack_limit == "six":
-            return 6
-        return 100
+            return min(6, self._pass_recipient.card_count())
+        if self._game._attack_limit == "hand":
+            return self._pass_recipient.card_count()
+        if self._game._attack_limit == "unlimited":
+            return 100
+
+        raise self.InvalidAttackLimit
 
     @property
     def _pass_recipient(self):
         if not self._defender:
             return
 
-        players = deque(self._game._ordered_players_with_cards_in_round())
+        players = deque(self._game.ordered_players_in_play())
         players.rotate(2)
-        try:
-            return next(
-                player
-                for player in players
-                if player.cards() and self._player(player) != self._defender
-            )
-        except StopIteration:
-            return
+
+        for player in players:
+            if player == self._defender:
+                continue
+            if not player.cards():
+                if self._game._attack_limit != "unlimited":
+                    continue
+                if not player.undefended_cards():
+                    continue
+            return player
 
     @property
     def _defender(self):

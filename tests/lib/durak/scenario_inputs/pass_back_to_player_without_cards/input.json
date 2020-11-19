@@ -1,38 +1,16 @@
 {
-  "payload": {
-    "cards": [
-      "10H"
-    ]
-  },
-  "to_state": {
-    "attack_limit": "hand",
+  "from_state": {
+    "attack_limit": "unlimited",
     "attackers": [
-      "igor",
-      "grusha"
+      "vasyl"
     ],
     "cards_left": 0,
-    "defender": "vasyl",
+    "defender": "igor",
     "drawn_cards": [
       "10C",
       "10D",
       "10H",
       "10S",
-      "2C",
-      "2D",
-      "2H",
-      "2S",
-      "3C",
-      "3D",
-      "3H",
-      "3S",
-      "4C",
-      "4D",
-      "4H",
-      "4S",
-      "5C",
-      "5D",
-      "5H",
-      "5S",
       "6C",
       "6D",
       "6H",
@@ -66,88 +44,102 @@
       "QH",
       "QS"
     ],
-    "last_card": "10H",
+    "last_card": "6H",
     "legal_attacks": {
       "cards": [],
-      "limit": 0
+      "limit": 98
     },
     "legal_defenses": {
-      "10D": [
-        "AH"
+      "9C": [
+        "8H",
+        "QC",
+        "QH"
       ],
-      "10H": [
-        "AH"
+      "9S": [
+        "8H",
+        "QH"
       ]
     },
     "legal_passes": {
       "cards": [
-        "10C"
+        "9D"
       ],
-      "limit": 0
+      "limit": 98
     },
     "lowest_rank": "6",
     "pass_count": 1,
     "players": [
       {
+        "attacks": [],
+        "hand": [],
+        "id": "anna",
+        "order": 0,
+        "organize_strategy": "group_by_rank_and_trump",
+        "state": [
+          "out_of_play"
+        ]
+      },
+      {
         "attacks": [
           {
-            "attack": "10H",
+            "attack": "9C",
             "defense": null,
-            "timestamp": 0.0
+            "timestamp": -1
           },
           {
-            "attack": "10D",
+            "attack": "9S",
             "defense": null,
             "timestamp": -1
           }
         ],
-        "hand": [],
-        "id": "anna",
-        "order": 0,
-        "organize_strategy": "no_sort",
-        "state": []
-      },
-      {
-        "attacks": [],
         "hand": [
-          "AH",
-          "10C"
+          "KC",
+          "KS",
+          "AC",
+          "AD",
+          "AS"
         ],
         "id": "vasyl",
-        "order": 1,
-        "organize_strategy": "no_sort",
+        "order": 0,
+        "organize_strategy": "group_by_rank_and_trump",
         "state": []
       },
       {
         "attacks": [],
         "hand": [
-          "9S",
-          "QC"
+          "8S",
+          "9D",
+          "QC",
+          "8H",
+          "QH"
         ],
         "id": "igor",
-        "order": 2,
-        "organize_strategy": "no_sort",
+        "order": 1,
+        "organize_strategy": "group_by_rank_and_trump",
         "state": []
       },
       {
         "attacks": [],
-        "hand": [
-          "QS",
-          "KH"
-        ],
+        "hand": [],
         "id": "grusha",
-        "order": 3,
-        "organize_strategy": "no_sort",
+        "order": 2,
+        "organize_strategy": "group_by_rank_and_trump",
         "state": []
       }
     ],
-    "seed": 0.4,
+    "seed": 0.9671038645,
     "trump_suit": "hearts",
     "winners": [
-      "anna"
+      "anna",
+      "grusha"
     ],
     "with_passing": true
   },
+  "payload": {
+    "cards": [
+      "9D"
+    ]
+  },
   "type": "passed",
-  "user": "anna"
+  "user": "igor"
 }

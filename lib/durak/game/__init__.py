@@ -1,6 +1,7 @@
 from collections import deque
 
 from lib.durak.draw_pile import DrawPile
+from lib.durak.exceptions import IllegalAction
 from lib.durak.status import Status
 from lib.durak.table import Table
 
@@ -14,6 +15,9 @@ from .yielded import Yielded
 
 
 class Game:
+    class GiveUpWithoutCards(IllegalAction):
+        pass
+
     @classmethod
     def deserialize(cls, state):
         return cls(
@@ -67,6 +71,7 @@ class Game:
             player.organize_cards(trump_suit=self._trump_suit)
             if self._durak == player:
                 player.add_status(Status.DURAK)
+
         return self._players.serialize()
 
     @property
@@ -101,6 +106,10 @@ class Game:
         )
         self._clear_yields()
 
+        # TODO: add a message to returning payload?
+        if self.defender and not self.defender.cards():
+            self._successful_defense_cleanup()
+
     def legally_defend(self, *, player, base_card, card):
         self.legal_defenses.validate(player=player, base_card=base_card, card=card)
         self.defend(player=player, base_card=base_card, card=card)
@@ -115,7 +124,7 @@ class Game:
             self.collect()
             return
 
-        if self._table.undefended_cards():
+        if self._table.undefended_cards() and self.defender.cards():
             return
 
         self._successful_defense_cleanup()
@@ -129,26 +138,29 @@ class Game:
         self._remove_players()
 
     def _successful_defense_cleanup(self):
-        self._table.clear()
+        self._table.return_undefended()
         self.draw()
         self._rotate()
         self._clear_yields()
         self._remove_players()
 
     def _remove_players(self):
-        for player in self._ordered_players_with_cards_in_round():
-            if not player.cards():
-                player.remove_from_game()
+        for player in self.ordered_players_in_play():
+            if player.cards():
+                continue
+            if player.undefended_cards():
+                continue
+            player.remove_from_game()
 
     def draw(self):
-        players = deque(self._ordered_players_with_cards_in_round())
+        players = deque(self.ordered_players_in_play())
         players.rotate(self._pass_count)
         for player in players:
             player.draw(draw_pile=self._draw_pile)
         self._pass_count = 0
 
     def _pass_card(self, *, player, card):
-        self._table.attack(player=self.player(player), card=card)
+        self._table.pass_card(player=self.player(player), card=card)
 
     def pass_cards(self, *, player, cards):
         for card in cards:
@@ -157,12 +169,21 @@ class Game:
         self._clear_yields()
         self._rotate()
 
+        # TODO: add a message to returning payload?
+        if self.defender and not self.defender.cards():
+            self._remove_players()
+
     def legally_pass_cards(self, *, player, cards):
         self._legal_passes.validate(player=player, cards=cards)
         self.pass_cards(player=player, cards=cards)
 
     def give_up(self, *, player):
-        self._collector.set(player=player)
+        _player = self.player(player)
+
+        if not _player.cards():
+            raise self.GiveUpWithoutCards
+
+        self._collector.set(player=_player)
         self._clear_yields()
 
     def organize_cards(self, *, player, strategy):
@@ -174,30 +195,26 @@ class Game:
         return self._ai.perform_action(player=player)
 
     def _rotate(self, *, skip=0):
-        players = deque(self._ordered_players_with_cards_in_round())
+        players = deque(self.ordered_players_in_play())
         players.rotate(-1 - skip)
 
         for index, player in enumerate(players):
             player.order = index
 
     @property
-    def defender(self):
-        players = self._ordered_players_with_cards_in_round()
-        if len(players) < 2:
-            return
-        return players[1]
+    def attackers(self):
+        potential_attackers = self._players.potential_attackers()
+        if self._table.cards():
+            return potential_attackers
+        return potential_attackers[:1]
 
     @property
-    def attackers(self):
-        players = self._ordered_players_with_cards_in_round()
-        if not players:
-            return []
+    def defender(self):
+        return self._players.defender()
 
-        potential_attackers = [
-            player for player in players if player != self.defender and player.cards()
-        ]
-
-        return potential_attackers if self._table.cards() else potential_attackers[:1]
+    @property
+    def collector(self):
+        return self._collector.get()
 
     def _no_more_attacks(self):
         return set(self.attackers).issubset(self._yielded_players())
@@ -209,18 +226,19 @@ class Game:
         self._yielded.clear()
 
     def _active_players(self):
-        return [
-            player
-            for player in self.ordered_players()
-            if self._draw_pile.size() or player.cards()
-        ]
+        if self._draw_pile.size():
+            return self.ordered_players_in_play()
 
-    def _ordered_players_with_cards_in_round(self):
-        return [
-            player
-            for player in self.ordered_players()
-            if not player.has_status(Status.OUT_OF_PLAY)
-        ]
+        if self._attack_limit == "unlimited" and self._table.undefended_cards():
+            return [
+                player
+                for player in self.ordered_players_in_play()
+                if player.cards() or player.undefended_cards()
+            ]
+        return [player for player in self.ordered_players_in_play() if player.cards()]
+
+    def ordered_players_in_play(self):
+        return self._players.ordered_in_play()
 
     def ordered_players(self):
         return self._players.ordered()
