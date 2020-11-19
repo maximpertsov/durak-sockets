@@ -212,6 +212,10 @@ class Game:
     def defender(self):
         return self._players.defender()
 
+    @property
+    def collector(self):
+        return self._collector.get()
+
     def _no_more_attacks(self):
         return set(self.attackers).issubset(self._yielded_players())
 

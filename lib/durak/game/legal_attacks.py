@@ -103,7 +103,7 @@ class LegalAttacks:
         if self._game._attack_limit == "hand":
             return self._defender.card_count()
         if self._game._attack_limit == "unlimited":
-            return 100
+            return self._defender.card_count() if self._game.collector else 100
 
         raise self.InvalidAttackLimit
 
