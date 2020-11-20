@@ -26,6 +26,11 @@ app.add_middleware(
 )
 
 
+@app.get("/status")
+async def status():
+    return {"status": "ok"}
+
+
 @app.websocket("/ws/{channel}")
 async def channel_ws(websocket: WebSocket, channel: str):
     await websocket.accept()
