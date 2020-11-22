@@ -1,0 +1,159 @@
+{
+  "user": "maxim",
+  "type": "attacked",
+  "payload": {
+    "cards": [
+      "8C",
+      "8H",
+      "8S"
+    ]
+  },
+  "from_state": {
+    "seed": 0.5628532801,
+    "players": [
+      {
+        "id": "gautam",
+        "hand": [
+          "10C",
+          "10S",
+          "JC",
+          "10D",
+          "QD"
+        ],
+        "order": 0,
+        "state": [],
+        "attacks": [
+          {
+            "attack": "6C",
+            "defense": "9C",
+            "timestamp": 1606016729.881129
+          },
+          {
+            "attack": "6D",
+            "defense": "8D",
+            "timestamp": 1606016727.746484
+          },
+          {
+            "attack": "6H",
+            "defense": "9H",
+            "timestamp": 1606016713.128373
+          },
+          {
+            "attack": "6S",
+            "defense": "9S",
+            "timestamp": 1606016713.128428
+          }
+        ],
+        "organize_strategy": "group_by_rank_and_trump"
+      },
+      {
+        "id": "sho",
+        "hand": [
+          "7H",
+          "7S",
+          "JS",
+          "KC",
+          "KH",
+          "KS",
+          "AC"
+        ],
+        "order": 1,
+        "state": [],
+        "attacks": [],
+        "organize_strategy": "group_by_rank_and_trump"
+      },
+      {
+        "id": "maxim",
+        "hand": [
+          "8C",
+          "8H",
+          "8S",
+          "10H",
+          "QH",
+          "QS",
+          "AH"
+        ],
+        "order": 2,
+        "state": [],
+        "attacks": [],
+        "organize_strategy": "group_by_rank_and_trump"
+      },
+      {
+        "id": "mariel",
+        "hand": [
+          "QC",
+          "AS",
+          "9D",
+          "7C",
+          "KD"
+        ],
+        "order": 3,
+        "state": [],
+        "attacks": [],
+        "organize_strategy": "no_sort"
+      }
+    ],
+    "winners": [],
+    "defender": "sho",
+    "attackers": [
+      "gautam",
+      "maxim",
+      "mariel"
+    ],
+    "last_card": "AD",
+    "cards_left": 4,
+    "pass_count": 2,
+    "trump_suit": "diamonds",
+    "drawn_cards": [
+      "10C",
+      "10D",
+      "10H",
+      "10S",
+      "6C",
+      "6D",
+      "6H",
+      "6S",
+      "7C",
+      "7H",
+      "7S",
+      "8C",
+      "8D",
+      "8H",
+      "8S",
+      "9C",
+      "9D",
+      "9H",
+      "9S",
+      "AC",
+      "AH",
+      "AS",
+      "JC",
+      "JS",
+      "KC",
+      "KD",
+      "KH",
+      "KS",
+      "QC",
+      "QD",
+      "QH",
+      "QS"
+    ],
+    "lowest_rank": "6",
+    "attack_limit": "six",
+    "legal_passes": {
+      "cards": [],
+      "limit": 6
+    },
+    "with_passing": true,
+    "legal_attacks": {
+      "cards": [
+        "8C",
+        "8H",
+        "8S",
+        "9D"
+      ],
+      "limit": 6
+    },
+    "legal_defenses": {}
+  }
+}
