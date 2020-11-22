@@ -1,4 +1,5 @@
 {
+  "no_display": true,
   "payload": {
     "cards": [
       "8C",
@@ -52,26 +53,17 @@
     "last_card": "AD",
     "legal_attacks": {
       "cards": [
+        "8C",
+        "8H",
+        "8S",
         "9D"
       ],
-      "limit": 3
+      "limit": 2
     },
-    "legal_defenses": {
-      "8C": [
-        "AC",
-        "KC"
-      ],
-      "8H": [
-        "KH"
-      ],
-      "8S": [
-        "JS",
-        "KS"
-      ]
-    },
+    "legal_defenses": {},
     "legal_passes": {
       "cards": [],
-      "limit": 1
+      "limit": 2
     },
     "lowest_rank": "6",
     "pass_count": 2,
@@ -128,24 +120,11 @@
         "state": []
       },
       {
-        "attacks": [
-          {
-            "attack": "8C",
-            "defense": null,
-            "timestamp": 0.0
-          },
-          {
-            "attack": "8H",
-            "defense": null,
-            "timestamp": 0.0
-          },
-          {
-            "attack": "8S",
-            "defense": null,
-            "timestamp": 0.0
-          }
-        ],
+        "attacks": [],
         "hand": [
+          "8C",
+          "8H",
+          "8S",
           "10H",
           "QH",
           "QS",

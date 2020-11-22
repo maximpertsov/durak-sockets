@@ -142,7 +142,7 @@
     "attack_limit": "six",
     "legal_passes": {
       "cards": [],
-      "limit": 6
+      "limit": 2
     },
     "with_passing": true,
     "legal_attacks": {
@@ -152,7 +152,7 @@
         "8S",
         "9D"
       ],
-      "limit": 6
+      "limit": 2
     },
     "legal_defenses": {}
   }
