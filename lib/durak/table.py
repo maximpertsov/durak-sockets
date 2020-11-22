@@ -104,6 +104,9 @@ class Table:
             chain.from_iterable(attack.pair() for attack in self._sorted_attacks())
         )
 
+    def attack_count(self):
+        return len(self._sorted_attacks())
+
     def _sorted_attacks(self):
         attacks = chain.from_iterable(
             player.attacks for player in self._game.ordered_players()

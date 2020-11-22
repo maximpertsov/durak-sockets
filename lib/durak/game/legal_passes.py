@@ -94,7 +94,8 @@ class LegalPasses:
     @property
     def _attack_limit(self):
         if self._game._attack_limit == "six":
-            return min(6, self._pass_recipient.card_count())
+            attacks_left = max(0, 6 - self._game._table.attack_count())
+            return min(attacks_left, self._pass_recipient.card_count())
         if self._game._attack_limit == "hand":
             return self._pass_recipient.card_count()
         if self._game._attack_limit == "unlimited":
