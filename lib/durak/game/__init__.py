@@ -106,10 +106,6 @@ class Game:
         )
         self._clear_yields()
 
-        # TODO: add a message to returning payload?
-        if self.defender and not self.defender.cards():
-            self._successful_defense_cleanup()
-
     def legally_defend(self, *, player, base_card, card):
         self.legal_defenses.validate(player=player, base_card=base_card, card=card)
         self.defend(player=player, base_card=base_card, card=card)
