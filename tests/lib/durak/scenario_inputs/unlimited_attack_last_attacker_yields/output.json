@@ -1,0 +1,134 @@
+{
+  "payload": {},
+  "to_state": {
+    "attack_limit": "unlimited",
+    "attackers": [
+      "vasyl"
+    ],
+    "cards_left": 0,
+    "defender": "grusha",
+    "drawn_cards": [
+      "10C",
+      "10D",
+      "10H",
+      "10S",
+      "6C",
+      "6D",
+      "6H",
+      "6S",
+      "7C",
+      "7D",
+      "7H",
+      "7S",
+      "8C",
+      "8D",
+      "8H",
+      "8S",
+      "9C",
+      "9D",
+      "9H",
+      "9S",
+      "AC",
+      "AD",
+      "AH",
+      "AS",
+      "JC",
+      "JD",
+      "JH",
+      "JS",
+      "KC",
+      "KD",
+      "KH",
+      "KS",
+      "QC",
+      "QD",
+      "QH",
+      "QS"
+    ],
+    "last_card": "JC",
+    "legal_attacks": {
+      "cards": [
+        "6D",
+        "7D",
+        "JC",
+        "KD"
+      ],
+      "limit": 100
+    },
+    "legal_defenses": {},
+    "legal_passes": {
+      "cards": [],
+      "limit": 100
+    },
+    "lowest_rank": "6",
+    "pass_count": 0,
+    "players": [
+      {
+        "attacks": [],
+        "hand": [
+          "6D",
+          "7D",
+          "KD",
+          "JC"
+        ],
+        "id": "vasyl",
+        "order": 0,
+        "organize_strategy": "group_by_rank_and_trump",
+        "state": []
+      },
+      {
+        "attacks": [],
+        "hand": [
+          "6H",
+          "6S",
+          "AS",
+          "AC"
+        ],
+        "id": "grusha",
+        "order": 1,
+        "organize_strategy": "group_by_rank_and_trump",
+        "state": []
+      },
+      {
+        "attacks": [],
+        "hand": [
+          "9S",
+          "QH",
+          "QS",
+          "KH",
+          "KS",
+          "AD",
+          "9C"
+        ],
+        "id": "igor",
+        "order": 2,
+        "organize_strategy": "group_by_rank_and_trump",
+        "state": []
+      },
+      {
+        "attacks": [],
+        "hand": [
+          "9D",
+          "9H",
+          "10D",
+          "10H",
+          "10S",
+          "AH",
+          "6C",
+          "7C",
+          "10C"
+        ],
+        "id": "anna",
+        "order": 3,
+        "organize_strategy": "group_by_rank_and_trump",
+        "state": []
+      }
+    ],
+    "seed": 0.6431703307,
+    "trump_suit": "clubs",
+    "winners": [],
+    "with_passing": true
+  },
+  "type": "yielded_attack",
+  "user": "igor"
+}
