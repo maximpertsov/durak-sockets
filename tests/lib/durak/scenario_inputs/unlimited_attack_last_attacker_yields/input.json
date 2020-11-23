@@ -1,0 +1,170 @@
+{
+  "user": "igor",
+  "type": "yielded_attack",
+  "payload": {},
+  "from_state": {
+    "seed": 0.6431703307,
+    "players": [
+      {
+        "id": "anna",
+        "hand": [
+          "9D",
+          "9H",
+          "10D",
+          "10H",
+          "10S",
+          "AH",
+          "6C",
+          "7C",
+          "10C"
+        ],
+        "order": 0,
+        "state": [
+          "yielded"
+        ],
+        "attacks": [
+          {
+            "attack": "7S",
+            "defense": "8C",
+            "timestamp": 1606109645.083962
+          },
+          {
+            "attack": "8D",
+            "defense": "QD",
+            "timestamp": 1606109671.754925
+          },
+          {
+            "attack": "8S",
+            "defense": "JS",
+            "timestamp": 1606109673.260117
+          }
+        ],
+        "organize_strategy": "group_by_rank_and_trump"
+      },
+      {
+        "id": "vasyl",
+        "hand": [],
+        "order": 1,
+        "state": [],
+        "attacks": [],
+        "organize_strategy": "group_by_rank_and_trump"
+      },
+      {
+        "id": "grusha",
+        "hand": [
+          "6H",
+          "6S",
+          "AS",
+          "AC"
+        ],
+        "order": 2,
+        "state": [
+          "yielded"
+        ],
+        "attacks": [
+          {
+            "attack": "7H",
+            "defense": "8H",
+            "timestamp": 1606109652.200089
+          },
+          {
+            "attack": "JH",
+            "defense": "QC",
+            "timestamp": 1606109715.158329
+          }
+        ],
+        "organize_strategy": "group_by_rank_and_trump"
+      },
+      {
+        "id": "igor",
+        "hand": [
+          "9S",
+          "QS",
+          "KH",
+          "KS",
+          "AD",
+          "9C"
+        ],
+        "order": 3,
+        "state": [],
+        "attacks": [
+          {
+            "attack": "JD",
+            "defense": "KC",
+            "timestamp": 1606109720.169784
+          },
+          {
+            "attack": "QH",
+            "defense": null,
+            "timestamp": 1606109721.689713
+          }
+        ],
+        "organize_strategy": "group_by_rank_and_trump"
+      }
+    ],
+    "winners": [],
+    "defender": "vasyl",
+    "attackers": [
+      "anna",
+      "grusha",
+      "igor"
+    ],
+    "last_card": "JC",
+    "cards_left": 4,
+    "pass_count": 0,
+    "trump_suit": "clubs",
+    "drawn_cards": [
+      "10C",
+      "10D",
+      "10H",
+      "10S",
+      "6C",
+      "6H",
+      "6S",
+      "7C",
+      "7H",
+      "7S",
+      "8C",
+      "8D",
+      "8H",
+      "8S",
+      "9C",
+      "9D",
+      "9H",
+      "9S",
+      "AC",
+      "AD",
+      "AH",
+      "AS",
+      "JD",
+      "JH",
+      "JS",
+      "KC",
+      "KH",
+      "KS",
+      "QC",
+      "QD",
+      "QH",
+      "QS"
+    ],
+    "lowest_rank": "6",
+    "attack_limit": "unlimited",
+    "legal_passes": {
+      "cards": [],
+      "limit": 99
+    },
+    "with_passing": true,
+    "legal_attacks": {
+      "cards": [
+        "7C",
+        "KH",
+        "KS",
+        "QS"
+      ],
+      "limit": 99
+    },
+    "legal_defenses": {
+      "QH": []
+    }
+  }
+}
