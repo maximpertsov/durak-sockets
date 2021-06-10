@@ -6,7 +6,7 @@ authors = ["Maxim Pertsov <maxim.pertsov@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.7"
-fastapi = "^0.61.0"
+fastapi = "^0.65.2"
 uvicorn = "^0.11.8"
 gunicorn = "^20.0.4"
 broadcaster = { git = "https://github.com/maximpertsov/broadcaster.git", branch = "authenticate-redis" }
