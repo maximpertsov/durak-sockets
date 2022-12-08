@@ -1,6 +1,6 @@
 asyncio-redis==0.16.0
 -e git+https://github.com/maximpertsov/broadcaster.git@06a43319c16dd8b0488726fc850c2eb3fbf5aa9d#egg=broadcaster
-certifi==2020.6.20
+certifi==2022.12.7
 chardet==3.0.4
 click==7.1.2
 fastapi==0.61.1
